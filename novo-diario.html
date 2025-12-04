@@ -3,153 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novo Diário - Diário de Viagens</title>
-    <link rel="stylesheet" href="./style.css">
+    <title>Adicionar Diário - Diário de Viagens</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-      
-        .container-form {
-            max-width: 600px;
-            margin: 2rem auto;
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        
-        .upload-area {
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-bottom: 1.5rem;
-            color: var(--text-light);
-        }
-        
-        .upload-area:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background-color: rgba(0, 168, 150, 0.05);
-        }
-
-        .toggle-switch {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .toggle-switch input { display: none; }
-
-        .slider {
-            width: 50px;
-            height: 26px;
-            background-color: #ccc;
-            border-radius: 34px;
-            position: relative;
-            transition: .4s;
-        }
-
-        .slider:before {
-            content: "";
-            position: absolute;
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            border-radius: 50%;
-            transition: .4s;
-        }
-
-        input:checked + .slider { background-color: var(--primary); }
-        input:checked + .slider:before { transform: translateX(24px); }
-    </style>
+    
 </head>
-<body>
+<body style="background-color: aliceblue;">
 
-    <header>
-        <div class="logo">
-            <a href="index.html" style="text-decoration:none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fa-solid fa-arrow-left"></i> Voltar
-            </a>
-        </div>
-        <h2 style="font-family: var(--font-head); font-size: 1.2rem;">Criar Novo Diário</h2>
-        <div style="width: 80px;"></div> </header>
-
-    <main>
-        <div class="container-form">
-            <form id="diarioForm">
-                
-                <div class="form-group">
-                    <label class="form-label">Capa do Diário</label>
-                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                        <p>Clique para enviar uma imagem de capa</p>
-                        <input type="file" id="fileInput" accept="image/*" hidden>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="nome" class="form-label">Nome da Viagem/Diário</label>
-                    <input type="text" id="nome" class="form-input" placeholder="Ex: Mochilão Europa 2025" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="descricao" class="form-label">Descrição Resumida</label>
-                    <textarea id="descricao" class="form-textarea" rows="4" placeholder="Sobre o que é este diário?"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Visibilidade</label>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="isPublico" checked>
-                        <span class="slider"></span>
-                        <span id="statusLabel">Público (Todos podem ver)</span>
-                    </label>
-                </div>
-
-                <button type="button" class="btn-primary" onclick="salvarDiario()">
-                    <i class="fa-solid fa-check"></i> Criar Diário
-                </button>
-            </form>
-        </div>
-    </main>
-
-    <script>
+    <div class="page-container">
         
-        const isPublicoCheck = document.getElementById('isPublico');
-        const statusLabel = document.getElementById('statusLabel');
+        <div class="header-section">
+            <div class="action-bar">
+                <button class="btn-salvar" id="salvarBtn" onclick="salvarDiario(event)">
+                    Salvar
+                </button>
+            </div>
 
-        isPublicoCheck.addEventListener('change', () => {
-            if(isPublicoCheck.checked) {
-                statusLabel.innerText = "Público (Todos podem ver)";
-                statusLabel.style.color = "var(--text)";
-            } else {
-                statusLabel.innerText = "Privado (Apenas você)";
-                statusLabel.style.color = "var(--text-light)";
+            <h1 class="header-title">Adicionar diário</h1>
+
+            <div class="privacy-toggle-container">
+                <div id="publico" class="toggle-option active" onclick="setPrivacy('publico')">
+                    Público
+                </div>
+                <span class="toggle-separator">|</span>
+                <div id="privado" class="toggle-option" onclick="setPrivacy('privado')">
+                    Privado
+                </div>
+            </div>
+        </div>
+
+        <div class="center-visual">
+            <i class="fa-solid fa-book notebook-icon" id="notebookIcon">
+                <i class="fa-solid fa-paint-brush" onclick="toggleColorPicker(event)"></i>
+                
+                <div class="color-picker-dropdown" id="colorPicker">
+                    <div class="color-option" style="background-color: red;" data-color="#FF0000" onclick="selectColor(this)"></div>
+                    <div class="color-option" style="background-color: orange;" data-color="#FFA500" onclick="selectColor(this)"></div>
+                    <div class="color-option" style="background-color: yellow;" data-color="#FFFF00" onclick="selectColor(this)"></div>
+                    <div class="color-option" style="background-color: green;" data-color="#008000" onclick="selectColor(this)"></div>
+                    <div class="color-option" style="background-color: blue;" data-color="#0000FF" onclick="selectColor(this)"></div>
+                    <div class="color-option" style="background-color: pink;" data-color="#FFC0CB" onclick="selectColor(this)"></div>
+                </div>
+            </i>
+        </div>
+
+        <input type="text" id="diaryName" class="diary-title-input" placeholder="Dê um nome ao seu diário..." required />
+
+        <div id="statusMessage" style="margin-top: 20px; text-align: center; color: var(--primary); font-weight: 600;"></div>
+        
+    </div>
+
+    <script type="module">
+      
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        
+        let db;
+        let auth;
+        let userId = null;
+        let selectedPrivacy = 'publico';
+        let selectedColor = '#a0a0a0'; 
+
+        const appId = 'default-app-id'; 
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+        window.salvarDiario = salvarDiario;
+        window.setPrivacy = setPrivacy;
+        window.toggleColorPicker = toggleColorPicker;
+        window.selectColor = selectColor;
+        
+     
+        async function initFirebase() {
+            if (Object.keys(firebaseConfig).length === 0) return;
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+              
+                await signInAnonymously(auth);
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("Usuário autenticado:", userId);
+                    } else {
+                        userId = null;
+                    }
+                });
+            } catch (error) {
+                console.error("Erro ao iniciar Firebase:", error);
             }
-        });
+        }
 
-        function salvarDiario() {
-         
-            const nome = document.getElementById('nome').value;
-            const descricao = document.getElementById('descricao').value;
-            const publico = isPublicoCheck.checked;
+    
+        function setPrivacy(status) {
+            selectedPrivacy = status;
+            const publico = document.getElementById('publico');
+            const privado = document.getElementById('privado');
 
-            if(!nome) {
-                alert("Por favor, dê um nome ao diário.");
+            
+            publico.classList.remove('active');
+            privado.classList.remove('active');
+            document.getElementById(status).classList.add('active');
+        }
+
+        function toggleColorPicker(event) {
+            event.stopPropagation();
+            const picker = document.getElementById('colorPicker');
+            picker.style.display = (picker.style.display === 'grid') ? 'none' : 'grid';
+        }
+
+      
+        function selectColor(element) {
+            
+            selectedColor = element.getAttribute('data-color'); 
+            
+            
+            document.getElementById('notebookIcon').style.color = selectedColor;
+            
+            
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            toggleColorPicker(event); 
+        }
+
+       
+        
+        async function salvarDiario(event) {
+            event.preventDefault();
+            
+            const diaryName = document.getElementById('diaryName').value.trim();
+            const statusMessage = document.getElementById('statusMessage');
+            const salvarBtn = document.getElementById('salvarBtn');
+           
+            if (!diaryName) {
+                statusMessage.textContent = "Insira um nome!!";
+                return;
+            }
+            if (!db || !userId) {
+                statusMessage.textContent = "Criando...";
                 return;
             }
 
-          
-            console.log("Salvando Diário:", { nome, descricao, publico });
-            alert("Diário criado com sucesso!");
-            window.location.href = "index.html";
-        }
-    </script>
+            salvarBtn.disabled = true;
+            statusMessage.texsContent = "Salvando...";
 
+            try {
+               
+                let collectionPath;
+                if (selectedPrivacy === 'publico') {
+                   
+                    collectionPath = `artifacts/${appId}/public/data/diaries`;
+                } else {
+                
+                    collectionPath = `artifacts/${appId}/users/${userId}/diaries`;
+                }
+
+             
+                const newDiaryData = {
+                    name: diaryName,
+                    privacy: selectedPrivacy,
+                    color: selectedColor, 
+                    createdAt: new Date(),
+                    createdBy: userId,
+                };
+
+                await addDoc(collection(db, collectionPath), newDiaryData);
+
+                statusMessage.textContent = "Salvo com sucesso! Indo para a lista...";
+                
+                
+                setTimeout(() => {
+                    window.location.href = "index.html"; 
+                }, 1500);
+
+            } catch (error) {
+                console.error("Erro ao salvar:", error);
+                statusMessage.textContent = "Erro ao salvar: " + error.message;
+            } finally {
+                salvarBtn.disabled = false;
+            }
+        }
+       
+        initFirebase();
+        
+        document.addEventListener('click', (e) => {
+            const picker = document.getElementById('colorPicker');
+            const brush = document.querySelector('.fa-paint-brush');
+            if (picker.style.display === 'grid' && !picker.contains(e.target) && e.target !== brush) {
+                picker.style.display = 'none';
+            }
+        });
+
+    </script>
 </body>
 </html>

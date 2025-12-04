@@ -42,27 +42,31 @@
     </div>
 
     <script>
+        
         function toggleSenha(idCampo, icone) {
             const campo = document.getElementById(idCampo);
             if (campo.type === "password") {
                 campo.type = "text";
-                icone.classList.remove('fa-eye-regular');
+               
+                icone.classList.remove('fa-eye'); 
                 icone.classList.add('fa-eye-slash');
             } else {
                 campo.type = "password";
                 icone.classList.remove('fa-eye-slash');
-                icone.classList.add('fa-eye-regular');
+                icone.classList.add('fa-eye');
             }
         }
 
+       
         function realizarLogin(event) {
             event.preventDefault();
             const email = document.getElementById('email').value;
             const senha = document.getElementById('senha').value;
             
-            console.log("Tentativa de login com:", { email, senha });
+            console.log("Simulando login bem-sucedido com:", { email, senha });
             
-            window.location.href = "index.html";
+            
+            window.location.href = "novo-diario.html"; 
         }
     </script>
 </body>
