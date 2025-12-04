@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Diário - Diário de Viagens</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      
+        .container-form {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background-color: rgba(0, 168, 150, 0.05);
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input { display: none; }
+
+        .slider {
+            width: 50px;
+            height: 26px;
+            background-color: #ccc;
+            border-radius: 34px;
+            position: relative;
+            transition: .4s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(24px); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href="index.html" style="text-decoration:none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+        <h2 style="font-family: var(--font-head); font-size: 1.2rem;">Criar Novo Diário</h2>
+        <div style="width: 80px;"></div> </header>
+
+    <main>
+        <div class="container-form">
+            <form id="diarioForm">
+                
+                <div class="form-group">
+                    <label class="form-label">Capa do Diário</label>
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>Clique para enviar uma imagem de capa</p>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nome" class="form-label">Nome da Viagem/Diário</label>
+                    <input type="text" id="nome" class="form-input" placeholder="Ex: Mochilão Europa 2025" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao" class="form-label">Descrição Resumida</label>
+                    <textarea id="descricao" class="form-textarea" rows="4" placeholder="Sobre o que é este diário?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Visibilidade</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="isPublico" checked>
+                        <span class="slider"></span>
+                        <span id="statusLabel">Público (Todos podem ver)</span>
+                    </label>
+                </div>
+
+                <button type="button" class="btn-primary" onclick="salvarDiario()">
+                    <i class="fa-solid fa-check"></i> Criar Diário
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        
+        const isPublicoCheck = document.getElementById('isPublico');
+        const statusLabel = document.getElementById('statusLabel');
+
+        isPublicoCheck.addEventListener('change', () => {
+            if(isPublicoCheck.checked) {
+                statusLabel.innerText = "Público (Todos podem ver)";
+                statusLabel.style.color = "var(--text)";
+            } else {
+                statusLabel.innerText = "Privado (Apenas você)";
+                statusLabel.style.color = "var(--text-light)";
+            }
+        });
+
+        function salvarDiario() {
+         
+            const nome = document.getElementById('nome').value;
+            const descricao = document.getElementById('descricao').value;
+            const publico = isPublicoCheck.checked;
+
+            if(!nome) {
+                alert("Por favor, dê um nome ao diário.");
+                return;
+            }
+
+          
+            console.log("Salvando Diário:", { nome, descricao, publico });
+            alert("Diário criado com sucesso!");
+            window.location.href = "index.html";
+        }
+    </script>
+
+</body>
+</html>

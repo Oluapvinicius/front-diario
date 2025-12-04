@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Viagem</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href="index.html" style="text-decoration:none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.2rem;">Nova Viagem/Postagem</h2>
+        <div style="width: 80px;"></div>
+    </header>
+
+    <main class="form-layout">
+        
+        <div class="content-col">
+            <h1 style="font-family: var(--font-heading); font-size: 1.6rem; margin-bottom: 2rem;">
+                Detalhes da Postagem
+            </h1>
+
+            <form id="viagemForm">
+                <div class="form-group">
+                    <label for="titulo" class="form-label">Título da Viagem</label>
+                    <input type="text" id="titulo" class="form-input" placeholder="Ex: Trilha na Patagônia" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="descricao_completa" class="form-label">Relato Completo da Viagem</label>
+                    <textarea id="descricao_completa" class="form-textarea" rows="8" placeholder="Escreva sobre suas experiências, dicas e sentimentos..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="data_inicio" class="form-label">Data de Início</label>
+                        <input type="date" id="data_inicio" class="form-input" required>
+                    </div>
+
+                    <div class="form-group" style="flex: 1;">
+                        <label for="data_fim" class="form-label">Data de Fim (Opcional)</label>
+                        <input type="date" id="data_fim" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria" class="form-label">Categoria</label>
+                    <select id="categoria" class="form-input" required>
+                        <option value="">Selecione a Categoria Principal</option>
+                        <option value="1">Aventura</option>
+                        <option value="2">Cultura</option>
+                        <option value="3">Gastronômica</option>
+                        <option value="4">Praia</option>
+                    </select>
+                </div>
+
+                <button type="button" onclick="salvarViagem()" class="btn-primary" style="margin-top: 2rem;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Publicar Viagem
+                </button>
+            </form>
+        </div>
+
+        <div class="sidebar-col">
+            
+            <div class="section-box">
+                <h3><i class="fa-solid fa-map-pin"></i> Locais Visitados</h3>
+                <div id="local-inputs">
+                    <div class="local-input-group">
+                        <input type="text" placeholder="Nome do Local (Ex: Torre Eiffel)" class="form-input" id="local_nome_1">
+                        <button type="button" title="Capturar Coordenadas" class="btn-icon" style="color: var(--color-highlight);">
+                            <i class="fa-solid fa-location-crosshairs"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" onclick="adicionarLocalInput()" class="btn-add-local">
+                    Adicionar Outro Local
+                </button>
+                <ul class="local-list" id="locais-lista-visual">
+                    </ul>
+            </div>
+
+            <div class="section-box">
+                <h3><i class="fa-solid fa-camera"></i> Fotos e Vídeos</h3>
+                
+                <p style="font-size: 0.9rem; color: var(--color-text-light);">
+                    Selecione arquivos relacionados à viagem.
+                </p>
+
+                <div class="media-preview" id="media-preview">
+                    </div>
+
+                <p class="file-count" id="file-count">0 arquivos selecionados</p>
+
+                <input type="file" id="media_files" multiple accept="image/*,video/*" hidden>
+                <button type="button" onclick="document.getElementById('media_files').click()" class="btn-upload-file">
+                    <i class="fa-solid fa-upload"></i> Fazer Upload
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let localCounter = 1;
+
+        function adicionarLocalInput() {
+            localCounter++;
+            const inputContainer = document.getElementById('local-inputs');
+            
+            const div = document.createElement('div');
+            div.className = 'local-input-group';
+            div.innerHTML = `
+                <input type="text" placeholder="Nome do Local (Ex: Museu do Louvre)" class="form-input" id="local_nome_${localCounter}">
+                <button type="button" title="Capturar Coordenadas" class="btn-icon" style="color: var(--color-highlight);">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                </button>
+            `;
+            inputContainer.appendChild(div);
+        }
+
+    
+        document.getElementById('media_files').addEventListener('change', function(e) {
+            const previewContainer = document.getElementById('media-preview');
+            const fileCountElement = document.getElementById('file-count');
+            previewContainer.innerHTML = '';
+            
+            let count = 0;
+            Array.from(e.target.files).forEach(file => {
+                count++;
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const div = document.createElement('div');
+                        div.className = 'media-item-preview';
+                        div.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                        previewContainer.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                } else if (file.type.startsWith('video/')) {
+                    const div = document.createElement('div');
+                    div.className = 'media-item-preview flex items-center justify-center bg-gray-800';
+                    div.innerHTML = `<i class="fa-solid fa-video text-white"></i>`;
+                    previewContainer.appendChild(div);
+                }
+            });
+            fileCountElement.innerText = `${count} arquivos selecionados`;
+        });
+
+        
+        function salvarViagem() {
+            const titulo = document.getElementById('titulo').value;
+            if (!titulo) {
+                alert("Por favor, preencha o título da viagem.");
+                return;
+            }
+            
+       
+            console.log("Viagem e Locais prontos para envio ao Back-end.");
+            alert("Viagem registrada com sucesso! Redirecionando para o Dashboard.");
+            window.location.href = "index.html"; 
+        }
+    </script>
+
+</body>
+</html>
