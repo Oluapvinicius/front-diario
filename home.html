@@ -29,8 +29,8 @@
                 
                 <div class="diary-card">
                     <div class="diary-card-header" style="background-color: #00A896;"></div> 
-                    <div class="diary-card-content" onclick="goToDiaryDetail(1)">
-                        <h2 class="diary-card-title">Diário de Viagens</h2>
+                    <div class="diary-card-content" onclick="">
+                        <h2 class="diary-card-title" onclick="salvarH1()">Diário de Viagens</h2>
                         
                         <div class="diary-card-actions">
                             <button class="menu-dot-btn" onclick="event.stopPropagation(); toggleMenu(1)">
@@ -51,8 +51,8 @@
 
                 <div class="diary-card">
                     <div class="diary-card-header" style="background-color: #FFC0CB;"></div> 
-                    <div class="diary-card-content" onclick="goToDiaryDetail(2)">
-                        <h2 class="diary-card-title">Diário de Ponto turistico</h2>
+                    <div class="diary-card-content" onclick="">
+                        <h2 class="diary-card-title"onclick="salvarH1()">Diário de Ponto turistico</h2>
                         
                         <div class="diary-card-actions">
                             <button class="menu-dot-btn" onclick="event.stopPropagation(); toggleMenu(2)">
@@ -73,8 +73,8 @@
 
                 <div class="diary-card">
                     <div class="diary-card-header" style="background-color: #008000;"></div> 
-                    <div class="diary-card-content" onclick="goToDiaryDetail(3)">
-                        <h2 class="diary-card-title">Diário</h2>
+                    <div class="diary-card-content" onclick="salvarH1()">
+                        <h2 class="diary-card-title" >Diário</h2>
                         
                         <div class="diary-card-actions">
                             <button class="menu-dot-btn" onclick="event.stopPropagation(); toggleMenu(3)">
@@ -169,7 +169,15 @@
      
         return "#" + corComponente(result[1]) + corComponente(result[2]) + corComponente(result[3]);
         }
-        
+        function salvarH1(){
+            let h1 = document.getElementById("diary-card-title")
+
+            let textoH1 = h1.innerText
+
+            localStorage.setItem('h1 salva', textoH1)
+
+            window.location.href = "home-principal.html"
+        }
         </script>
 </body>
 </html>

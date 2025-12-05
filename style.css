@@ -384,7 +384,7 @@ h2 {
 
 .btn-primary {
     padding: 10px 20px;
-    width: 50%;
+  
     height: 30px;
     background-color: var(--primary);
     color: white;
@@ -798,21 +798,20 @@ h2 {
     background-color: var(--background);
 }
 
-/* Responsividade Aprimorada para o Grid */
+
 .diary-grid {
-    /* Permite que o grid crie colunas de no mínimo 250px, preenchendo o espaço */
+  
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
     gap: 25px;
 }
 
-/* Garante o padding correto em telas menores */
+
 @media (max-width: 768px) {
-    /* Garante que o conteúdo principal tenha padding nos lados em telas pequenas */
+    
     .main-content {
         padding: 20px;
     }
 
-    /* Para telas muito pequenas, o grid pode ter apenas 1 coluna de 100% */
     .diary-grid {
         grid-template-columns: 1fr;
         gap: 20px;
