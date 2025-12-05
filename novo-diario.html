@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
 </head>
-<body style="background-color: aliceblue;">
+<body style="background-color: aliceblue; padding: 1rem;">
 
     <div class="page-container">
         
@@ -19,7 +19,7 @@
                 </button>
             </div>
 
-            <h1 class="header-title">Adicionar diário</h1>
+            <h1 class="header-title" id="pageTitle">Adicionar diário</h1>
 
             <div class="privacy-toggle-container">
                 <div id="publico" class="toggle-option active" onclick="setPrivacy('publico')">
@@ -39,32 +39,32 @@
                 <div class="color-picker-dropdown" id="colorPicker">
                     <div class="color-option" style="background-color: red;" data-color="#FF0000" onclick="selectColor(this)"></div>
                     <div class="color-option" style="background-color: orange;" data-color="#FFA500" onclick="selectColor(this)"></div>
-                    <div class="color-option" style="background-color: rgb(238, 238, 119);" data-color="#EEEE77" onclick="selectColor(this)"></div>
+                    <div class="color-option" style="background-color: yellow;" data-color="#FFFF00" onclick="selectColor(this)"></div>
                     <div class="color-option" style="background-color: green;" data-color="#008000" onclick="selectColor(this)"></div>
                     <div class="color-option" style="background-color: blue;" data-color="#0000FF" onclick="selectColor(this)"></div>
-                    <div class="color-option" style="background-color: rgb(250, 173, 186);" data-color="#FF66BB" onclick="selectColor(this)"></div>
+                    <div class="color-option" style="background-color: pink;" data-color="#FFC0CB" onclick="selectColor(this)"></div>
                 </div>
             </i>
         </div>
 
         <input type="text" id="diaryName" class="diary-title-input" placeholder="Dê um nome ao seu diário..." required />
 
-        <div id="statusMessage" style="margin-top: 20px; text-align: center; color: var(--primary); font-weight: 600;"></div>
+        <div id="statusMessage"></div>
         
     </div>
 
     <script type="module">
-      
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, addDoc, collection, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        
         let db;
         let auth;
         let userId = null;
         let selectedPrivacy = 'publico';
         let selectedColor = '#a0a0a0'; 
+        let isEditing = false;
+        let editDiaryId = null;
 
         const appId = 'default-app-id'; 
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
@@ -74,21 +74,39 @@
         window.toggleColorPicker = toggleColorPicker;
         window.selectColor = selectColor;
         
-     
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function loadDiaryForEditing() {
+            editDiaryId = getQueryParam('editId');
+            if (editDiaryId) {
+                isEditing = true;
+                const diaryName = getQueryParam('name');
+                const privacy = getQueryParam('privacy');
+                const color = getQueryParam('color');
+
+                document.getElementById('pageTitle').textContent = "Editar diário";
+                document.getElementById('salvarBtn').textContent = "Atualizar";
+                
+                if (diaryName) document.getElementById('diaryName').value = decodeURIComponent(diaryName);
+                if (privacy) setPrivacy(privacy);
+                if (color) selectColor(null, color);
+            }
+        }
+
         async function initFirebase() {
             if (Object.keys(firebaseConfig).length === 0) return;
             try {
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
-
-              
                 await signInAnonymously(auth);
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
-                        console.log("Usuário autenticado:", userId);
                     } else {
                         userId = null;
                     }
@@ -98,13 +116,10 @@
             }
         }
 
-    
         function setPrivacy(status) {
             selectedPrivacy = status;
             const publico = document.getElementById('publico');
             const privado = document.getElementById('privado');
-
-            
             publico.classList.remove('active');
             privado.classList.remove('active');
             document.getElementById(status).classList.add('active');
@@ -116,22 +131,16 @@
             picker.style.display = (picker.style.display === 'grid') ? 'none' : 'grid';
         }
 
-      
-        function selectColor(element) {
-            
-            selectedColor = element.getAttribute('data-color'); 
-            
-            
+        function selectColor(element, colorParam) {
+            const color = colorParam || element.getAttribute('data-color');
+            selectedColor = color; 
             document.getElementById('notebookIcon').style.color = selectedColor;
             
-            
             document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
+            if(element) element.classList.add('selected');
             
-            toggleColorPicker(event); 
+            if (element) toggleColorPicker(event); 
         }
-
-       
         
         async function salvarDiario(event) {
             event.preventDefault();
@@ -139,7 +148,7 @@
             const diaryName = document.getElementById('diaryName').value.trim();
             const statusMessage = document.getElementById('statusMessage');
             const salvarBtn = document.getElementById('salvarBtn');
-           
+            
             if (!diaryName) {
                 statusMessage.textContent = "Insira um nome!!";
                 return;
@@ -150,46 +159,51 @@
             }
 
             salvarBtn.disabled = true;
-            statusMessage.texsContent = "Salvando...";
+            statusMessage.textContent = isEditing ? "Atualizando..." : "Salvando...";
 
             try {
-               
                 let collectionPath;
                 if (selectedPrivacy === 'publico') {
-                   
                     collectionPath = `artifacts/${appId}/public/data/diaries`;
                 } else {
-                
                     collectionPath = `artifacts/${appId}/users/${userId}/diaries`;
                 }
 
-             
-                const newDiaryData = {
+                const diaryData = {
                     name: diaryName,
                     privacy: selectedPrivacy,
                     color: selectedColor, 
-                    createdAt: new Date(),
-                    createdBy: userId,
                 };
 
-                await addDoc(collection(db, collectionPath), newDiaryData);
-
-                statusMessage.textContent = "Salvo com sucesso! Indo para a lista...";
-                
+                if (isEditing) {
+                   
+                    const docRef = doc(db, collectionPath, editDiaryId); 
+                    diaryData.updatedAt = new Date();
+                    await updateDoc(docRef, diaryData);
+                    statusMessage.textContent = "Atualizado com sucesso! Indo para o diário...";
+                } else {
+                  
+                    diaryData.createdAt = new Date();
+                    diaryData.createdBy = userId;
+                    await addDoc(collection(db, collectionPath), diaryData);
+                    statusMessage.textContent = "Salvo com sucesso! Indo para a lista...";
+                }
                 
                 setTimeout(() => {
-                    window.location.href = "index.html"; 
+                    window.location.href = isEditing ? `detalhe-diario.html?id=${editDiaryId}` : "home.html"; 
                 }, 1500);
 
             } catch (error) {
-                console.error("Erro ao salvar:", error);
+                console.error("Erro ao salvar/atualizar:", error);
                 statusMessage.textContent = "Erro ao salvar: " + error.message;
             } finally {
                 salvarBtn.disabled = false;
             }
         }
-       
-        initFirebase();
+        
+        initFirebase().then(() => {
+            loadDiaryForEditing(); 
+        });
         
         document.addEventListener('click', (e) => {
             const picker = document.getElementById('colorPicker');
@@ -198,7 +212,44 @@
                 picker.style.display = 'none';
             }
         });
+        
 
+
+function carregarDadosDiario(id) {
+    
+    if (id == 1) {
+        return { nome: 'Diário Europa 2025', isPublico: true, cor: '#00A896' };
+    }
+   
+    return null;
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const acao = urlParams.get('acao');
+const diarioId = urlParams.get('id');
+
+if (acao === 'editar' && diarioId) {
+    const dados = carregarDadosDiario(diarioId);
+    
+    if (dados) {
+       
+        document.querySelector('.header-title').textContent = 'Editar Diário';
+        document.querySelector('.diary-title-input').placeholder = dados.nome; 
+        document.querySelector('.btn-primary').textContent = 'Salvar Alterações'; 
+        
+      
+        const publicoToggle = document.getElementById('publico');
+        const privadoToggle = document.getElementById('privado');
+
+        if (dados.isPublico) {
+            publicoToggle.classList.add('active');
+            privadoToggle.classList.remove('active');
+        } else {
+            privadoToggle.classList.add('active');
+            publicoToggle.classList.remove('active');
+        }
+    }
+}
     </script>
 </body>
 </html>

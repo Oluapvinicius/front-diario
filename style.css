@@ -14,11 +14,12 @@
 body {
     font-family: var(--font-body);
     background-color: var(--background);
-    min-height: 100vh;
+    height: 100vh;
+    width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    /*padding: 2rem;*/
     margin: 0;
 }
 
@@ -184,15 +185,21 @@ h2 {
 /*Pagina novo Diario*/
 .page-container {
     display: flex;
-    border: solid black 1px;
     flex-direction: column; 
     align-items: center;
-    padding: 3rem;
+    padding: 2rem;
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
     min-height: 90vh;
     justify-content: space-between;
+}
+
+#statusMessage{
+    margin-top: 20px; 
+    text-align: center; 
+    color: var(--primary); 
+    font-weight: 600;
 }
 
 .header-section {
@@ -347,4 +354,467 @@ h2 {
 
 .color-option.selected {
     border-color: #333;
+}
+/* --- ESTILOS ESPECÍFICOS: TELA HOME (home.html) --- */
+
+.home-header {
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+.home-header h1 {
+    font-family: var(--font-head);
+    font-size: 2.2rem;
+    color: var(--text);
+    margin-bottom: 5px;
+}
+
+.home-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.floating-actions{
+    width: 50%;
+    height: 30px;
+    background-color: #a0a0a0;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    width: 50%;
+    height: 30px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background-color: #008e7e;
+    box-shadow: 0 4px 8px rgba(0, 168, 150, 0.3);
+}
+
+.diary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.diary-card {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
+
+.diary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.diary-card-header {
+    background-color: var(--primary);
+    height: 10px;
+}
+
+.diary-card-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.diary-card-title {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.diary-card-meta {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px dashed #eee;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-icon {
+    font-size: 1.2rem;
+    margin-right: 5px;
+}
+
+
+@media (max-width: 768px) {
+    .dashboard-layout {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+    }
+    .sidebar-logo {
+        margin-bottom: 0;
+    }
+    .nav-links {
+        display: none;
+    }
+    .main-content {
+        padding: 20px;
+    }
+    .floating-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .diary-detail-meta {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .trip-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .trip-actions {
+        align-self: flex-end;
+    }
+    .date-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+/* LAYOUT DO DASHBOARD */
+.dashboard-layout {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+.main-content {
+    flex-grow: 1;
+    padding: 40px;
+    background-color: var(--secondary);
+}
+/* --- ESTILOS ESPECÍFICOS: NOVA VIAGEM (nova-viagem.html) --- */
+
+
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-header h1 {
+    font-family: var(--font-head);
+    color: var(--primary);
+    margin-bottom: 5px;
+    font-size: 2rem;
+}
+
+.form-group.textarea-group textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+
+.date-group {
+    display: flex;
+    gap: 20px;
+}
+
+.date-group > div {
+    flex: 1;
+}
+
+
+.category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.category-tag {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s, border-color 0.2s;
+    user-select: none;
+}
+
+.category-tag:hover {
+    background-color: #f0f0f0;
+}
+
+.category-tag.selected {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+
+.media-upload-area {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+.media-upload-area:hover {
+    border-color: var(--primary);
+    background-color: #f7f7f7;
+}
+
+.media-upload-area i {
+    font-size: 2.5rem;
+    color: var(--secondary-text);
+    margin-bottom: 10px;
+}
+
+.media-upload-area p {
+    margin: 0;
+    color: var(--secondary-text);
+}
+
+#fileInput {
+    display: none;
+}
+
+.uploaded-files-list {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.file-item {
+    background-color: var(--background);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.remove-file {
+    color: red;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+
+.btn-save-viagem {
+    width: 100%;
+    margin-top: 30px;
+  
+}
+
+/* --- ESTILOS ESPECÍFICOS: DETALHES DO DIÁRIO (detalhe-diario.html) --- */
+
+
+.diary-detail-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.diary-detail-title {
+    font-family: var(--font-head);
+    font-size: 2.5rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.diary-detail-meta {
+    font-size: 1rem;
+    color: var(--secondary-text);
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.diary-detail-meta span i {
+    margin-right: 5px;
+    color: var(--primary);
+}
+
+.floating-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 10px 0;
+    background-color: var(--background); 
+}
+
+
+.btn-secondary {
+    padding: 10px 20px;
+    background-color: #e0e0e0;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-secondary:hover {
+    background-color: #d0d0d0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+.trips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.trip-card {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border-left: 5px solid var(--primary); 
+}
+
+.trip-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.trip-info h4 {
+    margin: 0 0 5px 0;
+    font-family: var(--font-head);
+    color: var(--primary);
+    font-size: 1.3rem;
+}
+
+.trip-info p {
+    margin: 0;
+    color: var(--secondary-text);
+    font-size: 0.95rem;
+}
+
+.trip-actions {
+    position: relative;
+}
+
+.menu-dot-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--secondary-text);
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.menu-dot-btn:hover {
+    background-color: var(--background);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background-color: var(--card-background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 60;
+    min-width: 150px;
+    display: none; 
+    overflow: hidden;
+}
+
+.dropdown-menu button {
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+    border: none;
+    background: none;
+    color: var(--text);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dropdown-menu button:hover {
+    background-color: var(--background);
+}
+
+/* Responsividade Aprimorada para o Grid */
+.diary-grid {
+    /* Permite que o grid crie colunas de no mínimo 250px, preenchendo o espaço */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 25px;
+}
+
+/* Garante o padding correto em telas menores */
+@media (max-width: 768px) {
+    /* Garante que o conteúdo principal tenha padding nos lados em telas pequenas */
+    .main-content {
+        padding: 20px;
+    }
+
+    /* Para telas muito pequenas, o grid pode ter apenas 1 coluna de 100% */
+    .diary-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }
