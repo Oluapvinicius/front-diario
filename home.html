@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Diários - Diário de Viagens</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+        </aside>
+
+        <main class="main-content">
+            <header class="home-header">
+                <h1>Meus Diários de Viagens</h1>
+                <p style="color: var(--secondary-text);">Aqui estão todos os seus diários. Clique para ver os detalhes e viagens.</p>
+            </header>
+
+            <div class="home-actions">
+                <a href="novo-diario.html" class="btn-primary" style="width: auto;"> 
+                    <i class="fa-solid fa-plus"></i> Novo Diário
+                </a>
+            </div>
+            
+            <section class="diary-grid">
+    
+                <div class="diary-card">
+                    <div class="diary-card-header" style="background-color: #00A896;"></div> 
+                    <div class="diary-card-content" >
+                        <h2 class="diary-card-title" onclick="salvarH1(this)">Diário de Viagens</h2> 
+                        
+                        <div class="diary-card-actions">
+                            <button class="menu-dot-btn" onclick="event.stopPropagation(); toggleMenu(1)">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu" id="menu-1">
+                                <button onclick="editarDiario(1)"><i class="fa-solid fa-pen"></i> Editar</button>
+                                <button onclick="excluirDiario(1)"><i class="fa-solid fa-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                        
+                        <div class="diary-card-meta">
+                            <span><i class="fa-solid fa-plane card-icon"></i> 2 Viagens</span>
+                            <span><i class="fa-solid fa-lock-open card-icon"></i> Público</span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="diary-card">
+                    <div class="diary-card-header" style="background-color: #FFC0CB;"></div> 
+                    <div class="diary-card-content" >
+                        <h2 class="diary-card-title" onclick="salvarH1(this)">Diário de Ponto turistico</h2>
+                        
+                        <div class="diary-card-actions">
+                            <button class="menu-dot-btn" onclick="event.stopPropagation(); toggleMenu(2)">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu" id="menu-2">
+                                <button onclick="editarDiario(2)"><i class="fa-solid fa-pen"></i> Editar</button>
+                                <button onclick="excluirDiario(2)"><i class="fa-solid fa-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+            
+                        <div class="diary-card-meta">
+                            <span><i class="fa-solid fa-plane card-icon"></i> 1 Viagem</span>
+                            <span><i class="fa-solid fa-lock-open card-icon"></i> Público</span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="diary-card">
+                    <div class="diary-card-header" style="background-color: #008000;"></div> 
+                    <div class="diary-card-content">
+                        <h2 class="diary-card-title" onclick="salvarH1(this)">Diário</h2>
+                        
+                        <div class="diary-card-actions">
+                            <button class="menu-dot-btn" onclick="event.stopPropagation(); toggleMenu(3)">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu" id="menu-3">
+                                <button onclick="editarDiario(3)"><i class="fa-solid fa-pen"></i> Editar</button>
+                                <button onclick="excluirDiario(3)"><i class="fa-solid fa-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+            
+                        <div class="diary-card-meta">
+                            <span><i class="fa-solid fa-plane card-icon"></i> 1 Viagem</span>
+                            <span><i class="fa-solid fa-lock card-icon"></i> Privado</span>
+                        </div>
+                    </div>
+                </div>
+            
+            </section>
+        </main>
+    </div>
+
+    <script>
+
+        function toggleMenu(id) {
+        const menu = document.getElementById(`menu-${id}`);
+        document.querySelectorAll('.dropdown-menu').forEach(m => {
+        if (m.id !== `menu-${id}`) {
+         m.style.display = 'none';
+        }
+        });
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+         }
+        
+        document.addEventListener('click', function(event) {
+        if (!event.target.closest('.diary-card-actions')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+         menu.style.display = 'none';
+         });
+        }
+         });
+        
+        function editarDiario(id) {
+       const card = document.querySelector(`#menu-${id}`).closest('.diary-card');
+
+      const nameElement = card.querySelector('.diary-card-title');
+       const name = nameElement ? nameElement.textContent.trim() : `Diario ID ${id}`;
+        
+     
+        const headerElement = card.querySelector('.diary-card-header');
+       const colorStyle = headerElement.style.backgroundColor;
+      
+        let color = '#a0a0a0'; 
+        if (colorStyle) {
+        
+        color = rgbToHex(colorStyle); 
+       }
+         
+    
+            const privacyElement = card.querySelector('.diary-card-meta span:last-child');
+             let privacy = 'publico';
+             if (privacyElement && privacyElement.textContent.includes('Privado')) {
+            privacy = 'privado';
+             }
+        
+        
+            const encontrarNome = encodeURIComponent(name);
+            const encontrarCor = encodeURIComponent(color);
+        
+        
+        
+            window.location.href = `novo-diario.html?editId=${id}&name=${encontrarNome}&privacy=${privacy}&color=${encontrarCor}`;
+        }
+        
+        function excluirDiario(id) {
+             if (confirm('Tem certeza que deseja excluir o Diário ' + id + '?')) {
+            alert('Diário ' + id + ' excluído.');
+             }
+        }
+        
+       
+        function rgbToHex(rgb) {
+        
+        const result = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgb);
+        if (!result) return rgb; 
+    
+            function corComponente(c) {
+        const hex = parseInt(c).toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
+         }
+        
+     
+        return "#" + corComponente(result[1]) + corComponente(result[2]) + corComponente(result[3]);
+        }
+
+
+    function salvarH1(h1Element){ 
+    let textoH1 = h1Element.innerText;
+    localStorage.setItem('h1 salva', textoH1);
+    window.location.href = "home-principal.html";
+}
+
+        </script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário Aberto</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="display: block; background-color: aliceblue;">
+
+    <header class="diary-header">
+        <div class="header-left">
+            <button class="icon-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="header-logo">
+                <i class="fa-solid fa-mountain-sun"></i> <h2 id="diaryTitleDisplay" class="current-diary-title">Carregando...</h2>
+            </div>
+            
+        </div>
+
+        <div class="header-right">
+            <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+            <button class="icon-btn" onclick="toggleProfilePopup()">
+                <i class="fa-regular fa-circle-user" style="font-size: 1.8rem;"></i>
+            </button>
+            
+            <div id="profilePopup" class="profile-popup">
+                <div class="profile-info">
+                    <span>Raimundo</span> <i class="fa-solid fa-circle-user"></i>
+                </div>
+                <button class="popup-btn" onclick="goToSettings()">Configurações</button>
+                <button class="popup-btn" onclick="logout()">Sair</button>
+            </div>
+        </div>
+    </header>
+
+    <aside id="mainSidebar" class="main-sidebar">
+        <div class="sidebar-icon" onclick="window.location.href='home.html'" title="Meus Diários">
+            <i class="fa-solid fa-book-open"></i>
+        </div>
+        <div class="sidebar-icon" title="Diários Públicos">
+            <i class="fa-solid fa-tag"></i>
+        </div>
+    </aside>
+
+    <main class="timeline-container">
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; justify-content: flex-end;">
+            <input type="text" placeholder="Pesquisar..." class="form-input" style="height: 40px; width: 200px; margin-bottom: 0;">
+            <button class="icon-btn" style="align-self: center;"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button class="icon-btn" style="align-self: center; font-size: 1.2rem;"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; justify-content: flex-end;">
+             <button class="btn-small">Categoria <i class="fa-solid fa-chevron-down"></i></button>
+             <button class="btn-small">Order by <i class="fa-solid fa-chevron-down"></i></button>
+        </div>
+
+        <div class="trip-entry">
+            <div class="trip-date">
+                <span class="dow">qua</span>
+                <span class="day">26</span>
+            </div>
+            <div class="trip-content-card">
+                <div class="trip-header">
+                    <h3>Dia de Verão</h3>
+                </div>
+                <div class="trip-body">
+                    <div class="trip-thumb"><i class="fa-solid fa-image"></i></div>
+                    <div class="trip-details">
+                        <div class="trip-time">13:31</div>
+                        <div class="trip-location"><i class="fa-solid fa-location-dot"></i> Rua Rogerio Queroz</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="trip-entry">
+            <div class="trip-date">
+                <span class="dow">qui</span>
+                <span class="day">27</span>
+            </div>
+            <div class="trip-content-card">
+                <div class="trip-header">
+                    <h3>Estou indo a praia</h3>
+                </div>
+                <div class="trip-body">
+                    <div class="trip-details">
+                        <p style="font-size: 0.9rem; color: var(--secondary-text); margin-top:0;">ut perspiciatis unde omnis iste natus error sit vol ipsa...</p>
+                        <div class="trip-location"><i class="fa-solid fa-location-dot"></i> 03:00 copa cabana RJ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <button class="fab-add" onclick="openAddModal()">
+        Adicionar <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <div id="addTripModal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="step1" class="modal-step active">
+                <div class="modal-header">
+                    <button class="btn-small" onclick="closeAddModal()">Voltar</button>
+                    <h2 class="settings-title" style="margin:0;">Criar Viagens</h2>
+                    <div style="width: 50px;"></div> 
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nome:</label>
+                    <input type="text" id="tripName" class="form-input" oninput="validateStep1()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descrição:</label>
+                    <input type="text" id="tripDesc" class="form-input" oninput="validateStep1()">
+                </div>
+                
+                <p class="form-label">Adicionar Foto ou Video:</p>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="width: 100px; height: 60px; background: var(--input-bg); display: flex; justify-content: center; align-items: center; font-size: 2rem; border-radius: 8px; color: var(--secondary-text);">+</div>
+                    <button id="btnNext1" class="btn-circle-action" onclick="nextStep(2)">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="step2" class="modal-step">
+                <div class="modal-header">
+                    <button class="btn-small" onclick="prevStep(1)">Voltar</button>
+                    <h2 class="settings-title" style="margin:0;">Criar Viagens</h2>
+                    <div style="width: 50px;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">País:</label>
+                    <select id="tripCountry" class="form-input" onchange="validateStep2()">
+                        <option value="">Selecione...</option>
+                        <option value="br">Brasil</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Estado:</label>
+                    <select id="tripState" class="form-input" onchange="validateStep2()">
+                        <option value="">Selecione...</option>
+                        <option value="sp">São Paulo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Cidade:</label>
+                    <select id="tripCity" class="form-input" onchange="validateStep2()">
+                        <option value="">Selecione...</option>
+                        <option value="itapevi">Itapevi</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                    <div>
+                        <span class="form-label" style="display:inline; margin-right: 10px;">Localização automática:</span>
+                        <button class="btn-small">Mapa</button>
+                    </div>
+                    <button id="btnNext2" class="btn-circle-action" onclick="nextStep(3)">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="step3" class="modal-step">
+                <div class="modal-header">
+                    <button class="btn-small" onclick="prevStep(2)">Voltar</button>
+                    <h2 class="settings-title" style="margin:0;">Criar Viagens</h2>
+                    <div style="width: 50px;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <label class="form-label" style="margin:0;">Categorias:</label>
+                    <button class="btn-small">Adicionar +</button>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <label style="background: var(--input-bg); padding: 10px; border-radius: 8px; font-weight: 500;">
+                        <input type="radio" name="category" onchange="validateStep3()"> ● Lazer
+                    </label>
+                    <label style="background: var(--input-bg); padding: 10px; border-radius: 8px; font-weight: 500;">
+                        <input type="radio" name="category" onchange="validateStep3()"> ○ Gastronômico
+                    </label>
+                    <label style="background: var(--input-bg); padding: 10px; border-radius: 8px; font-weight: 500;">
+                        <input type="radio" name="category" onchange="validateStep3()"> ○ Cultural
+                    </label>
+                </div>
+
+                <div style="text-align: right; margin-top: 25px;">
+                    <button id="btnSave" class="btn-circle-action" style="width: auto; height: auto; padding: 10px 20px; border-radius: 8px; font-size: 1rem;" onclick="closeAddModal()">
+                        Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+ 
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTitle = localStorage.getItem('h1 salva') || "Meu Diário";
+            document.getElementById('diaryTitleDisplay').innerText = savedTitle;
+        });
+
+        function toggleSidebar() {
+            document.getElementById('mainSidebar').classList.toggle('open');
+        }
+
+        function toggleProfilePopup() {
+            const popup = document.getElementById('profilePopup');
+            popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function goToSettings() {
+            window.location.href = 'configuracoes.html';
+        }
+        function logout() {
+            if(confirm('Tem certeza que deseja sair?')) {
+                 window.location.href = 'index.html';
+            }
+        }
+        
+       
+        document.addEventListener('DOMContentLoaded', () => {
+             document.getElementById('btnNext1').style.opacity = '0';
+             document.getElementById('btnNext1').style.pointerEvents = 'none';
+             document.getElementById('btnNext2').style.opacity = '0';
+             document.getElementById('btnNext2').style.pointerEvents = 'none';
+             document.getElementById('btnSave').style.opacity = '0';
+             document.getElementById('btnSave').style.pointerEvents = 'none';
+        });
+
+        function openAddModal() {
+            document.getElementById('addTripModal').style.display = 'flex';
+            showStep(1); 
+        }
+
+        function closeAddModal() {
+            document.getElementById('addTripModal').style.display = 'none';
+        }
+
+        function showStep(stepNumber) {
+            document.querySelectorAll('.modal-step').forEach(el => el.classList.remove('active'));
+            document.getElementById('step' + stepNumber).classList.add('active');
+
+            if (stepNumber === 1) validateStep1();
+            if (stepNumber === 2) validateStep2();
+            if (stepNumber === 3) validateStep3();
+        }
+        
+        function nextStep(step) { showStep(step); }
+        function prevStep(step) { showStep(step); }
+
+
+
+        function validateStep1() {
+            const name = document.getElementById('tripName').value.trim();
+            const desc = document.getElementById('tripDesc').value.trim();
+            const btn = document.getElementById('btnNext1');
+
+            if(name !== "" && desc !== "") {
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'all';
+            } else {
+                btn.style.opacity = '0';
+                btn.style.pointerEvents = 'none';
+            }
+        }
+
+
+        function validateStep2() {
+            const country = document.getElementById('tripCountry').value;
+            const state = document.getElementById('tripState').value;
+            const city = document.getElementById('tripCity').value;
+            const btn = document.getElementById('btnNext2');
+
+            if(country !== "" && state !== "" && city !== "") {
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'all';
+            } else {
+                btn.style.opacity = '0';
+                btn.style.pointerEvents = 'none';
+            }
+        }
+
+
+        function validateStep3() {
+            const checked = document.querySelector('input[name="category"]:checked');
+            const btn = document.getElementById('btnSave');
+
+            if(checked) {
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'all';
+            } else {
+                btn.style.opacity = '0';
+                btn.style.pointerEvents = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

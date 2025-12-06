@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - Diário de Viagens</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="margin: 0;">
+
+    <div class="settings-container">
+        <aside class="settings-sidebar">
+            <button class="back-btn" onclick="window.location.href='home-principal.html'">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </button>
+
+            <button class="settings-nav-btn active" onclick="openSection('editProfile', this)">Editar Perfil</button>
+            <button class="settings-nav-btn" onclick="openSection('account', this)">Gerenciamento da Conta</button>
+            <button class="settings-nav-btn" onclick="openSection('privacy', this)">Privacidade do Perfil</button>
+            <button class="settings-nav-btn" onclick="openSection('stats', this)">Estatísticas</button>
+        </aside>
+
+        <main class="settings-content">
+            
+            <section id="editProfile" class="settings-section active">
+                <h2 class="settings-title">Editar Perfil</h2>
+                <p class="settings-subtitle">Mantenha seus dados pessoais privados. As informações que você adiciona aqui ficam visíveis para qualquer pessoa que possa visualizar seu perfil</p>
+
+                <div class="form-group" style="display: flex; align-items: center; gap: 15px;">
+                    <label class="form-label" style="align-self: flex-start;">Foto</label>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                         <div class="profile-pic-edit">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                        <button class="btn-small">Alterar</button>
+                    </div>
+                </div>
+
+                <div class="form-group" style="max-width: 500px;">
+                    <label class="form-label">Nome</label>
+                    <input type="text" class="form-input" value="Raimundo">
+                </div>
+                <div class="form-group" style="max-width: 500px;">
+                    <label class="form-label">Nome Usuário</label>
+                    <input type="text" class="form-input" value="Ednaldo777">
+                </div>
+                <div class="form-group" style="max-width: 500px;">
+                    <label class="form-label">Descrição</label>
+                    <textarea class="form-input" rows="3">No maximo 500 caracteres</textarea>
+                </div>
+            </section>
+
+            <section id="account" class="settings-section">
+                <h2 class="settings-title">Gerenciamento da Conta</h2>
+                
+                <h3 style="margin-top: 20px;">Sua Conta</h3>
+                
+                <div class="form-group" style="max-width: 500px;">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" value="email@exemplo.com">
+                </div>
+                
+                <div class="form-group" style="max-width: 500px;">
+                    <label class="form-label">Senha</label>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="position: relative; flex-grow: 1;">
+                            <input type="password" class="form-input" value="********" id="passwordField">
+                            <i class="fa-solid fa-eye password-toggle" onclick="togglePasswordVisibility()"></i>
+                        </div>
+                        <button class="btn-small">Alterar</button>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">Informações pessoais</h3>
+                <div class="form-group" style="max-width: 500px;">
+                    <label class="form-label">Data nascimento</label>
+                    <input type="text" class="form-input" value="26/09/1999">
+                    <i class="fa-solid fa-calendar" style="float: right; margin-top: -35px; margin-right: 15px; color: var(--secondary-text);"></i>
+                </div>
+                <div class="form-group" style="max-width: 500px;">
+                    <label class="form-label">Gênero</label>
+                    <select class="form-input">
+                        <option>Masculino</option>
+                    </select>
+                </div>
+
+                <h3 style="margin-top: 30px;">Desativação e Exclusão</h3>
+                <div style="display: flex; gap: 20px;">
+                    <button class="btn-small" style="padding: 10px 20px;">Desativar Conta</button>
+                    <button class="btn-small" style="padding: 10px 20px;" onclick="alert('Atenção: Essa ação é irreversível!')">Excluir Conta</button>
+                </div>
+            </section>
+
+            <section id="privacy" class="settings-section">
+                <h2 class="settings-title">Privacidade da Conta</h2>
+                <p class="settings-subtitle">Visibilidade da conta</p>
+
+                <div class="privacy-toggle-container" style="display: inline-flex;">
+                    <div class="toggle-option active">Público</div>
+                    <div class="toggle-option">Privado</div>
+                </div>
+            </section>
+
+            <section id="stats" class="settings-section">
+                <h2 class="settings-title">Estatísticas</h2>
+
+                <h3>Pessoal</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span>Total Entradas</span>
+                        <span class="stat-value">23</span>
+                    </div>
+                    <div class="stat-card">
+                        <span>Total Categorias</span>
+                        <span class="stat-value">7</span>
+                    </div>
+                    <div class="stat-card" style="grid-row: span 2; display: flex; flex-direction: column; justify-content: center;">
+                        <span>Total Dias Registrado</span>
+                        <span class="stat-value" style="font-size: 3rem;">133</span>
+                    </div>
+                    <div class="stat-card">
+                        <span>Total Mídias</span>
+                        <span class="stat-value">12</span>
+                    </div>
+                    <div class="stat-card">
+                        <span>Total Diários</span>
+                        <span class="stat-value">5</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">Públicas</h3>
+                <div class="stats-grid" style="grid-template-columns: repeat(2, 200px);">
+                    <div class="stat-card">
+                        <span>Total Curtidas</span>
+                        <span class="stat-value">25k</span>
+                    </div>
+                    <div class="stat-card">
+                        <span>Total Seguidores</span>
+                        <span class="stat-value">72k</span>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        function openSection(sectionId, btnElement) {
+            document.querySelectorAll('.settings-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.settings-nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(sectionId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        function togglePasswordVisibility() {
+            const field = document.getElementById('passwordField');
+            const icon = document.querySelector('.password-toggle');
+            if (field.type === "password") {
+                field.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+</html>
