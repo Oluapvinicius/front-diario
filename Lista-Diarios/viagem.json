@@ -1,0 +1,32 @@
+[
+    {
+      "id_viagem": 201,
+      "nome": "Dia de Verão",
+      "data_inicio": "2025-07-26T10:30:00Z",
+      "data_fim": "2025-07-26T18:00:00Z",
+      "descricao": "Pegamos o carro cedo e fomos para a Praia do Forte. O dia estava perfeito e o mar calmo...",
+      "isPublico": true,
+      "quantidade_curtidas": 45,
+      "id_diario": 101
+    },
+    {
+      "id_viagem": 202,
+      "nome": "Almoço em Salvador",
+      "data_inicio": "2025-07-27T13:00:00Z",
+      "data_fim": "2025-07-27T15:00:00Z",
+      "descricao": "Almoço no Mercado Modelo, experimentando acarajé e moqueca. Inesquecível!",
+      "isPublico": true,
+      "quantidade_curtidas": 22,
+      "id_diario": 101
+    },
+    {
+      "id_viagem": 203,
+      "nome": "Trilha da Cachoeira",
+      "data_inicio": "2025-07-28T08:00:00Z",
+      "data_fim": "2025-07-28T16:00:00Z",
+      "descricao": "Dia de muita aventura e contato com a natureza. A vista lá de cima valeu o esforço!",
+      "isPublico": false,
+      "quantidade_curtidas": 15,
+      "id_diario": 101
+    }
+  ]

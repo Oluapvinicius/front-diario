@@ -1,0 +1,204 @@
+
+:root {
+    --primary: #008e7e;
+    --primary-hover: #00564d;
+    --background: #f8faff;
+    --card-background: #ffffff;
+    --text: #333333;
+    --secondary-text: #666666;
+    --border: #dddddd;
+    --font-head: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-body: 'Roboto', sans-serif;
+}
+
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--background);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-head);
+    color: var(--text);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.form-input,
+select.form-input,
+textarea.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: var(--card-background);
+    color: var(--text);
+}
+
+.form-input:focus,
+select.form-input:focus,
+textarea.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 142, 126, 0.1);
+}
+
+
+.btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary);
+    color: var(--card-background);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-small {
+    padding: 8px 15px;
+    background-color: var(--input-bg); 
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-small:hover {
+    background-color: #d0d0d0;
+}
+
+/* auth.css */
+.auth-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    background: var(--card-background);
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.auth-card.cadastro {
+    max-width: 500px;
+    text-align: left;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-head);
+}
+
+.logo i {
+    margin-right: 10px;
+}
+
+.auth-links {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+}
+
+.auth-links p {
+    margin: 0;
+}
+
+.auth-links a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.auth-links a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-text);
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.password-toggle:hover {
+    color: var(--primary);
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .auth-card {
+        padding: 1.5rem;
+    }
+}

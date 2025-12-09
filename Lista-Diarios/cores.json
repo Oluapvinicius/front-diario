@@ -1,0 +1,22 @@
+[
+  {
+    "id_cor": 1,
+    "nome": "Verde Água",
+    "hex_code": "#00A896"
+  },
+  {
+    "id_cor": 2,
+    "nome": "Rosa Claro",
+    "hex_code": "#FFC0CB"
+  },
+  {
+    "id_cor": 3,
+    "nome": "Verde Escuro",
+    "hex_code": "#008000"
+  },
+  {
+    "id_cor": 4,
+    "nome": "Amarelo",
+    "hex_code": "#FFD700"
+  }
+]

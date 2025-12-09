@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed de Postagens Públicas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="./home-principal.css">
+    
+    <link rel="stylesheet" href="./feed-publico.css"> 
+</head>
+<body class="main-body">
+
+    <header class="diary-header">
+        <div class="header-left">
+            <button class="icon-btn" onclick="voltaTela()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-logo">
+               
+                Feed de Viagens
+            </div>
+        </div>
+        
+        <div class="main-search-row" style="margin:0; width: 400px; max-width: 50%;">
+            <input type="text" class="form-input main-search-input" placeholder="Buscar no feed..." />
+            <button class="icon-btn search-align-center" style="margin-left: -50px;">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+
+        <div class="header-right">
+            <button class="icon-btn">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="icon-btn profile-icon">
+                <i class="fas fa-user-circle"></i> </button>
+        </div>
+    </header>
+
+    <div class="feed-main-content" id="public-feed-container">
+        </div>
+
+        <script>
+          
+          function voltaTela() {
+    window.location.href = './home-principal.html';
+}
+
+
+            const publicPosts = [
+                {
+                    "id_viagem": 101,
+                    "nome_viagem": "Museu Histórico de SP",
+                    "descricao_viagem": "Uma tarde incrível explorando as exposições de arte e história da cidade. Momentos de paz e cultura.",
+                    "data_inicio": "20/JAN",
+                    "dia_semana": "SEG",
+                    "horario": "15:00",
+                    "local_resumo": "São Paulo, Brasil",
+                    "isPublico": true,
+                    "usuario": {
+                        "id_usuario": 1,
+                        "user_nome": "Carla Oliveira",
+                        "foto_perfil_url": "https://via.placeholder.com/45/008e7e/ffffff?text=C" 
+                    },
+                    "imagem_url": "https://via.placeholder.com/600x180/e0e0e0/333333?text=Foto+do+Museu"
+                },
+                {
+                    "id_viagem": 102,
+                    "nome_viagem": "Trilha da Cachoeira Escondida",
+                    "descricao_viagem": "Um dia de aventura na natureza, descobrindo uma cachoeira secreta. A água estava gelada, mas a vista valeu a pena!",
+                    "data_inicio": "12/NOV",
+                    "dia_semana": "DOM",
+                    "horario": "10:30",
+                    "local_resumo": "Chapada Diamantina, Bahia",
+                    "isPublico": true,
+                    "usuario": {
+                        "id_usuario": 2,
+                        "user_nome": "Lucas Ferreira",
+                        "foto_perfil_url": "https://via.placeholder.com/45/008e7e/ffffff?text=L"
+                    },
+                    "imagem_url": "https://via.placeholder.com/600x180/c0c0c0/333333?text=Foto+da+Cachoeira"
+                }
+            ];
+    
+     
+            function goToUserProfile(userId, userName) {
+                alert(`Navegando para o perfil de ${userName} (ID: ${userId}).`);
+     
+            }
+ 
+            function createPostCard(post) {
+                const card = document.createElement('div');
+                card.className = 'post-card';
+           
+                card.onclick = () => goToUserProfile(post.usuario.id_usuario, post.usuario.user_nome);
+    
+                card.innerHTML = `
+                    <div class="user-header-feed">
+                        <div class="profile-pic-feed">
+                            <img src="${post.usuario.foto_perfil_url}" alt="${post.usuario.user_nome.charAt(0)}">
+                        </div>
+                        <span class="username-feed">${post.usuario.user_nome}</span>
+                    </div>
+                    <div class="post-body-feed">
+                        <div class="post-date-feed">
+                            <div class="day-name">${post.dia_semana}</div>
+                            <div class="day-number">${post.data_inicio.split('/')[0]}</div>
+                        </div>
+                        <div class="post-content-feed">
+                             <div class="trip-media-feed">
+                                 <img src="${post.imagem_url}" alt="${post.nome_viagem}">
+                            </div>
+                            <h2 class="title">${post.nome_viagem}</h2>
+                            <p class="description">${post.descricao_viagem}</p>
+                            
+                            <div class="post-footer-feed">
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${post.horario} | ${post.local_resumo}</span>
+                                </div>
+                                <div class="actions">
+                                    <i class="far fa-heart" title="Curtir"></i>
+                                    <i class="far fa-star" title="Favoritar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return card;
+            }
+
+            function renderFeed() {
+                const feedContainer = document.getElementById('public-feed-container');
+                feedContainer.innerHTML = ''; 
+    
+                if (publicPosts.length === 0) {
+                    feedContainer.innerHTML = '<p style="text-align: center; color: var(--secondary-text); margin-top: 50px;">Nenhuma postagem pública encontrada neste momento.</p>';
+                    return;
+                }
+    
+
+                publicPosts.forEach(post => {
+                    if (post.isPublico && post.usuario.user_nome) { 
+                        const postCard = createPostCard(post);
+                        feedContainer.appendChild(postCard);
+                    }
+                });
+       
+            }
+    
+            document.addEventListener('DOMContentLoaded', renderFeed);
+        </script>
+</body>
+</html>

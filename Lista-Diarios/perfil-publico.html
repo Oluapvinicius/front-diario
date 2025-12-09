@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Público - Diário de Viagens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="./home-principal.css">
+    <link rel="stylesheet" href="./perfil.css">
+    
+    
+</head>
+<body class="main-body">
+
+    <header class="diary-header">
+        <div class="header-left">
+            <button class="icon-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-logo">
+                <i class="fas fa-user-circle"></i>
+                Perfil Público
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <button class="icon-btn">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="profile-container">
+        
+        <div class="profile-header-info">
+            
+            <div class="profile-pic-large" id="profile-pic-area">
+                 </div>
+            
+            <div class="user-details">
+                <h2 id="profile-username">Nome do Usuário</h2>
+                
+                <p id="profile-bio">Esta é a descrição do perfil do usuário. No máximo 500 caracteres aqui.</p>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-followers">12.5K</div>
+                        <div class="stat-label">Seguidores</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-following">350</div>
+                        <div class="stat-label">Seguindo</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-likes">50K</div>
+                        <div class="stat-label">Curtidas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-trips">42</div>
+                        <div class="stat-label">Viagens</div>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="btn-follow" onclick="toggleFollow(this)">Seguir</button>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="profile-section-title">Postagens Públicas</h3>
+        
+        <div class="gallery-grid" id="gallery">
+            </div>
+    </div>
+
+
+    <script>
+    
+        const MOCK_PROFILE_DATA = {
+            id_usuario: 2,
+            user_nome: "Lucas Ferreira",
+            bio: "Aventureiro de fim de semana, buscando sempre a próxima trilha. Diários de viagem e fotografias.",
+            foto_perfil_url: "https://via.placeholder.com/120/008e7e/ffffff?text=L",
+            stats: {
+                seguidores: "12.5K",
+                seguindo: 350,
+                curtidas_publicas: "50K",
+                total_viagens: 42
+            },
+          
+            viagens_publicas_imagens: [
+                "https://via.placeholder.com/200x200/a9a9a9/ffffff?text=Foto+Viagem+1",
+                "https://via.placeholder.com/200x200/b0b0b0/ffffff?text=Foto+Viagem+2",
+                "https://via.placeholder.com/200x200/c1c1c1/ffffff?text=Foto+Viagem+3",
+                "https://via.placeholder.com/200x200/d2d2d2/ffffff?text=Foto+Viagem+4",
+                "https://via.placeholder.com/200x200/e3e3e3/ffffff?text=Foto+Viagem+5",
+            ]
+        };
+
+    
+        function exibirImagens(urls) {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = ''; 
+
+            if (urls.length === 0) {
+                 gallery.innerHTML = '<p style="color: var(--secondary-text); text-align: center;">Nenhuma postagem pública disponível.</p>';
+                 return;
+            }
+
+            urls.forEach(url => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+               
+                galleryItem.onclick = () => alert('Ver detalhes da viagem com esta foto.'); 
+
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Foto da Viagem';
+
+                galleryItem.appendChild(img);
+                gallery.appendChild(galleryItem);
+            });
+        }
+        
+     
+        function loadProfileData(profile) {
+          
+            document.getElementById('profile-username').textContent = profile.user_nome;
+            document.getElementById('profile-bio').textContent = profile.bio;
+
+      
+            const profilePicArea = document.getElementById('profile-pic-area');
+            profilePicArea.innerHTML = `<img src="${profile.foto_perfil_url}" alt="${profile.user_nome}">`;
+            
+            document.getElementById('stat-followers').textContent = profile.stats.seguidores;
+            document.getElementById('stat-following').textContent = profile.stats.seguindo;
+            document.getElementById('stat-likes').textContent = profile.stats.curtidas_publicas;
+            document.getElementById('stat-trips').textContent = profile.stats.total_viagens;
+
+          
+            exibirImagens(profile.viagens_publicas_imagens);
+        }
+        
+    
+        function toggleFollow(btn) {
+            if (btn.textContent === 'Seguir') {
+                btn.textContent = 'Seguindo';
+                btn.style.backgroundColor = 'var(--primary-hover)';
+                alert(`Você começou a seguir ${MOCK_PROFILE_DATA.user_nome}.`);
+            } else {
+                btn.textContent = 'Seguir';
+                btn.style.backgroundColor = 'var(--primary)';
+                alert(`Você deixou de seguir ${MOCK_PROFILE_DATA.user_nome}.`);
+            }
+        }
+        
+       
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfileData(MOCK_PROFILE_DATA);
+        });
+
+    </script>
+</body>
+</html>

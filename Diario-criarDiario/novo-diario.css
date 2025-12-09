@@ -1,0 +1,286 @@
+/* Novo Diário (novo-diario.html)*/
+
+
+:root {
+    --primary: #008e7e;
+    --primary-hover: #00564d;
+    --background: #f8faff;
+    --card-background: #ffffff;
+    --text: #333333;
+    --secondary-text: #666666;
+    --border: #dddddd;
+    --font-head: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-body: 'Roboto', sans-serif;
+}
+
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--background);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-head);
+    color: var(--text);
+}
+
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.form-input,
+select.form-input,
+textarea.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: var(--card-background);
+    color: var(--text);
+}
+
+.form-input:focus,
+select.form-input:focus,
+textarea.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 142, 126, 0.1);
+}
+
+
+.btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary);
+    color: var(--card-background);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-small {
+    padding: 8px 15px;
+    background-color: var(--input-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-small:hover {
+    background-color: #d0d0d0;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 90vh;
+    justify-content: space-between;
+}
+
+#statusMessage {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.header-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-family: var(--font-head);
+    color: var(--text);
+    text-align: center;
+}
+
+.privacy-toggle-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4rem;
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.toggle-option {
+    padding: 10px 30px;
+    font-weight: 600;
+    color: var(--secondary-text);
+    cursor: pointer;
+    border-radius: 50px;
+    transition: background-color 0.3s, color 0.3s;
+    user-select: none;
+}
+
+.toggle-separator {
+    color: var(--secondary-text);
+    padding: 10px 0;
+}
+
+.toggle-option.active {
+    background-color: #f0f0f0;
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-bar {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.btn-salvar {
+    padding: 20px 30px;
+    background-color: #f0f0f0;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-salvar:hover {
+    background-color: #e6e6e6;
+}
+
+.center-visual {
+    text-align: center;
+    margin-bottom: 3rem;
+
+}
+
+.notebook-icon {
+    font-size: 11rem;
+    color: #a0a0a0;
+    position: relative;
+}
+
+.notebook-icon .fa-paint-brush {
+    position: absolute;
+    top: 5px;
+    right: 0px;
+    font-size: 2.5rem;
+    color: var(--primary);
+    background: white;
+    padding: 5px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.notebook-icon .fa-paint-brush:active {
+    transform: scale(0.9);
+}
+
+
+.diary-title-input {
+    width: 100%;
+    border: none;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    background: transparent;
+    padding: 10px 0;
+    margin-top: auto;
+    border-bottom: 2px dashed #ccc;
+    outline: none;
+    transition: border-bottom-color 0.3s;
+}
+
+.diary-title-input:focus {
+    border-bottom-color: var(--primary);
+}
+
+
+.color-picker-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 120px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    z-index: 20;
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
+.color-option {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.color-option.selected {
+    border-color: #333;
+}

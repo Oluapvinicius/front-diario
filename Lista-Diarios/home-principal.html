@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Diário de Viagens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=menu_book" />
+    <link rel="stylesheet" href="./home-principal.css">
+    <link rel="stylesheet" href="../Login-cadastro/index.html">
+</head>
+<body>
+    <div class="modal-overlay" id="createCategoryModal">
+        <div class="modal-content small-modal">
+            <div class="modal-header category-modal-header-new">
+                <div class="header-spacer"></div> 
+                <h2 class="settings-title modal-title">Criar Categoria</h2>
+                <button class="icon-btn close-category-modal-btn" id="closeCreateCategoryModalBtn">
+                     <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="form-group categories-creation-form">
+                <label for="newCategoryName" class="form-label">Nome da Categoria:</label>
+                <input type="text" id="newCategoryName" class="form-input" placeholder="Ex: Praia, Aventura, Gastronomia">
+            </div>
+
+            <div class="save-button-container">
+                <button id="btnSaveCategory" class="btn-primary-save btn-disabled" disabled>
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+<div class="categories-modal-header">
+    <label class="form-label step3-label">Categorias: (Máximo 3)</label>
+    <button class="btn-small" id="addCategoryStep3Btn">Adicionar +</button>
+</div>
+    <header class="diary-header">
+        <div class="header-left">
+            <button class="icon-btn" id="toggle-sidebar-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-logo" id="diaryTitleDisplay">
+                <i class="fas fa-book"></i> Meu Diário
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="icon-btn profile-toggle" id="profile-toggle-btn">
+                <i class="fas fa-user-circle profile-icon"></i>
+            </button>
+            
+            <div class="profile-popup" id="profile-popup">
+                <div class="profile-info">
+                    <span>Usuário Teste</span>
+                    <i class="fas fa-user"></i>
+                </div>
+                <button class="popup-btn" id="goToSettingsBtn"><i class="fas fa-cog"></i> Configurações</button>
+                <button class="popup-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+    </header>
+
+    <aside class="main-sidebar" id="main-sidebar">
+        <div class="sidebar-icon" title="Diários" id="goToHomeBtn"><span class="material-symbols-outlined">
+            </span></div>
+        <div class="sidebar-icon" title="Mapas"><i class="fas fa-map-marked-alt"></i></div>
+        <div class="sidebar-icon" title="Fotos" onclick="goToFeed()"><i class="fas fa-images"></i></div>
+    </aside>
+
+    <main class="main-body">
+        <div class="timeline-container">
+            
+            <div class="main-search-row">
+                <input type="text" class="form-input main-search-input" placeholder="Buscar por palavra-chave..." id="main-search-input">
+                <button class="btn-small search-align-center" id="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <div class="controls-and-categories-wrapper">
+                
+                <div class="main-filter-row">
+                    <button class="btn-small" id="categories-filter-toggle">
+                        <i class="fas fa-tags"></i> Categorias
+                    </button>
+                    <button class="btn-small">
+                        <i class="fas fa-sort-amount-down"></i> Ordenar
+                    </button>
+                </div>
+                
+                <div class="categories-filter-popup" id="categoryFilterColumn">
+                    <div class="categories-header">
+                        <h4 class="categories-title"><i class="fas fa-tags"></i> Filtros</h4>
+                        <button class="btn-small create-category-btn"><i class="fas fa-plus"></i> Novo</button>
+                    </div>
+                    <input type="text" class="form-input category-search-input" id="categorySearchInput" placeholder="Buscar categorias...">
+                    
+                    <ul class="categories-list" id="categories-list-filter">
+                        </ul>
+                </div>
+            </div>
+
+            <div id="timeline-content">
+                <div class="trip-entry">
+                    <div class="trip-date">
+                        <span class="dow">SEG</span>
+                        <span class="day">26</span>
+                    </div>
+                    <div class="trip-content-card">
+                        <div class="trip-header">
+                            <h3>Dia de Verão</h3>
+                        </div>
+                        <div class="trip-body">
+                            <div class="trip-thumb"><i class="fas fa-camera"></i></div>
+                            <div class="trip-details">
+                                <p class="trip-time">10:30h</p>
+                                <p class="trip-description">Pegamos o carro cedo e fomos para a Praia do Forte. O dia estava perfeito e o mar calmo...</p>
+                                <div class="trip-location"><i class="fas fa-map-marker-alt"></i> Praia do Forte, Bahia, Brasil</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trip-entry">
+                    <div class="trip-date">
+                        <span class="dow">TER</span>
+                        <span class="day">27</span>
+                    </div>
+                    <div class="trip-content-card">
+                        <div class="trip-header">
+                            <h3>Almoço em Salvador</h3>
+                        </div>
+                        <div class="trip-body">
+                            <div class="trip-thumb"><i class="fas fa-utensils"></i></div>
+                            <div class="trip-details">
+                                <p class="trip-time">13:00h</p>
+                                <p class="trip-description">Almoço no Mercado Modelo, experimentando acarajé e moqueca. Inesquecível!</p>
+                                <div class="trip-location"><i class="fas fa-map-marker-alt"></i> Mercado Modelo, Salvador, Brasil</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <button class="fab-add" id="fab-add-btn">
+        <i class="fas fa-plus"></i> Adicionar Viagem
+    </button>
+
+
+    <div class="modal-overlay" id="addTripModal">
+        <div class="modal-content">
+            <div id="step1" class="modal-step active">
+                <div class="modal-header">
+                    <button class="btn-small" id="closeModalBtnHeader">Voltar</button>
+                    <h2 class="settings-title modal-title">Criar Viagens</h2>
+                    <div class="header-spacer"></div>
+                </div>
+            
+                <div class="form-group">
+                    <label class="form-label">Nome:</label>
+                    <input type="text" id="tripName" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descrição:</label>
+                    <input type="text" id="tripDesc" class="form-input">
+                </div>
+            
+                <p class="form-label">Adicionar Foto ou Video:</p>
+                <div class="media-row">
+                  
+                    <div class="media-upload-container">
+                        <input type="file" id="tripImageUpload" accept="image/*" style="display: none;">
+                        <div class="media-preview" id="imagePreview">
+                       
+                            <div class="media-placeholder" id="mediaPlaceholder">+</div>
+                            <img id="previewImage" class="preview-image" style="display: none;">
+                        </div>
+                        <button type="button" class="btn-small" id="uploadImageBtn">
+                            <i class="fas fa-upload"></i> Upload
+                        </button>
+                    </div>
+                    
+                    <button id="btnNext1" class="btn-circle-action btn-hidden">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-step" id="step2">
+                <div class="modal-header">
+                    <button class="icon-btn" onclick="passoAnterior(1)">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 class="modal-title location-title">Detalhes da Localização</h2>
+                    <div class="header-spacer"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="trip-country" class="form-label">País</label>
+                    <input type="text" id="trip-country" class="form-input" oninput="validarPasso2()" required>
+                </div>
+                <div class="form-group">
+                    <label for="trip-state" class="form-label">Estado (Opcional)</label>
+                    <input type="text" id="trip-state" class="form-input" oninput="validarPasso2()">
+                </div>
+                <div class="form-group">
+                    <label for="trip-city" class="form-label">Cidade</label>
+                    <input type="text" id="trip-city" class="form-input" oninput="validarPasso2()" required>
+                </div>
+                
+                <div class="media-row button-row-center">
+                    <div class="media-placeholder-spacer"></div> 
+                    <button id="btnNext2" class="btn-circle-action btn-hidden">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="step3" class="modal-step">
+                <div class="modal-header">
+                    <button class="btn-small" id="prevStep2Btn">Voltar</button>
+                    <h2 class="settings-title modal-title">Criar Viagens</h2>
+                    <div class="header-spacer"></div>
+                </div>
+
+                <div class="categories-modal-header">
+                    <label class="form-label step3-label">Categorias: (Máximo 3)</label>
+                    <button class="btn-small">Adicionar +</button>
+                </div>
+
+                <div id="categoryList" class="category-list-modal">
+                    </div>
+
+                <div class="save-button-container">
+                    <button id="btnSave" class="btn-primary-save">
+                        Salvar
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ** JSON FALSO DE CATEGORIAS **
+        const CATEGORIAS_FALSAS = [
+            { "id_categoria": 1, "nome": "Viagens" },
+            { "id_categoria": 2, "nome": "Ponto Turístico" },
+            { "id_categoria": 3, "nome": "Fim de Semana" },
+            { "id_categoria": 4, "nome": "Gastronomia" },
+            { "id_categoria": 5, "nome": "Aventura" },
+            { "id_categoria": 6, "nome": "Cultura" },
+            { "id_categoria": 7, "nome": "Praia" },
+            { "id_categoria": 8, "nome": "Montanha" }
+        ];
+
+const VIAGENS_FALSAS = [
+    {
+        "id_viagem": 201,
+        "nome": "Dia de Verão",
+        "data_inicio": "2025-07-26T10:30:00Z",
+        "descricao": "Pegamos o carro cedo e fomos para a Praia do Forte. O dia estava perfeito e o mar calmo...",
+        "localizacao_detalhada": "Praia do Forte, Bahia, Brasil",
+        "arquivos": [
+            {
+                "id_arquivo": 1,
+                "nome": "praia_forte.jpg",
+                "tipo": "imagem",
+                "url_armazenamento": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=200&fit=crop",
+                "tamanho_megabytes": 2.5
+            }
+        ]
+    },
+    {
+        "id_viagem": 202,
+        "nome": "Almoço em Salvador",
+        "data_inicio": "2025-07-27T13:00:00Z",
+        "descricao": "Almoço no Mercado Modelo, experimentando acarajé e moqueca. Inesquecível!",
+        "localizacao_detalhada": "Mercado Modelo, Salvador, Brasil",
+        "arquivos": [
+            {
+                "id_arquivo": 2,
+                "nome": "acarajé.jpg",
+                "tipo": "imagem",
+                "url_armazenamento": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=200&fit=crop",
+                "tamanho_megabytes": 3.1
+            }
+        ]
+    },
+    {
+        "id_viagem": 203,
+        "nome": "Trilha da Cachoeira",
+        "data_inicio": "2025-07-28T08:00:00Z",
+        "descricao": "Dia de muita aventura e contato com a natureza. A vista lá de cima valeu o esforço!",
+        "localizacao_detalhada": "Chapada Diamantina, Bahia, Brasil",
+        "arquivos": [
+            {
+                "id_arquivo": 3,
+                "nome": "cachoeira.jpg",
+                "tipo": "imagem",
+                "url_armazenamento": "https://images.unsplash.com/photo-1551632811-561732d1e306?w=300&h=200&fit=crop",
+                "tamanho_megabytes": 4.2
+            }
+        ]
+    }
+];
+        document.addEventListener('DOMContentLoaded', () => {
+        
+            const tituloSalvo = localStorage.getItem('h1 salva') || "Meu Diário";
+          
+            const displayElement = document.getElementById('diaryTitleDisplay');
+            if (displayElement) {
+             
+                const spanTitle = displayElement.querySelector('.current-diary-title');
+                if (spanTitle) {
+                     spanTitle.innerText = tituloSalvo;
+                } else {
+                  
+                     displayElement.innerHTML = `<i class="fas fa-book"></i> ${tituloSalvo}`;
+                }
+            }
+
+
+         
+            renderizarFiltroCategorias(CATEGORIAS_FALSAS);
+    
+         
+            const botoesIniciais = ['btnNext1', 'btnNext2', 'btnSave'];
+            botoesIniciais.forEach(id => {
+                const botao = document.getElementById(id);
+                if (botao) {
+                 
+                    botao.classList.add('btn-hidden'); 
+                }
+            });
+    
+          
+            document.getElementById('toggle-sidebar-btn').addEventListener('click', alternarBarraLateral); // Corrigido
+            document.getElementById('profile-toggle-btn').addEventListener('click', alternarPopupPerfil); // Corrigido
+            document.getElementById('goToSettingsBtn').addEventListener('click', irParaConfiguracoes); // Corrigido
+            document.getElementById('logoutBtn').addEventListener('click', sair, () => {window.location.href= '../Login-cadastro/index.html'}); // Corrigido
+            document.getElementById('goToHomeBtn').addEventListener('click', () => { window.location.href = 'home.html'; }); // Corrigido
+    
+       
+            document.getElementById('categories-filter-toggle').addEventListener('click', alternarFiltroCategorias); 
+           
+            document.getElementById('categorySearchInput').addEventListener('input', filtrarCategorias); 
+    
+         
+            document.getElementById('fab-add-btn').addEventListener('click', abrirModalAdicionar); 
+            document.getElementById('closeModalBtnHeader').addEventListener('click', fecharModalAdicionar); 
+    
+            // Passo 1 
+            document.getElementById('tripName').addEventListener('input', validarPasso1);
+            document.getElementById('tripDesc').addEventListener('input', validarPasso1);
+            document.getElementById('btnNext1').addEventListener('click', () => proximoPasso(2));
+    
+            // Passo 2 
+            document.getElementById('prevStep1Btn').addEventListener('click', () => passoAnterior(1)); 
+            document.getElementById('trip-country').addEventListener('input', validarPasso2); 
+            document.getElementById('trip-state').addEventListener('input', validarPasso2); 
+            document.getElementById('trip-city').addEventListener('input', validarPasso2); 
+            document.getElementById('btnNext2').addEventListener('click', () => proximoPasso(3));
+    
+            // Passo 3 
+            document.getElementById('prevStep2Btn').addEventListener('click', () => passoAnterior(2)); 
+            document.getElementById('btnSave').addEventListener('click', fecharModalAdicionar);
+        });
+        
+    
+        function alternarBarraLateral() {
+            document.getElementById('main-sidebar').classList.toggle('open');
+        }
+    
+        function alternarPopupPerfil() {
+            const popup = document.getElementById('profile-popup');
+            popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+        }
+    
+        function irParaConfiguracoes() {
+            window.location.href = 'configuracoes.html';
+        }
+        
+        function sair() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                window.location.href = 'index.html';
+            }
+        }
+    
+    
+    
+        function alternarFiltroCategorias(evento) {
+            if (evento) evento.stopPropagation();
+    
+
+            const coluna = document.getElementById('categoryFilterColumn'); 
+            coluna.classList.toggle('visible');
+    
+            if (coluna.classList.contains('visible')) {
+                document.addEventListener('click', fecharFiltroCategoriasAoClicarFora);
+            } else {
+
+                document.getElementById('categorySearchInput').value = '';
+                filtrarCategorias(); 
+                document.removeEventListener('click', fecharFiltroCategoriasAoClicarFora); 
+            }
+        }
+    
+        function fecharFiltroCategoriasAoClicarFora(evento) {
+            const coluna = document.getElementById('categoryFilterColumn'); 
+            const botao = document.getElementById('categories-filter-toggle'); 
+    
+            if (!coluna.contains(evento.target) && !botao.contains(evento.target)) {
+                coluna.classList.remove('visible');
+                document.removeEventListener('click', fecharFiltroCategoriasAoClicarFora);
+            }
+        }
+    
+        function filtrarCategorias() {
+            const entrada = document.getElementById('categorySearchInput');
+            const filtro = entrada.value.toUpperCase();
+            const listaUl = document.getElementById('categories-list-filter');
+            const itensLista = listaUl.getElementsByTagName('li');
+    
+            for (let i = 0; i < itensLista.length; i++) {
+                const spanNome = itensLista[i].querySelector('.category-name');
+                const valorTexto = spanNome.textContent || spanNome.innerText;
+    
+                if (valorTexto.toUpperCase().indexOf(filtro) > -1) {
+                    itensLista[i].style.display = 'flex';
+                } else {
+                    itensLista[i].style.display = 'none';
+                }
+            }
+        }
+    
+     
+        function excluirCategoria(id, nome) {
+            if (confirm(`Tem certeza que deseja excluir a categoria "${nome}"? (ID: ${id})`)) {
+                console.log(`Categoria ${id} excluída! (Simulação)`);
+                const itemParaRemover = document.querySelector(`.category-item-filter[data-id="${id}"]`);
+                if (itemParaRemover) {
+                    itemParaRemover.remove();
+                }
+
+                document.getElementById('categoryFilterColumn').classList.remove('visible'); 
+                document.removeEventListener('click', fecharFiltroCategoriasAoClicarFora);
+            }
+        }
+        window.deleteCategory = excluirCategoria; 
+    
+        function renderizarFiltroCategorias(categorias) {
+            const contentorLista = document.getElementById('categories-list-filter'); 
+            if (!contentorLista) return;
+    
+            contentorLista.innerHTML = '';
+    
+            categorias.forEach(categoria => {
+                const itemLista = document.createElement('li');
+                itemLista.classList.add('category-item-filter');
+                itemLista.setAttribute('data-id', categoria.id_categoria);
+    
+                itemLista.innerHTML = `
+                    <span class="category-name">${categoria.nome}</span>
+                    <button class="delete-category-btn" onclick="excluirCategoria(${categoria.id_categoria}, '${categoria.nome}')">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                `;
+    
+                itemLista.querySelector('.category-name').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    console.log(`Filtro aplicado na categoria: ${categoria.nome}`);
+                    document.getElementById('categoryFilterColumn').classList.remove('visible');
+                });
+    
+                contentorLista.appendChild(itemLista);
+            });
+        }
+    
+       
+    
+        function renderizarCategorias(categorias) {
+
+            const contentorLista = document.getElementById('categoryList');
+            if (!contentorLista) return;
+            contentorLista.innerHTML = '';
+    
+            categorias.forEach(categoria => {
+                const rotulo = document.createElement('label');
+                rotulo.classList.add('category-label-modal'); 
+    
+                const caixaSelecao = document.createElement('input');
+                caixaSelecao.type = 'checkbox';
+                caixaSelecao.name = 'category'; 
+                caixaSelecao.value = categoria.id_categoria;
+    
+                caixaSelecao.addEventListener('change', function() {
+                    const caixasSelecionadas = document.querySelectorAll('#categoryList input[name="category"]:checked');
+                    const contagem = caixasSelecionadas.length;
+    
+                    if (contagem > 3) {
+                        this.checked = false;
+                        alert('Você pode selecionar no máximo 3 categorias.');
+                    }
+                    validarPasso3();
+                });
+    
+                rotulo.appendChild(caixaSelecao);
+                rotulo.innerHTML += ` ${categoria.nome}`;
+                contentorLista.appendChild(rotulo);
+            });
+    
+            validarPasso3(); 
+        }
+    
+        function abrirModalAdicionar() {
+            document.getElementById('addTripModal').style.display = 'flex';
+            renderizarCategorias(CATEGORIAS_FALSAS);
+            mostrarPasso(1);
+        }
+    
+        function fecharModalAdicionar() {
+            document.getElementById('addTripModal').style.display = 'none';
+        }
+    
+        function mostrarPasso(numeroPasso) {
+            document.querySelectorAll('.modal-step').forEach(elemento => elemento.classList.remove('active'));
+            document.getElementById('step' + numeroPasso).classList.add('active');
+
+
+            if (numeroPasso === 1) validarPasso1();
+ 
+            if (numeroPasso === 2) validarPasso2(); 
+            if (numeroPasso === 3) validarPasso3();
+
+
+            if (numeroPasso === 3) {
+                document.getElementById('prevStep2Btn').onclick = () => passoAnterior(2);
+            }
+  
+            if (numeroPasso === 2) {
+                document.getElementById('prevStep1Btn').onclick = () => passoAnterior(1);
+            }
+        }
+    
+        function proximoPasso(passo) { mostrarPasso(passo); }
+        function passoAnterior(passo) { mostrarPasso(passo); }
+    
+    
+     
+    
+        function validarPasso1() {
+            const nome = document.getElementById('tripName').value.trim();
+            const descricao = document.getElementById('tripDesc').value.trim();
+            const botao = document.getElementById('btnNext1');
+    
+            if (nome !== "" && descricao !== "") {
+                botao.classList.remove('btn-hidden');
+            } else {
+                botao.classList.add('btn-hidden');
+            }
+        }
+    
+        
+function validarPasso2() {
+    const pais = document.getElementById('trip-country').value.trim();
+    const estado = document.getElementById('trip-state').value.trim(); 
+    const cidade = document.getElementById('trip-city').value.trim();
+    const botao = document.getElementById('btnNext2');
+
+    
+    if (pais !== "" && estado !== "" && cidade !== "") {
+        botao.classList.remove('btn-hidden');
+    } else {
+        botao.classList.add('btn-hidden');
+    }
+}
+function validarPasso3() {
+   
+    const caixasSelecionadas = document.querySelectorAll('#categoryList input[name="category"]:checked');
+    const contagemSelecionada = caixasSelecionadas.length;
+    const botao = document.getElementById('btnSave');
+
+    if (botao) { 
+        
+        if (contagemSelecionada >= 1 && contagemSelecionada <= 3) {
+            
+            botao.classList.remove('btn-hidden');
+            botao.disabled = false; 
+        } else {
+            
+            botao.classList.add('btn-hidden');
+            botao.disabled = true;
+        }
+    }
+}
+
+function abrirModalCriarCategoria() {
+    document.getElementById('createCategoryModal').style.display = 'flex';
+    document.getElementById('newCategoryName').value = ''; 
+    validarSalvarCategoria(); 
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const btnNovoFiltro = document.querySelector('.categories-header .create-category-btn');
+    if (btnNovoFiltro) {
+        btnNovoFiltro.addEventListener('click', abrirModalCriarCategoria);
+    }
+
+
+    const btnAddStep3 = document.getElementById('addCategoryStep3Btn');
+    if (btnAddStep3) {
+
+        btnAddStep3.addEventListener('click', abrirModalCriarCategoria); 
+    }
+    
+   
+});
+        
+       
+        function handleLocationInput(value) {
+           
+            console.log("Buscando localização: " + value);
+        }
+
+        
+        function selectLocation(suggestion) {
+            console.log("Localização selecionada: " + suggestion);
+           
+        }
+        document.getElementById('btnNext2').addEventListener('click', () => proximoPasso(3));
+        document.getElementById('btnSave').addEventListener('click', function() {
+
+    console.log("Viagem salva!"); 
+
+    fecharModalAdicionar(); 
+});
+
+function abrirModalCriarCategoria() {
+    document.getElementById('createCategoryModal').style.display = 'flex';
+    document.getElementById('newCategoryName').value = '';
+    validarSalvarCategoria(); 
+}
+
+function fecharModalCriarCategoria() {
+    document.getElementById('createCategoryModal').style.display = 'none';
+}
+function validarSalvarCategoria() {
+    const nomeCategoria = document.getElementById('newCategoryName').value.trim();
+    const botaoSalvar = document.getElementById('btnSaveCategory');
+
+    if (nomeCategoria.length > 0) {
+        botaoSalvar.disabled = false;
+        botaoSalvar.classList.remove('btn-disabled');
+    } else {
+        botaoSalvar.disabled = true;
+        botaoSalvar.classList.add('btn-disabled');
+    }
+}
+function salvarNovaCategoria() {
+    const nomeCategoria = document.getElementById('newCategoryName').value.trim();
+    if (nomeCategoria) {
+        console.log(`Nova Categoria Salva: "${nomeCategoria}" (Simulação)`);
+
+        const novaCategoria = { "id_categoria": Date.now(), "nome": nomeCategoria };
+        CATEGORIAS_FALSAS.push(novaCategoria);
+
+        renderizarFiltroCategorias(CATEGORIAS_FALSAS);
+
+        if (document.getElementById('addTripModal').style.display === 'flex' && document.getElementById('step3').classList.contains('active')) {
+             renderizarCategorias(CATEGORIAS_FALSAS);
+        }
+
+        fecharModalCriarCategoria();
+    }
+}
+
+function formatarDiaDaSemana(dataISO) {
+    const data = new Date(dataISO);
+    return data.toLocaleDateString('pt-BR', { weekday: 'short' }).toUpperCase().replace('.', ''); 
+}
+
+function formatarDiaDoMes(dataISO) {
+    const data = new Date(dataISO);
+    return data.getDate();
+}
+
+function formatarHora(dataISO) {
+    const data = new Date(dataISO);
+    const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    return horaFormatada.replace(':', 'h'); 
+}
+
+function renderizarViagens(viagens) {
+    const timelineContent = document.getElementById('timeline-content');
+    if (!timelineContent) return;
+
+
+    timelineContent.innerHTML = '';
+
+    viagens.forEach(viagem => {
+
+        const diaSemana = formatarDiaDaSemana(viagem.data_inicio);
+        const diaMes = formatarDiaDoMes(viagem.data_inicio);
+        const horaInicio = formatarHora(viagem.data_inicio);
+
+        const tripEntry = document.createElement('div');
+        tripEntry.classList.add('trip-entry');
+        tripEntry.setAttribute('data-id', viagem.id_viagem);
+
+        const tripDate = document.createElement('div');
+        tripDate.classList.add('trip-date');
+        
+        const dow = document.createElement('span'); 
+        dow.classList.add('dow');
+        dow.textContent = diaSemana;
+        
+        const day = document.createElement('span');
+        day.classList.add('day');
+        day.textContent = diaMes;
+
+        tripDate.appendChild(dow);
+        tripDate.appendChild(day);
+        
+        const tripCard = document.createElement('div');
+        tripCard.classList.add('trip-content-card');
+
+        const tripHeader = document.createElement('div');
+        tripHeader.classList.add('trip-header');
+        const title = document.createElement('h3');
+        title.textContent = viagem.nome;
+        tripHeader.appendChild(title);
+
+        const tripBody = document.createElement('div');
+        tripBody.classList.add('trip-body');
+
+        const tripThumb = document.createElement('div');
+        tripThumb.classList.add('trip-thumb');
+        const icon = document.createElement('i');
+        icon.classList.add('fas', viagem.icone || 'fa-book-open');
+        tripThumb.appendChild(icon);
+
+        const tripDetails = document.createElement('div');
+        tripDetails.classList.add('trip-details');
+
+        const tripTime = document.createElement('p'); 
+        tripTime.classList.add('trip-time');
+        tripTime.textContent = horaInicio;
+
+        const tripDesc = document.createElement('p'); 
+        tripDesc.classList.add('trip-description');
+        tripDesc.textContent = viagem.descricao;
+
+        const tripLocation = document.createElement('div');
+        tripLocation.classList.add('trip-location');
+        const mapIcon = document.createElement('i');
+        mapIcon.classList.add('fas', 'fa-map-marker-alt');
+        tripLocation.appendChild(mapIcon);
+        tripLocation.insertAdjacentText('beforeend', ` ${viagem.localizacao_detalhada || 'Localização não informada'}`);
+        tripDetails.appendChild(tripTime);
+        tripDetails.appendChild(tripDesc);
+        tripDetails.appendChild(tripLocation);
+        tripBody.appendChild(tripThumb);
+        tripBody.appendChild(tripDetails);
+        tripCard.appendChild(tripHeader);
+        tripCard.appendChild(tripBody);
+        tripEntry.appendChild(tripDate);
+        tripEntry.appendChild(tripCard);
+        timelineContent.appendChild(tripEntry);
+    });
+}
+
+let imagemSelecionada = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const uploadBtn = document.getElementById('uploadImageBtn');
+    const fileInput = document.getElementById('tripImageUpload');
+    const previewImage = document.getElementById('previewImage');
+    const mediaPlaceholder = document.getElementById('mediaPlaceholder');
+    
+    if (uploadBtn) {
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+    }
+    
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                  
+                    previewImage.src = event.target.result;
+                    previewImage.style.display = 'block';
+                    mediaPlaceholder.style.display = 'none';
+                    
+                    imagemSelecionada = {
+                        nome: file.name,
+                        tipo: file.type,
+                        tamanho_megabytes: (file.size / (1024 * 1024)).toFixed(2),
+                        data_url: event.target.result
+                    };
+                    
+                    console.log('Imagem selecionada:', imagemSelecionada);
+                };
+                
+                reader.readAsDataURL(file);
+            } else {
+                alert('Por favor, selecione um arquivo de imagem válido.');
+            }
+        });
+    }
+});
+
+
+function removerImagemSelecionada() {
+    imagemSelecionada = null;
+    document.getElementById('previewImage').style.display = 'none';
+    document.getElementById('mediaPlaceholder').style.display = 'flex';
+    document.getElementById('tripImageUpload').value = '';
+}
+
+
+function criarViagemComImagem(dadosViagem) {
+    
+    if (imagemSelecionada) {
+        dadosViagem.arquivos = [{
+            id_arquivo: Date.now(),
+            nome: imagemSelecionada.nome,
+            tipo: 'imagem',
+            url_armazenamento: imagemSelecionada.data_url, 
+            tamanho_megabytes: parseFloat(imagemSelecionada.tamanho_megabytes)
+        }];
+    }
+    
+   
+    const novaViagem = {
+        id_viagem: Date.now(),
+        ...dadosViagem,
+        data_inicio: new Date().toISOString()
+    };
+    
+    VIAGENS_FALSAS.unshift(novaViagem); 
+    renderizarViagens(VIAGENS_FALSAS); 
+    
+  
+    imagemSelecionada = null;
+    document.getElementById('previewImage').style.display = 'none';
+    document.getElementById('mediaPlaceholder').style.display = 'flex';
+    document.getElementById('tripImageUpload').value = '';
+    
+    return novaViagem;
+}
+function renderizarViagens(viagens) {
+    const timelineContent = document.getElementById('timeline-content');
+    if (!timelineContent) return;
+
+    timelineContent.innerHTML = '';
+
+    viagens.forEach(viagem => {
+        const diaSemana = formatarDiaDaSemana(viagem.data_inicio);
+        const diaMes = formatarDiaDoMes(viagem.data_inicio);
+        const horaInicio = formatarHora(viagem.data_inicio);
+
+        const tripEntry = document.createElement('div');
+        tripEntry.classList.add('trip-entry');
+        tripEntry.setAttribute('data-id', viagem.id_viagem);
+
+        const tripDate = document.createElement('div');
+        tripDate.classList.add('trip-date');
+        
+        const dow = document.createElement('span'); 
+        dow.classList.add('dow');
+        dow.textContent = diaSemana;
+        
+        const day = document.createElement('span');
+        day.classList.add('day');
+        day.textContent = diaMes;
+
+        tripDate.appendChild(dow);
+        tripDate.appendChild(day);
+        
+        const tripCard = document.createElement('div');
+        tripCard.classList.add('trip-content-card');
+
+        const tripHeader = document.createElement('div');
+        tripHeader.classList.add('trip-header');
+        const title = document.createElement('h3');
+        title.textContent = viagem.nome;
+        tripHeader.appendChild(title);
+
+        const tripBody = document.createElement('div');
+        tripBody.classList.add('trip-body');
+
+        const tripThumb = document.createElement('div');
+        tripThumb.classList.add('trip-thumb');
+        
+       
+        if (viagem.arquivos && viagem.arquivos.length > 0 && viagem.arquivos[0].tipo === 'imagem') {
+            // Usa imagem
+            const img = document.createElement('img');
+            img.src = viagem.arquivos[0].url_armazenamento;
+            img.alt = viagem.nome;
+            img.classList.add('trip-image');
+            tripThumb.appendChild(img);
+        } else {
+          
+            const icon = document.createElement('i');
+            icon.classList.add('fas', 'fa-camera');
+            tripThumb.appendChild(icon);
+        }
+
+        const tripDetails = document.createElement('div');
+        tripDetails.classList.add('trip-details');
+
+        const tripTime = document.createElement('p'); 
+        tripTime.classList.add('trip-time');
+        tripTime.textContent = horaInicio;
+
+        const tripDesc = document.createElement('p'); 
+        tripDesc.classList.add('trip-description');
+        tripDesc.textContent = viagem.descricao;
+
+        const tripLocation = document.createElement('div');
+        tripLocation.classList.add('trip-location');
+        const mapIcon = document.createElement('i');
+        mapIcon.classList.add('fas', 'fa-map-marker-alt');
+        tripLocation.appendChild(mapIcon);
+        tripLocation.insertAdjacentText('beforeend', ` ${viagem.localizacao_detalhada || 'Localização não informada'}`);
+        
+        tripDetails.appendChild(tripTime);
+        tripDetails.appendChild(tripDesc);
+        tripDetails.appendChild(tripLocation);
+        tripBody.appendChild(tripThumb);
+        tripBody.appendChild(tripDetails);
+        tripCard.appendChild(tripHeader);
+        tripCard.appendChild(tripBody);
+        tripEntry.appendChild(tripDate);
+        tripEntry.appendChild(tripCard);
+        timelineContent.appendChild(tripEntry);
+    });
+}
+document.getElementById('btnSave').addEventListener('click', function() {
+  
+    const nome = document.getElementById('tripName').value.trim();
+    const descricao = document.getElementById('tripDesc').value.trim();
+    const pais = document.getElementById('trip-country').value.trim();
+    const estado = document.getElementById('trip-state').value.trim();
+    const cidade = document.getElementById('trip-city').value.trim();
+    
+    const categoriasSelecionadas = Array.from(
+        document.querySelectorAll('#categoryList input[name="category"]:checked')
+    ).map(cb => parseInt(cb.value));
+    
+    const novaViagem = {
+        id_viagem: Date.now(),
+        nome: nome,
+        descricao: descricao,
+        data_inicio: new Date().toISOString(),
+        localizacao_detalhada: `${cidade}${estado ? ', ' + estado : ''}, ${pais}`,
+        isPublico: true,
+        quantidade_curtidas: 0,
+        id_diario: 1 
+    };
+  
+    if (categoriasSelecionadas.length > 0) {
+        novaViagem.categorias = categoriasSelecionadas;
+    }
+    
+  
+    if (imagemSelecionada) {
+        novaViagem.arquivos = [{
+            id_arquivo: Date.now() + 1,
+            nome: imagemSelecionada.nome,
+            tipo: 'imagem',
+            url_armazenamento: imagemSelecionada.data_url,
+            tamanho_megabytes: parseFloat(imagemSelecionada.tamanho_megabytes),
+            id_viagem: novaViagem.id_viagem
+        }];
+    }
+   
+    VIAGENS_FALSAS.unshift(novaViagem);
+    
+    console.log("Viagem salva:", novaViagem);
+    renderizarViagens(VIAGENS_FALSAS);
+    
+    fecharModalAdicionar();
+    limparFormularioViagem();
+});
+
+function limparFormularioViagem() {
+
+    document.getElementById('tripName').value = '';
+    document.getElementById('tripDesc').value = '';
+    document.getElementById('trip-country').value = '';
+    document.getElementById('trip-state').value = '';
+    document.getElementById('trip-city').value = '';
+    
+  
+    document.querySelectorAll('#categoryList input[name="category"]').forEach(cb => {
+        cb.checked = false;
+    });
+    
+   
+    imagemSelecionada = null;
+    document.getElementById('previewImage').style.display = 'none';
+    document.getElementById('mediaPlaceholder').style.display = 'flex';
+    document.getElementById('tripImageUpload').value = '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarViagens(VIAGENS_FALSAS);
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const btnNovoFiltro = document.querySelector('.categories-header .create-category-btn');
+    if (btnNovoFiltro) {
+        btnNovoFiltro.addEventListener('click', abrirModalCriarCategoria);
+    }
+
+    const btnAddStep3 = document.getElementById('addCategoryStep3Btn');
+    if (btnAddStep3) {
+        btnAddStep3.addEventListener('click', abrirModalCriarCategoria);
+    }
+
+    document.getElementById('closeCreateCategoryModalBtn').addEventListener('click', fecharModalCriarCategoria);
+    document.getElementById('newCategoryName').addEventListener('input', validarSalvarCategoria);
+    document.getElementById('btnSaveCategory').addEventListener('click', salvarNovaCategoria); 
+});
+
+function goToFeed() {
+  
+    window.location.href = './feed-publico.html'; 
+}
+    </script>
+</body>
+</html>

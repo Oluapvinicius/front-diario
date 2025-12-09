@@ -1,0 +1,283 @@
+:root {
+    --primary: #008e7e;
+    --primary-hover: #00564d;
+    --background: #f8faff;
+    --card-background: #ffffff;
+    --text: #333333;
+    --secondary-text: #666666;
+    --border: #dddddd;
+    --font-head: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-body: 'Roboto', sans-serif;
+}
+
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--background);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-head);
+    color: var(--text);
+}
+
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.form-input,
+select.form-input,
+textarea.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: var(--card-background);
+    color: var(--text);
+}
+
+.form-input:focus,
+select.form-input:focus,
+textarea.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 142, 126, 0.1);
+}
+
+
+.btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary);
+    color: var(--card-background);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-small {
+    padding: 8px 15px;
+    background-color: var(--input-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-small:hover {
+    background-color: #d0d0d0;
+}
+
+.home-header {
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+.home-header h1 {
+    font-family: var(--font-head);
+    font-size: 2.2rem;
+    color: var(--text);
+    margin-bottom: 5px;
+}
+
+.home-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.floating-actions {
+    width: 50%;
+    height: 30px;
+    background-color: #a0a0a0;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+
+    height: 30px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background-color: #008e7e;
+    box-shadow: 0 4px 8px rgba(0, 168, 150, 0.3);
+}
+
+.diary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.diary-card {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
+
+.diary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.diary-card-header {
+    background-color: var(--primary);
+    height: 10px;
+}
+
+.diary-card-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.diary-card-title {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.diary-card-meta {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px dashed #eee;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-icon {
+    font-size: 1.2rem;
+    margin-right: 5px;
+}
+
+
+@media (max-width: 768px) {
+    .dashboard-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+    }
+
+    .sidebar-logo {
+        margin-bottom: 0;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .floating-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .diary-detail-meta {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .trip-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .trip-actions {
+        align-self: flex-end;
+    }
+
+    .date-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+
+.dashboard-layout {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+.main-content {
+    flex-grow: 1;
+    padding: 40px;
+    background-color: var(--secondary);
+}

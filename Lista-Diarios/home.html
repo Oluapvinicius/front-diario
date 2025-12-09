@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Diários - Diário de Viagens</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+        </aside>
+
+        <main class="main-content">
+            <header class="home-header">
+                <h1>Meus Diários de Viagens</h1>
+                <p style="color: var(--secondary-text);">Aqui estão todos os seus diários. Clique para ver os detalhes e viagens.</p>
+            </header>
+
+            <div class="home-actions">
+                <a href="../Diario-criarDiario/novo-diario.html" class="btn-primary" style="width: auto;"> 
+                    <i class="fa-solid fa-plus"></i> Novo Diário
+                </a>
+            </div>
+            
+            <section class="diary-grid">
+    
+               
+            </section>
+        </main>
+    </div>
+
+    <script>
+
+        function toggleMenu(id) {
+        const menu = document.getElementById(`menu-${id}`);
+        document.querySelectorAll('.dropdown-menu').forEach(m => {
+        if (m.id !== `menu-${id}`) {
+         m.style.display = 'none';
+        }
+        });
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+         }
+        
+        document.addEventListener('click', function(event) {
+        if (!event.target.closest('.diary-card-actions')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+         menu.style.display = 'none';
+         });
+        }
+         });
+        
+        function editarDiario(id) {
+       const card = document.querySelector(`#menu-${id}`).closest('.diary-card');
+
+      const nameElement = card.querySelector('.diary-card-title');
+       const name = nameElement ? nameElement.textContent.trim() : `Diario ID ${id}`;
+        
+     
+        const headerElement = card.querySelector('.diary-card-header');
+       const colorStyle = headerElement.style.backgroundColor;
+      
+        let color = '#a0a0a0'; 
+        if (colorStyle) {
+        
+        color = rgbToHex(colorStyle); 
+       }
+         
+    
+            const privacyElement = card.querySelector('.diary-card-meta span:last-child');
+             let privacy = 'publico';
+             if (privacyElement && privacyElement.textContent.includes('Privado')) {
+            privacy = 'privado';
+             }
+        
+        
+            const encontrarNome = encodeURIComponent(name);
+            const encontrarCor = encodeURIComponent(color);
+        
+        
+        
+            window.location.href = `../Diario-criarDiario/novo-diario.html?editId=${id}&name=${encontrarNome}&privacy=${privacy}&color=${encontrarCor}`;
+        }
+        
+        function excluirDiario(id) {
+             if (confirm('Tem certeza que deseja excluir o Diário ' + id + '?')) {
+            alert('Diário ' + id + ' excluído.');
+             }
+        }
+        
+       
+        function rgbToHex(rgb) {
+        
+        const result = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgb);
+        if (!result) return rgb; 
+    
+            function corComponente(c) {
+        const hex = parseInt(c).toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
+         }
+        
+     
+        return "#" + corComponente(result[1]) + corComponente(result[2]) + corComponente(result[3]);
+        }
+
+
+    function salvarH1(h1Element){ 
+    let textoH1 = h1Element.innerText;
+    localStorage.setItem('h1 salva', textoH1);
+    window.location.href = "./home-principal.html";
+}
+      
+
+function exibirDiarios(diarios, cores) {
+    const container = document.querySelector('.diary-grid');
+    container.innerHTML = ''; 
+
+    diarios.forEach(diario => {
+       
+        const corEncontrada = cores.find(c => c.id_cor === diario.id_cor);
+      
+        const hexCode = corEncontrada ? corEncontrada.hex_code : '#ccc';
+
+        
+        const card = document.createElement('div');
+        card.className = 'diary-card';
+        card.id = `card-${diario.id_diario}`;
+
+      
+        const header = document.createElement('div');
+        header.className = 'diary-card-header';
+        header.style.backgroundColor = hexCode;
+
+        
+        const content = document.createElement('div');
+        content.className = 'diary-card-content';
+
+       
+        const title = document.createElement('h2');
+        title.className = 'diary-card-title';
+        title.textContent = diario.nome;
+        title.onclick = function() { salvarH1(this); }; 
+
+        const actions = document.createElement('div');
+        actions.className = 'diary-card-actions';
+
+           
+            const btnMenu = document.createElement('button');
+            btnMenu.className = 'menu-dot-btn';
+            btnMenu.onclick = function(e) { 
+                e.stopPropagation(); 
+             
+                toggleMenu(diario.id_diario); 
+            };
+            
+            const iconMenu = document.createElement('i');
+            iconMenu.className = 'fa-solid fa-ellipsis-vertical';
+            btnMenu.appendChild(iconMenu);
+            
+         
+            const dropdown = document.createElement('div');
+            dropdown.className = 'dropdown-menu';
+            dropdown.id = `menu-${diario.id_diario}`;
+            dropdown.style.display = 'none';
+
+               
+                const btnEditar = document.createElement('button');
+                btnEditar.onclick = function() { editarDiario(diario.id_diario); };
+                const iconEditar = document.createElement('i');
+                iconEditar.className = 'fa-solid fa-pen';
+                btnEditar.appendChild(iconEditar);
+                btnEditar.appendChild(document.createTextNode(' Editar'));
+
+               
+                const btnExcluir = document.createElement('button');
+                btnExcluir.onclick = function() { excluirDiario(diario.id_diario); };
+                const iconExcluir = document.createElement('i');
+                iconExcluir.className = 'fa-solid fa-trash';
+                btnExcluir.appendChild(iconExcluir);
+                btnExcluir.appendChild(document.createTextNode(' Excluir'));
+
+            dropdown.appendChild(btnEditar);
+            dropdown.appendChild(btnExcluir);
+
+            actions.appendChild(btnMenu);
+            actions.appendChild(dropdown);
+        
+       
+        const meta = document.createElement('div');
+        meta.className = 'diary-card-meta';
+
+            const spanViagens = document.createElement('span');
+            const iconPlane = document.createElement('i');
+            iconPlane.className = 'fa-solid fa-plane card-icon';
+            spanViagens.appendChild(iconPlane);
+            spanViagens.appendChild(document.createTextNode(` ${diario.quantidade_viagens} Viagens`));
+            
+            const spanPrivacidade = document.createElement('span');
+            const isPublico = diario.isPublico;
+            const iconLockClass = isPublico ? 'fa-lock-open' : 'fa-lock';
+            const textLock = isPublico ? ' Público' : ' Privado';
+
+            const iconLock = document.createElement('i');
+            iconLock.className = `fa-solid ${iconLockClass} card-icon`;
+            
+            spanPrivacidade.appendChild(iconLock);
+            spanPrivacidade.appendChild(document.createTextNode(textLock));
+        
+        meta.appendChild(spanViagens);
+        meta.appendChild(spanPrivacidade);
+
+      
+        content.appendChild(title);
+        content.appendChild(actions);
+        content.appendChild(meta);
+
+        card.appendChild(header);
+        card.appendChild(content);
+
+  
+        container.appendChild(card);
+    });
+}
+
+
+async function carregarDados() {
+    try {
+      
+        const responseCores = await fetch('./cores.json'); 
+        const cores = await responseCores.json();
+
+        const responseDiarios = await fetch('./diarios.json');
+        const diarios = await responseDiarios.json();
+        
+        
+        exibirDiarios(diarios, cores);
+
+    } catch (error) {
+        console.error("Erro ao carregar dados. Verifique se os arquivos JSON existem e se está usando um servidor local (ex: Live Server).", error);
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', carregarDados);
+
+
+document.addEventListener('DOMContentLoaded', carregarCores);
+async function carregarDiarios() {
+    try {
+        const response = await fetch('./diarios.json');
+        const listaDiarios = await response.json();
+        exibirDiarios(listaDiarios);
+    } catch (error) {
+        console.error("Erro ao carregar o JSON:", error);
+    }
+}
+
+
+
+
+        </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+[
+  {
+    "id_diario": 1,
+    "nome": "Diário de Viagens",
+    "isPublico": true,
+    "quantidade_viagens": 2,
+    "id_cor": 1 
+  },
+  {
+    "id_diario": 2,
+    "nome": "Diário de Ponto Turístico",
+    "isPublico": true,
+    "quantidade_viagens": 1,
+    "id_cor": 2
+  },
+  {
+    "id_diario": 3,
+    "nome": "Diário de Fim de Semana",
+    "isPublico": false,
+    "quantidade_viagens": 1,
+    "id_cor": 3
+  },
+  {
+    "id_diario": 4,
+    "nome": "Diário de Gastronomia",
+    "isPublico": true,
+    "quantidade_viagens": 0,
+    "id_cor": 4
+  },
+  {
+    "id_diario": 5,
+    "nome": "Diário",
+    "isPublico": false,
+    "quantidade_viagens": 20,
+    "id_cor": 1
+  }
+]
