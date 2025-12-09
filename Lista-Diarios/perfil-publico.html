@@ -45,20 +45,8 @@
 
                 <div class="stats-row">
                     <div class="stat-item">
-                        <div class="stat-value" id="stat-followers">12.5K</div>
+                        <div class="stat-value" id="stat-followers"></div>
                         <div class="stat-label">Seguidores</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="stat-following">350</div>
-                        <div class="stat-label">Seguindo</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="stat-likes">50K</div>
-                        <div class="stat-label">Curtidas</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="stat-trips">42</div>
-                        <div class="stat-label">Viagens</div>
                     </div>
                 </div>
 
@@ -78,23 +66,39 @@
     <script>
     
         const MOCK_PROFILE_DATA = {
-            id_usuario: 2,
-            user_nome: "Lucas Ferreira",
+            id_usuario: 1,
+            user_nome: "Carla",
             bio: "Aventureiro de fim de semana, buscando sempre a próxima trilha. Diários de viagem e fotografias.",
-            foto_perfil_url: "https://via.placeholder.com/120/008e7e/ffffff?text=L",
+            foto_perfil_url: "https://693869924fa1dfdc400e4c42.imgix.net/puppy.jpg",
             stats: {
-                seguidores: "12.5K",
-                seguindo: 350,
-                curtidas_publicas: "50K",
-                total_viagens: 42
+                seguidores: "12.5K"
             },
           
             viagens_publicas_imagens: [
-                "https://via.placeholder.com/200x200/a9a9a9/ffffff?text=Foto+Viagem+1",
-                "https://via.placeholder.com/200x200/b0b0b0/ffffff?text=Foto+Viagem+2",
-                "https://via.placeholder.com/200x200/c1c1c1/ffffff?text=Foto+Viagem+3",
-                "https://via.placeholder.com/200x200/d2d2d2/ffffff?text=Foto+Viagem+4",
-                "https://via.placeholder.com/200x200/e3e3e3/ffffff?text=Foto+Viagem+5",
+                "https://images.unsplash.com/photo-1551632811-561732d1e306?w=300&h=200&fit=crop",
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=200&fit=crop",
+                "https://images.unsplash.com/photo-1551632811-561732d1e306?w=300&h=200&fit=crop",
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=200&fit=crop",
+                "https://images.unsplash.com/photo-1551632811-561732d1e306?w=300&h=200&fit=crop",
+            ],
+
+
+
+
+            id_usuario: 2,
+            user_nome: "Lucas Ferreira",
+            bio: "Aventureiro de fim de semana, buscando sempre a próxima trilha. Diários de viagem e fotografias.",
+            foto_perfil_url: "https://693869924fa1dfdc400e4c42.imgix.net/puppy.jpg",
+            stats: {
+                seguidores: "12.5K"
+            },
+          
+            viagens_publicas_imagens: [
+                "https://images.unsplash.com/photo-1551632811-561732d1e306?w=300&h=200&fit=crop",
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=200&fit=crop",
+                "https://images.unsplash.com/photo-1551632811-561732d1e306?w=300&h=200&fit=crop",
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=200&fit=crop",
+                "https://images.unsplash.com/photo-1551632811-561732d1e306?w=300&h=200&fit=crop",
             ]
         };
 
@@ -134,9 +138,6 @@
             profilePicArea.innerHTML = `<img src="${profile.foto_perfil_url}" alt="${profile.user_nome}">`;
             
             document.getElementById('stat-followers').textContent = profile.stats.seguidores;
-            document.getElementById('stat-following').textContent = profile.stats.seguindo;
-            document.getElementById('stat-likes').textContent = profile.stats.curtidas_publicas;
-            document.getElementById('stat-trips').textContent = profile.stats.total_viagens;
 
           
             exibirImagens(profile.viagens_publicas_imagens);
@@ -156,7 +157,7 @@
         }
         
        
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', (id) => {
             loadProfileData(MOCK_PROFILE_DATA);
         });
 

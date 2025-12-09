@@ -63,9 +63,9 @@
                     "usuario": {
                         "id_usuario": 1,
                         "user_nome": "Carla Oliveira",
-                        "foto_perfil_url": "https://via.placeholder.com/45/008e7e/ffffff?text=C" 
+                        "foto_perfil_url": "https://693869924fa1dfdc400e4c42.imgix.net/plant.jpg" 
                     },
-                    "imagem_url": "https://via.placeholder.com/600x180/e0e0e0/333333?text=Foto+do+Museu"
+                    "imagem_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=200&fit=crop"
                 },
                 {
                     "id_viagem": 102,
@@ -79,9 +79,9 @@
                     "usuario": {
                         "id_usuario": 2,
                         "user_nome": "Lucas Ferreira",
-                        "foto_perfil_url": "https://via.placeholder.com/45/008e7e/ffffff?text=L"
+                        "foto_perfil_url": "https://693869924fa1dfdc400e4c42.imgix.net/puppy.jpg"
                     },
-                    "imagem_url": "https://via.placeholder.com/600x180/c0c0c0/333333?text=Foto+da+Cachoeira"
+                    "imagem_url": "https://images.unsplash.com/photo-1551632811-561732d1e306?w=300&h=200&fit=crop"
                 }
             ];
     
@@ -98,8 +98,8 @@
                 card.onclick = () => goToUserProfile(post.usuario.id_usuario, post.usuario.user_nome);
     
                 card.innerHTML = `
-                    <div class="user-header-feed">
-                        <div class="profile-pic-feed">
+                    <div class="user-header-feed" >
+                        <div class="profile-pic-feed" onclick = "entrarPerfil()">
                             <img src="${post.usuario.foto_perfil_url}" alt="${post.usuario.user_nome.charAt(0)}">
                         </div>
                         <span class="username-feed">${post.usuario.user_nome}</span>
@@ -131,6 +131,12 @@
                 `;
                 return card;
             }
+
+
+            function  entrarPerfil(params) {
+                window.location.href = "./perfil-publico.html"
+            }
+
 
             function renderFeed() {
                 const feedContainer = document.getElementById('public-feed-container');
