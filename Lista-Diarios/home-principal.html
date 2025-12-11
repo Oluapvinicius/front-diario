@@ -6,6 +6,7 @@
     <title>Meu Diário de Viagens</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=more_vert" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=menu_book" />
     <link rel="stylesheet" href="./home-principal.css">
     <link rel="stylesheet" href="../Login-cadastro/index.html">
@@ -394,7 +395,7 @@ const VIAGENS_FALSAS = [
         
         function sair() {
             if (confirm('Tem certeza que deseja sair?')) {
-                window.location.href = 'index.html';
+                window.location.href = '../index.html';
             }
         }
     
@@ -753,6 +754,13 @@ function renderizarViagens(viagens) {
         icon.classList.add('fas', viagem.icone || 'fa-book-open');
         tripThumb.appendChild(icon);
 
+
+        const tresPontos = document.createElement('div')
+        tresPontos.classList.add('editarViagem')
+        const tresIcon = document.createElement('i')
+        tresIcon.classList.add('material-icon')
+        tresIcon.textContent.add('more_vert')
+
         const tripDetails = document.createElement('div');
         tripDetails.classList.add('trip-details');
 
@@ -768,6 +776,10 @@ function renderizarViagens(viagens) {
         tripLocation.classList.add('trip-location');
         const mapIcon = document.createElement('i');
         mapIcon.classList.add('fas', 'fa-map-marker-alt');
+
+
+        tresPontos.appendChild(tresIcon)
+        tripBody.appendChild(tresPontos)
         tripLocation.appendChild(mapIcon);
         tripLocation.insertAdjacentText('beforeend', ` ${viagem.localizacao_detalhada || 'Localização não informada'}`);
         tripDetails.appendChild(tripTime);

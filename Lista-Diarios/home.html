@@ -175,8 +175,8 @@ function exibirDiarios(diarios, cores) {
 
                
                 const btnExcluir = document.createElement('button');
-                btnExcluir.onclick = function() { excluirDiario(diario.id_diario); };
-                const iconExcluir = document.createElement('i');
+                    btnExcluir.onclick = function() { excluirDiario(diario.id_diario); };
+                    const iconExcluir = document.createElement('i');
                 iconExcluir.className = 'fa-solid fa-trash';
                 btnExcluir.appendChild(iconExcluir);
                 btnExcluir.appendChild(document.createTextNode(' Excluir'));
@@ -225,35 +225,45 @@ function exibirDiarios(diarios, cores) {
 }
 
 
-async function carregarDados() {
+document.addEventListener('DOMContentLoaded', carregarDados);
+
+
+async function carregarDados(id) {
     try {
       
-        const responseCores = await fetch('./cores.json'); 
-        const cores = await responseCores.json();
-
-        const responseDiarios = await fetch('./diarios.json');
-        const diarios = await responseDiarios.json();
         
+        const urlDiarios = `http://localhost:8080/v1/travel/diario`;
+        const urlCores = 'http://localhost:8080/v1/travel/cor'; 
+
+    
+        const responseCores = await fetch(urlCores); 
+        const jsonCores = await responseCores.json();
+
+        
+        const cores = jsonCores.response.colors; 
+
+        
+        const responseDiarios = await fetch(urlDiarios)
+        const jsonDiarios = await responseDiarios.json();
+   console.log(jsonDiarios)
+        const diarios = jsonDiarios.response.diarios; 
+        
+       
+        if (!Array.isArray(diarios)) {
+             console.error("Erro de Estrutura: A lista de diários não é um array. JSON Recebido:", jsonDiarios);
+             return;
+        }
+
+        if (!Array.isArray(cores)) {
+             console.error("Erro de Estrutura: A lista de cores não é um array. JSON Recebido:", jsonCores);
+             return;
+        }
         
         exibirDiarios(diarios, cores);
 
     } catch (error) {
-        console.error("Erro ao carregar dados. Verifique se os arquivos JSON existem e se está usando um servidor local (ex: Live Server).", error);
-    }
-}
-
-
-document.addEventListener('DOMContentLoaded', carregarDados);
-
-
-document.addEventListener('DOMContentLoaded', carregarCores);
-async function carregarDiarios() {
-    try {
-        const response = await fetch('./diarios.json');
-        const listaDiarios = await response.json();
-        exibirDiarios(listaDiarios);
-    } catch (error) {
-        console.error("Erro ao carregar o JSON:", error);
+       
+        console.error("Erro ao carregar dados. Verifique o servidor da API, CORS e a estrutura JSON.", error);
     }
 }
 

@@ -23,7 +23,7 @@
   {
     "id_diario": 4,
     "nome": "Diário de Gastronomia",
-    "isPublico": true,
+    "isPublico": 0,
     "quantidade_viagens": 0,
     "id_cor": 4
   },
