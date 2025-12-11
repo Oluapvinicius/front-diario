@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <link rel="stylesheet" href="./home-principal.css">
-    
     <link rel="stylesheet" href="./feed-publico.css"> 
 </head>
 <body class="main-body">
@@ -19,14 +18,19 @@
                 <i class="fas fa-arrow-left"></i>
             </button>
             <div class="header-logo">
-               
                 Feed de Viagens
             </div>
         </div>
         
         <div class="main-search-row" style="margin:0; width: 400px; max-width: 50%;">
-            <input type="text" class="form-input main-search-input" placeholder="Buscar no feed..." />
-            <button class="icon-btn search-align-center" style="margin-left: -50px;">
+            <input 
+                type="text" 
+                id="search-input"
+                class="form-input main-search-input" 
+                placeholder="Buscar viagem ou usuário..." 
+                oninput="filtrarFeed()"
+            />
+            <button class="icon-btn search-align-center" style="margin-left: -50px;" onclick="filtrarFeed()">
                 <i class="fas fa-search"></i>
             </button>
         </div>
@@ -36,128 +40,233 @@
                 <i class="fas fa-bell"></i>
             </button>
             <button class="icon-btn profile-icon">
-                <i class="fas fa-user-circle"></i> </button>
+                <i class="fas fa-user-circle"></i>
+            </button>
         </div>
     </header>
 
     <div class="feed-main-content" id="public-feed-container">
-        </div>
+    </div>
 
-        <script>
-          
-          function voltaTela() {
-    window.location.href = './home-principal.html';
-}
+    <script>
+        function voltaTela() {
+            window.location.href = './home-principal.html';
+        }
 
-
-            const publicPosts = [
-                {
-                    "id_viagem": 101,
-                    "nome_viagem": "Museu Histórico de SP",
-                    "descricao_viagem": "Uma tarde incrível explorando as exposições de arte e história da cidade. Momentos de paz e cultura.",
-                    "data_inicio": "20/JAN",
-                    "dia_semana": "SEG",
-                    "horario": "15:00",
-                    "local_resumo": "São Paulo, Brasil",
-                    "isPublico": true,
-                    "usuario": {
-                        "id_usuario": 1,
-                        "user_nome": "Carla Oliveira",
-                        "foto_perfil_url": "https://693869924fa1dfdc400e4c42.imgix.net/plant.jpg" 
-                    },
-                    "imagem_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=200&fit=crop"
+        const publicPosts = [
+            {
+                "id_viagem": 101,
+                "nome_viagem": "Museu Histórico de SP",
+                "descricao_viagem": "Uma tarde incrível explorando as exposições de arte e história da cidade.",
+                "data_inicio": "20/JAN",
+                "dia_semana": "SEG",
+                "horario": "15:00",
+                "local_resumo": "São Paulo, Brasil",
+                "isPublico": true,
+                "usuario": {
+                    "id_usuario": 1,
+                    "user_nome": "Carla Oliveira",
+                    "foto_perfil_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" 
                 },
-                {
-                    "id_viagem": 102,
-                    "nome_viagem": "Trilha da Cachoeira Escondida",
-                    "descricao_viagem": "Um dia de aventura na natureza, descobrindo uma cachoeira secreta. A água estava gelada, mas a vista valeu a pena!",
-                    "data_inicio": "12/NOV",
-                    "dia_semana": "DOM",
-                    "horario": "10:30",
-                    "local_resumo": "Chapada Diamantina, Bahia",
-                    "isPublico": true,
-                    "usuario": {
-                        "id_usuario": 2,
-                        "user_nome": "Lucas Ferreira",
-                        "foto_perfil_url": "https://693869924fa1dfdc400e4c42.imgix.net/puppy.jpg"
-                    },
-                    "imagem_url": "https://images.unsplash.com/photo-1551632811-561732d1e306?w=300&h=200&fit=crop"
-                }
-            ];
-    
-     
-            function goToUserProfile(userId, userName) {
-                alert(`Navegando para o perfil de ${userName} (ID: ${userId}).`);
-     
+                "imagem_url": "https://images.unsplash.com/photo-1550586678-f7225f03c44b?w=500&h=300&fit=crop"
+            },
+            {
+                "id_viagem": 102,
+                "nome_viagem": "Trilha da Cachoeira Escondida",
+                "descricao_viagem": "Um dia de aventura na natureza, descobrindo uma cachoeira secreta.",
+                "data_inicio": "12/NOV",
+                "dia_semana": "DOM",
+                "horario": "10:30",
+                "local_resumo": "Chapada Diamantina, Bahia",
+                "isPublico": true,
+                "usuario": {
+                    "id_usuario": 2,
+                    "user_nome": "Lucas Ferreira",
+                    "foto_perfil_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop"
+                },
+                "imagem_url": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=500&h=300&fit=crop"
+            },
+            {
+                "id_viagem": 103,
+                "nome_viagem": "Férias em Paris",
+                "descricao_viagem": "Visitando a Torre Eiffel e comendo croissants.",
+                "data_inicio": "05/MAR",
+                "dia_semana": "QUA",
+                "horario": "14:00",
+                "local_resumo": "Paris, França",
+                "isPublico": true,
+                "usuario": {
+                    "id_usuario": 1,
+                    "user_nome": "Carla Oliveira",
+                    "foto_perfil_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" 
+                },
+                "imagem_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500&h=300&fit=crop"
             }
- 
-            function createPostCard(post) {
-                const card = document.createElement('div');
-                card.className = 'post-card';
-           
-                card.onclick = () => goToUserProfile(post.usuario.id_usuario, post.usuario.user_nome);
-    
-                card.innerHTML = `
-                    <div class="user-header-feed" >
-                        <div class="profile-pic-feed" onclick = "entrarPerfil()">
-                            <img src="${post.usuario.foto_perfil_url}" alt="${post.usuario.user_nome.charAt(0)}">
-                        </div>
-                        <span class="username-feed">${post.usuario.user_nome}</span>
-                    </div>
-                    <div class="post-body-feed">
-                        <div class="post-date-feed">
-                            <div class="day-name">${post.dia_semana}</div>
-                            <div class="day-number">${post.data_inicio.split('/')[0]}</div>
-                        </div>
-                        <div class="post-content-feed">
-                             <div class="trip-media-feed">
-                                 <img src="${post.imagem_url}" alt="${post.nome_viagem}">
-                            </div>
-                            <h2 class="title">${post.nome_viagem}</h2>
-                            <p class="description">${post.descricao_viagem}</p>
-                            
-                            <div class="post-footer-feed">
-                                <div class="location">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>${post.horario} | ${post.local_resumo}</span>
-                                </div>
-                                <div class="actions">
-                                    <i class="far fa-heart" title="Curtir"></i>
-                                    <i class="far fa-star" title="Favoritar"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                return card;
-            }
+        ];
 
+        function entrarPerfil(idUsuario) {
+            localStorage.setItem('selectedUserId', idUsuario);
+            window.location.href = "./perfil-publico.html";
+        }
 
-            function  entrarPerfil(params) {
-                window.location.href = "./perfil-publico.html"
-            }
-
-
-            function renderFeed() {
-                const feedContainer = document.getElementById('public-feed-container');
-                feedContainer.innerHTML = ''; 
-    
-                if (publicPosts.length === 0) {
-                    feedContainer.innerHTML = '<p style="text-align: center; color: var(--secondary-text); margin-top: 50px;">Nenhuma postagem pública encontrada neste momento.</p>';
-                    return;
-                }
-    
-
-                publicPosts.forEach(post => {
-                    if (post.isPublico && post.usuario.user_nome) { 
-                        const postCard = createPostCard(post);
-                        feedContainer.appendChild(postCard);
-                    }
-                });
+        function createPostCard(post) {
+            const card = document.createElement('div');
+            card.className = 'post-card';
        
+            const userHeaderFeed = document.createElement('div');
+            userHeaderFeed.className = 'user-header-feed';
+
+            const profilePicFeed = document.createElement('div');
+            profilePicFeed.className = 'profile-pic-feed';
+            profilePicFeed.onclick = () => entrarPerfil(post.usuario.id_usuario);
+            profilePicFeed.style.cursor = 'pointer';
+
+            const profileImg = document.createElement('img');
+            profileImg.src = post.usuario.foto_perfil_url;
+            profileImg.alt = post.usuario.user_nome.charAt(0);
+
+            profilePicFeed.appendChild(profileImg);
+
+            const usernameFeed = document.createElement('span');
+            usernameFeed.className = 'username-feed';
+            usernameFeed.onclick = () => entrarPerfil(post.usuario.id_usuario);
+            usernameFeed.style.cursor = 'pointer';
+            usernameFeed.textContent = post.usuario.user_nome;
+
+            userHeaderFeed.appendChild(profilePicFeed);
+            userHeaderFeed.appendChild(usernameFeed);
+            card.appendChild(userHeaderFeed);
+
+            const postBodyFeed = document.createElement('div');
+            postBodyFeed.className = 'post-body-feed';
+
+            const postDateFeed = document.createElement('div');
+            postDateFeed.className = 'post-date-feed';
+
+            const dayName = document.createElement('div');
+            dayName.className = 'day-name';
+            dayName.textContent = post.dia_semana;
+
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'day-number';
+            dayNumber.textContent = post.data_inicio.split('/')[0];
+
+            postDateFeed.appendChild(dayName);
+            postDateFeed.appendChild(dayNumber);
+
+            const postContentFeed = document.createElement('div');
+            postContentFeed.className = 'post-content-feed';
+
+            const tripMediaFeed = document.createElement('div');
+            tripMediaFeed.className = 'trip-media-feed';
+
+            const mediaImg = document.createElement('img');
+            mediaImg.src = post.imagem_url;
+            mediaImg.alt = post.nome_viagem;
+
+            tripMediaFeed.appendChild(mediaImg);
+
+            const title = document.createElement('h2');
+            title.className = 'title';
+            title.textContent = post.nome_viagem;
+
+            const description = document.createElement('p');
+            description.className = 'description';
+            description.textContent = post.descricao_viagem;
+
+            const postFooterFeed = document.createElement('div');
+            postFooterFeed.className = 'post-footer-feed';
+
+            const locationDiv = document.createElement('div');
+            locationDiv.className = 'location';
+
+            const mapIcon = document.createElement('i');
+            mapIcon.className = 'fas fa-map-marker-alt';
+
+            const locationSpan = document.createElement('span');
+            locationSpan.textContent = `${post.horario} | ${post.local_resumo}`;
+
+            locationDiv.appendChild(mapIcon);
+            locationDiv.appendChild(locationSpan);
+
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'actions';
+
+            const heartIcon = document.createElement('i');
+            heartIcon.className = 'far fa-heart';
+            heartIcon.title = 'Curtir';
+
+            const starIcon = document.createElement('i');
+            starIcon.className = 'far fa-star';
+            starIcon.title = 'Favoritar';
+
+            actionsDiv.appendChild(heartIcon);
+            actionsDiv.appendChild(starIcon);
+
+            postFooterFeed.appendChild(locationDiv);
+            postFooterFeed.appendChild(actionsDiv);
+
+            postContentFeed.appendChild(tripMediaFeed);
+            postContentFeed.appendChild(title);
+            postContentFeed.appendChild(description);
+            postContentFeed.appendChild(postFooterFeed);
+
+            postBodyFeed.appendChild(postDateFeed);
+            postBodyFeed.appendChild(postContentFeed);
+            card.appendChild(postBodyFeed);
+
+            return card;
+        }
+
+        function filtrarFeed() {
+            const termoBusca = document.getElementById('search-input').value.toLowerCase();
+
+            const postsFiltrados = publicPosts.filter(post => {
+                const nomeViagem = post.nome_viagem.toLowerCase();
+                const nomeUsuario = post.usuario.user_nome.toLowerCase();
+
+                return nomeViagem.includes(termoBusca) || nomeUsuario.includes(termoBusca);
+            });
+
+            renderFeed(postsFiltrados);
+        }
+
+        function renderFeed(listaPosts = publicPosts) {
+            const feedContainer = document.getElementById('public-feed-container');
+            feedContainer.innerHTML = ''; 
+
+            if (listaPosts.length === 0) {
+                const div = document.createElement('div');
+                div.style.textAlign = 'center';
+                div.style.marginTop = '50px';
+                div.style.color = 'var(--secondary-text)';
+                
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-search';
+                icon.style.fontSize = '2rem';
+                icon.style.marginBottom = '15px';
+                icon.style.opacity = '0.5';
+
+                const p = document.createElement('p');
+                p.textContent = 'Nenhuma viagem ou usuário encontrado.';
+
+                div.appendChild(icon);
+                div.appendChild(p);
+                feedContainer.appendChild(div);
+                return;
             }
-    
-            document.addEventListener('DOMContentLoaded', renderFeed);
-        </script>
+
+            listaPosts.forEach(post => {
+                if (post.isPublico) { 
+                    const postCard = createPostCard(post);
+                    feedContainer.appendChild(postCard);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFeed(publicPosts);
+        });
+    </script>
 </body>
 </html>

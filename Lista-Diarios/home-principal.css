@@ -1359,3 +1359,11 @@ textarea.form-input:focus {
         height: 80px;
     }
 }
+.trip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; 
+}
+
+
