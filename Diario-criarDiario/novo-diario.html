@@ -7,10 +7,9 @@
     <title>Adicionar Diário - Diário de Viagens</title>
     <link rel="stylesheet" href="novo-diario.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 </head>
 
-<body style="background-color: aliceblue; ">
+<body style="background-color: aliceblue;">
 
     <div class="page-container">
 
@@ -39,17 +38,17 @@
                 <i class="fa-solid fa-paint-brush" onclick="toggleColorPicker(event)"></i>
 
                 <div class="color-picker-dropdown" id="colorPicker">
-                    <div class="color-option" style="background-color: red;" data-color="#FF0000"
+                    <div class="color-option" style="background-color: red;" data-color="#FF0000" data-idcor="1"
                         onclick="selectColor(this)"></div>
-                    <div class="color-option" style="background-color: orange;" data-color="#FFA500"
+                    <div class="color-option" style="background-color: orange;" data-color="#FFA500" data-idcor="2"
                         onclick="selectColor(this)"></div>
-                    <div class="color-option" style="background-color: yellow;" data-color="#FFFF00"
+                    <div class="color-option" style="background-color: yellow;" data-color="#FFFF00" data-idcor="3"
                         onclick="selectColor(this)"></div>
-                    <div class="color-option" style="background-color: green;" data-color="#008000"
+                    <div class="color-option" style="background-color: green;" data-color="#008000" data-idcor="4"
                         onclick="selectColor(this)"></div>
-                    <div class="color-option" style="background-color: blue;" data-color="#0000FF"
+                    <div class="color-option" style="background-color: blue;" data-color="#0000FF" data-idcor="5"
                         onclick="selectColor(this)"></div>
-                    <div class="color-option" style="background-color: pink;" data-color="#FFC0CB"
+                    <div class="color-option" style="background-color: pink;" data-color="#FFC0CB" data-idcor="6"
                         onclick="selectColor(this)"></div>
                 </div>
             </i>
@@ -62,26 +61,19 @@
 
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, addDoc, collection, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        let db;
-        let auth;
-        let userId = null;
-        let selectedPrivacy = 'publico';
-        let selectedColor = '#a0a0a0';
-        let isEditing = false;
-        let editDiaryId = null;
-
-        const appId = 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-
+    <script>
         window.salvarDiario = salvarDiario;
         window.setPrivacy = setPrivacy;
         window.toggleColorPicker = toggleColorPicker;
         window.selectColor = selectColor;
+
+        let idUsuarioLogado = localStorage.getItem('userId') ? parseInt(localStorage.getItem('userId')) : null;
+
+        let selectedPrivacy = 'publico';
+        let selectedColor = '#A0A0A0';
+        let idCorSelecionada = 1;
+        let isEditing = false;
+        let editDiaryId = null;
 
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -89,39 +81,21 @@
         }
 
         function loadDiaryForEditing() {
-            editDiaryId = getQueryParam('editId');
-            if (editDiaryId) {
-                isEditing = true;
-                const diaryName = getQueryParam('name');
-                const privacy = getQueryParam('privacy');
-                const color = getQueryParam('color');
+            const acao = getQueryParam('acao');
+            const diarioId = getQueryParam('id');
 
+            if (acao === 'editar' && diarioId) {
+                isEditing = true;
+                editDiaryId = diarioId;
                 document.getElementById('pageTitle').textContent = "Editar diário";
                 document.getElementById('salvarBtn').textContent = "Atualizar";
 
-                if (diaryName) document.getElementById('diaryName').value = decodeURIComponent(diaryName);
-                if (privacy) setPrivacy(privacy);
-                if (color) selectColor(null, color);
-            }
-        }
-
-        async function initFirebase() {
-            if (Object.keys(firebaseConfig).length === 0) return;
-            try {
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                await signInAnonymously(auth);
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        userId = user.uid;
-                    } else {
-                        userId = null;
-                    }
-                });
-            } catch (error) {
-                console.error("Erro ao iniciar Firebase:", error);
+                const dadosMock = carregarDadosDiario(diarioId);
+                if (dadosMock) {
+                    document.getElementById('diaryName').value = dadosMock.nome;
+                    setPrivacy(dadosMock.isPublico ? 'publico' : 'privado');
+                    selectColor(null, dadosMock.cor, dadosMock.idCor || 1);
+                }
             }
         }
 
@@ -140,15 +114,24 @@
             picker.style.display = (picker.style.display === 'grid') ? 'none' : 'grid';
         }
 
-        function selectColor(element, colorParam) {
+        function selectColor(element, colorParam, idCorParam) {
             const color = colorParam || element.getAttribute('data-color');
+            const idCor = idCorParam || (element ? parseInt(element.getAttribute('data-idcor')) : 1);
+
             selectedColor = color;
+            idCorSelecionada = idCor;
+
             document.getElementById('notebookIcon').style.color = selectedColor;
 
             document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
             if (element) element.classList.add('selected');
 
-            if (element) toggleColorPicker(event);
+            if (element) {
+                const picker = document.getElementById('colorPicker');
+                if (picker.style.display === 'grid') {
+                    picker.style.display = 'none';
+                }
+            }
         }
 
         async function salvarDiario(event) {
@@ -157,108 +140,111 @@
             const diaryName = document.getElementById('diaryName').value.trim();
             const statusMessage = document.getElementById('statusMessage');
             const salvarBtn = document.getElementById('salvarBtn');
+            const isPublico = selectedPrivacy === 'publico';
 
             if (!diaryName) {
-                statusMessage.textContent = "Insira um nome!!";
+                statusMessage.textContent = "Insira um nome!";
+                statusMessage.style.color = 'red';
                 return;
             }
-            if (!db || !userId) {
-                statusMessage.textContent = "Criando...";
+            if (!idUsuarioLogado) {
+                statusMessage.textContent = "Erro: Usuário não logado. Redirecionando...";
+                statusMessage.style.color = 'red';
+                setTimeout(() => window.location.href = "../index.html", 1000);
                 return;
             }
 
             salvarBtn.disabled = true;
             statusMessage.textContent = isEditing ? "Atualizando..." : "Salvando...";
+            statusMessage.style.color = '#000';
+
+            const diaryData = {
+                id_usuario: idUsuarioLogado,
+                nome: diaryName,
+                isPublico: isPublico,
+                id_cor: idCorSelecionada,
+                quantidade_viagens: 0,
+                descricao: 'Um diário de viagens.'
+            };
+
+            let endpoint = `http://localhost:8080/v1/travel/diario`;
+            let method = 'POST';
+
+            if (isEditing) {
+                method = 'PUT';
+                endpoint = `http://localhost:8080/v1/travel/diario/${editDiaryId}`;
+                diaryData.id_diario = parseInt(editDiaryId);
+            }
 
             try {
-                let collectionPath;
-                if (selectedPrivacy === 'publico') {
-                    collectionPath = `artifacts/${appId}/public/data/diaries`;
+                const response = await fetch(endpoint, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(diaryData),
+                });
+
+                const data = await response.json();
+
+                if (response.ok || data.status_code === 201 || data.status_code === 200) {
+                    statusMessage.textContent = isEditing ? "Atualizado com sucesso!" : "Salvo com sucesso!";
+                    statusMessage.style.color = 'green';
+
+                    let nextUrl = "../Lista-Diarios/home.html";
+
+                    if (!isEditing && data.response && data.response.id_diario) {
+                        nextUrl = `../Lista-Diarios/home-principal.html?id_diario=${data.response.id_diario}`;
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = nextUrl;
+                    }, 1500);
+
                 } else {
-                    collectionPath = `artifacts/${appId}/users/${userId}/diaries`;
+                    const errorMessage = data.invalid_field || data.message || "Erro desconhecido da API.";
+                    statusMessage.textContent = `Erro ao salvar: ${errorMessage}`;
+                    statusMessage.style.color = 'red';
                 }
-
-                const diaryData = {
-                    name: diaryName,
-                    privacy: selectedPrivacy,
-                    color: selectedColor,
-                };
-
-                if (isEditing) {
-
-                    const docRef = doc(db, collectionPath, editDiaryId);
-                    diaryData.updatedAt = new Date();
-                    await updateDoc(docRef, diaryData);
-                    statusMessage.textContent = "Atualizado com sucesso! Indo para o diário...";
-                } else {
-
-                    diaryData.createdAt = new Date();
-                    diaryData.createdBy = userId;
-                    await addDoc(collection(db, collectionPath), diaryData);
-                    statusMessage.textContent = "Salvo com sucesso! Indo para a lista...";
-                }
-
-                setTimeout(() => {
-                    window.location.href = isEditing ? `detalhe-diario.html?id=${editDiaryId}` : "home.html";
-                }, 1500);
 
             } catch (error) {
                 console.error("Erro ao salvar/atualizar:", error);
-                statusMessage.textContent = "Erro ao salvar: " + error.message;
+                statusMessage.textContent = "Erro de conexão. Verifique se o servidor está ativo.";
+                statusMessage.style.color = 'red';
             } finally {
                 salvarBtn.disabled = false;
             }
         }
 
-        initFirebase().then(() => {
+
+        function carregarDadosDiario(id) {
+            if (id == 1) {
+                return { nome: 'Diário Europa 2025', isPublico: true, cor: '#00A896', idCor: 4 };
+            }
+            return null;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!idUsuarioLogado) {
+                document.getElementById('statusMessage').textContent = "Você não está logado.";
+            }
+
+            selectColor(null, selectedColor, idCorSelecionada);
             loadDiaryForEditing();
         });
 
         document.addEventListener('click', (e) => {
             const picker = document.getElementById('colorPicker');
             const brush = document.querySelector('.fa-paint-brush');
-            if (picker.style.display === 'grid' && !picker.contains(e.target) && e.target !== brush) {
+            const iconContainer = document.querySelector('.notebook-icon');
+
+            if (picker.style.display === 'grid' &&
+                !picker.contains(e.target) &&
+                e.target !== brush &&
+                e.target.parentNode !== iconContainer) {
                 picker.style.display = 'none';
             }
         });
-
-
-
-        function carregarDadosDiario(id) {
-
-            if (id == 1) {
-                return { nome: 'Diário Europa 2025', isPublico: true, cor: '#00A896' };
-            }
-
-            return null;
-        }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const acao = urlParams.get('acao');
-        const diarioId = urlParams.get('id');
-
-        if (acao === 'editar' && diarioId) {
-            const dados = carregarDadosDiario(diarioId);
-
-            if (dados) {
-
-                document.querySelector('.header-title').textContent = 'Editar Diário';
-                document.querySelector('.diary-title-input').placeholder = dados.nome;
-                document.querySelector('.btn-primary').textContent = 'Salvar Alterações';
-
-
-                const publicoToggle = document.getElementById('publico');
-                const privadoToggle = document.getElementById('privado');
-
-                if (dados.isPublico) {
-                    publicoToggle.classList.add('active');
-                    privadoToggle.classList.remove('active');
-                } else {
-                    privadoToggle.classList.add('active');
-                    publicoToggle.classList.remove('active');
-                }
-            }
-        }
     </script>
 </body>
 
