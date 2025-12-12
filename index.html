@@ -42,12 +42,10 @@
     </div>
 
     <script>
-        
         function toggleSenha(idCampo, icone) {
             const campo = document.getElementById(idCampo);
             if (campo.type === "password") {
                 campo.type = "text";
-               
                 icone.classList.remove('fa-eye'); 
                 icone.classList.add('fa-eye-slash');
             } else {
@@ -57,19 +55,67 @@
             }
         }
 
-       
-        function realizarLogin(event) {
+        function exibirMensagem(texto, tipo = 'error') {
+            const form = document.getElementById('loginForm');
+            let errorMessage = form.querySelector('.auth-message');
+            
+            if (!errorMessage) {
+                errorMessage = document.createElement('div');
+                errorMessage.className = 'auth-message';
+                form.prepend(errorMessage);
+            }
+
+            if (tipo === 'success') {
+                errorMessage.style.cssText = "padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 15px; text-align: center;";
+            } else {
+                errorMessage.style.cssText = "padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin-bottom: 15px; text-align: center;";
+            }
+            
+            errorMessage.textContent = texto;
+            setTimeout(() => errorMessage.remove(), 5000);
+        }
+
+        async function realizarLogin(event) {
             event.preventDefault();
             const email = document.getElementById('email').value;
             const senha = document.getElementById('senha').value;
             
-            console.log("Simulando login bem-sucedido com:", { email, senha });
-            
-            
-            window.location.href = "./Lista-Diarios/home.html"; 
-        }
+            const dadosLogin = {
+                email: email,
+                senha: senha
+            };
 
-        /*fazer um if para validadar  se  existe um diario e pular para a tela de home */
+            try {
+                const response = await fetch('http://localhost:8080/v1/travel/usuario/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dadosLogin),
+                });
+
+                const data = await response.json();
+
+                if (data.status_code === 200) { 
+                    exibirMensagem("Login realizado com sucesso! Redirecionando...", 'success');
+                    
+                    const userId = data.response.id_usuario;
+                    const userName = data.response.user_nome;
+                    
+                    localStorage.setItem('userId', userId);
+                    localStorage.setItem('userName', userName);
+                    
+                    setTimeout(() => {
+                        window.location.href = "./Lista-Diarios/home.html"; 
+                    }, 1000);
+
+                } else {
+                    exibirMensagem(data.message || "E-mail ou Senha inválidos.");
+                }
+            } catch (error) {
+                exibirMensagem("Erro de conexão. Verifique o servidor da API.");
+            }
+        }
     </script>
 </body>
 </html>

@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="./perfil.css">
 </head>
 <body class="main-body">
-
     <header class="diary-header">
         <div class="header-left">
             <button class="icon-btn" onclick="window.history.back()">
@@ -22,25 +21,16 @@
                 Perfil Público
             </div>
         </div>
-        
-        <div class="header-right">
-            <button class="icon-btn">
-                <i class="fas fa-ellipsis-v"></i>
-            </button>
-        </div>
     </header>
 
     <div class="profile-container">
-        
         <div class="profile-header-info">
             <div class="profile-pic-large" id="profile-pic-area">
-                
+                <i class="fas fa-user" style="font-size: 3rem; color: #ccc;"></i>
             </div>
-            
             <div class="user-details">
                 <h2 id="profile-username">Carregando...</h2>
                 <p id="profile-bio">Carregando descrição...</p>
-
                 <div class="stats-row">
                     <div class="stat-item">
                         <div class="stat-value" id="stat-followers">0</div>
@@ -51,160 +41,87 @@
                         <div class="stat-label">Viagens</div>
                     </div>
                 </div>
-
                 <div class="profile-actions">
                     <button class="btn-follow" id="btn-follow" onclick="toggleFollow(this)">Seguir</button>
                 </div>
             </div>
         </div>
-
         <h3 class="profile-section-title">Postagens Públicas</h3>
-        
         <div class="gallery-grid" id="gallery"></div>
     </div>
 
-    <div class="modal-overlay" id="trip-modal">
-        <div class="modal-card">
-            <div class="modal-header-nav">
-                <button class="btn-close-modal" onclick="fecharModal()">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-            </div>
-            
-            <div class="modal-image-container">
-                <img id="modal-img" src="" alt="Viagem">
-            </div>
-
-            <div class="modal-content-text">
-                <h2 class="modal-title" id="modal-title">Título</h2>
-                <p class="modal-description" id="modal-desc">
-                    Descrição da viagem...
-                </p>
-                <p class="modal-meta" id="modal-meta">
-                    00.00 . Local
-                </p>
-                
-                <div class="modal-actions">
-                    <i class="far fa-heart"></i>
-                    <i class="far fa-star"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        
-        const MOCK_USERS_DB = [
-            {
-                id_usuario: 1,
-                user_nome: "Carla Oliveira",
-                descricao: "Amante de artes e museus. Explorando o Brasil uma cidade de cada vez.",
-                quantidade_seguidores: 342,
-                foto_perfil_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop",
-                viagens: [
-                    {
-                        id: 101,
-                        titulo: "Museu Histórico",
-                        descricao: "Um passeio incrível pelas galerias antigas. A arquitetura deste lugar é fascinante e conta a história da cidade.",
-                        data_formatada: "20.01",
-                        local: "Sp Osasco Vila Nova",
-                        imagem_url: "https://images.unsplash.com/photo-1550586678-f7225f03c44b?w=400&h=300&fit=crop"
-                    },
-                    {
-                        id: 103,
-                        titulo: "Férias em Paris",
-                        descricao: "Visitando a Torre Eiffel e comendo croissants. A cidade luz nunca decepciona.",
-                        data_formatada: "05.03",
-                        local: "Paris, França",
-                        imagem_url: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&h=300&fit=crop"
-                    },
-                    {
-                        id: 104,
-                        titulo: "Dia de Praia",
-                        descricao: "Relaxando ao som do mar. Nada como um dia de sol para recarregar as energias.",
-                        data_formatada: "15.02",
-                        local: "Guarujá, SP",
-                        imagem_url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop"
-                    }
-                ]
-            },
-            {
-                id_usuario: 2,
-                user_nome: "Lucas Ferreira",
-                descricao: "Aventureiro de fim de semana, buscando sempre a próxima trilha.",
-                quantidade_seguidores: 1250,
-                foto_perfil_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop",
-                viagens: [
-                    {
-                        id: 102,
-                        titulo: "Cachoeira Escondida",
-                        descricao: "Trilha difícil, mas a vista valeu a pena. Água gelada e natureza pura.",
-                        data_formatada: "12.11",
-                        local: "Chapada Diamantina",
-                        imagem_url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=300&fit=crop"
-                    }
-                ]
-            }
-        ];
-
-        function abrirModal(viagem) {
-            document.getElementById('modal-img').src = viagem.imagem_url;
-            document.getElementById('modal-title').innerText = viagem.titulo;
-            document.getElementById('modal-desc').innerText = viagem.descricao;
-            document.getElementById('modal-meta').innerText = `${viagem.data_formatada} . ${viagem.local}`;
+        async function loadProfileData() {
+            const profileUserId = localStorage.getItem('selectedUserId') || localStorage.getItem('userId');
             
-            document.getElementById('trip-modal').style.display = 'flex';
-        }
+            if (!profileUserId) {
+                window.location.href = "../index.html";
+                return;
+            }
 
-        function fecharModal() {
-            document.getElementById('trip-modal').style.display = 'none';
+            try {
+                const responseUsuario = await fetch(`http://localhost:8080/v1/travel/usuario/${profileUserId}`);
+                const dataUsuario = await responseUsuario.json();
+                
+                if (dataUsuario.status_code !== 200) {
+                    console.error("Usuário não encontrado");
+                    return;
+                }
+                
+                const usuario = dataUsuario.response;
+                
+                document.getElementById('profile-username').textContent = usuario.user_nome || usuario.nome;
+                document.getElementById('profile-bio').textContent = usuario.descricao || "Sem descrição";
+                document.getElementById('stat-followers').textContent = usuario.quantidade_seguidores || 0;
+                
+                const responseViagens = await fetch('http://localhost:8080/v1/travel/viagem');
+                const dataViagens = await responseViagens.json();
+                
+                let viagensDoUsuario = [];
+                if (dataViagens.status_code === 200 && dataViagens.response.viagens) {
+                    viagensDoUsuario = dataViagens.response.viagens.filter(v => 
+                        v.id_usuario == profileUserId && (v.isPublico === true || v.isPublico === 1)
+                    );
+                }
+                
+                document.getElementById('stat-trips').textContent = viagensDoUsuario.length;
+                exibirImagens(viagensDoUsuario);
+                
+            } catch (error) {
+                console.error("Erro ao carregar perfil:", error);
+            }
         }
 
         function exibirImagens(listaViagens) {
             const gallery = document.getElementById('gallery');
-            gallery.innerHTML = ''; 
+            gallery.innerHTML = '';
 
             if (!listaViagens || listaViagens.length === 0) {
-                 const p = document.createElement('p');
-                 p.style.color = 'var(--secondary-text)';
-                 p.textContent = 'Nenhuma postagem pública disponível.';
-                 gallery.appendChild(p);
-                 return;
+                const p = document.createElement('p');
+                p.style.color = 'var(--secondary-text)';
+                p.textContent = 'Nenhuma postagem pública disponível.';
+                gallery.appendChild(p);
+                return;
             }
 
             listaViagens.forEach(viagem => {
                 const galleryItem = document.createElement('div');
                 galleryItem.className = 'gallery-item';
-                
-                galleryItem.onclick = () => abrirModal(viagem); 
+                galleryItem.onclick = () => abrirModal(viagem);
 
                 const img = document.createElement('img');
-                img.src = viagem.imagem_url;
+                img.src = `https://via.placeholder.com/400x300?text=${encodeURIComponent(viagem.nome)}`;
                 img.alt = viagem.titulo;
 
                 galleryItem.appendChild(img);
                 gallery.appendChild(galleryItem);
             });
-            
-            document.getElementById('stat-trips').textContent = listaViagens.length;
         }
-        
-        function loadProfileData() {
-            const userId = localStorage.getItem('selectedUserId') || 1; 
-            const user = MOCK_USERS_DB.find(u => u.id_usuario == userId);
 
-            if (!user) return;
-
-            document.getElementById('profile-username').textContent = user.user_nome;
-            document.getElementById('profile-bio').textContent = user.descricao;
-            document.getElementById('stat-followers').textContent = user.quantidade_seguidores;
-
-            const profilePicArea = document.getElementById('profile-pic-area');
-            profilePicArea.innerHTML = `<img src="${user.foto_perfil_url}" alt="${user.user_nome}">`;
-            
-            exibirImagens(user.viagens);
+        function abrirModal(viagem) {
+            alert(`Viagem: ${viagem.nome}\nDescrição: ${viagem.descricao || 'Sem descrição'}`);
         }
-        
+
         function toggleFollow(btn) {
             if (btn.textContent === 'Seguir') {
                 btn.textContent = 'Seguindo';
@@ -216,16 +133,8 @@
                 btn.style.color = '#fff';
             }
         }
-        
-        window.onclick = function(event) {
-            const modal = document.getElementById('trip-modal');
-            if (event.target == modal) {
-                fecharModal();
-            }
-        }
 
         document.addEventListener('DOMContentLoaded', loadProfileData);
-
     </script>
 </body>
 </html>

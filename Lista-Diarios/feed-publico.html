@@ -6,107 +6,90 @@
     <title>Feed de Postagens Públicas</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <link rel="stylesheet" href="./home-principal.css">
-    <link rel="stylesheet" href="./feed-publico.css"> 
+    <link rel="stylesheet" href="./feed-publico.css">
 </head>
 <body class="main-body">
-
     <header class="diary-header">
         <div class="header-left">
-            <button class="icon-btn" onclick="voltaTela()">
+            <button class="icon-btn" onclick="window.location.href='home-principal.html'">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <div class="header-logo">
-                Feed de Viagens
-            </div>
+            <div class="header-logo">Feed de Viagens</div>
         </div>
-        
         <div class="main-search-row" style="margin:0; width: 400px; max-width: 50%;">
-            <input 
-                type="text" 
-                id="search-input"
-                class="form-input main-search-input" 
-                placeholder="Buscar viagem ou usuário..." 
-                oninput="filtrarFeed()"
-            />
+            <input type="text" id="search-input" class="form-input main-search-input" placeholder="Buscar viagem ou usuário..." oninput="filtrarFeed()"/>
             <button class="icon-btn search-align-center" style="margin-left: -50px;" onclick="filtrarFeed()">
                 <i class="fas fa-search"></i>
             </button>
         </div>
-
         <div class="header-right">
-            <button class="icon-btn">
-                <i class="fas fa-bell"></i>
-            </button>
-            <button class="icon-btn profile-icon">
+            <button class="icon-btn" onclick="window.location.href='perfil-publico.html'">
                 <i class="fas fa-user-circle"></i>
             </button>
         </div>
     </header>
 
-    <div class="feed-main-content" id="public-feed-container">
-    </div>
+    <div class="feed-main-content" id="public-feed-container"></div>
 
     <script>
-        function voltaTela() {
-            window.location.href = './home-principal.html';
-        }
+        let allPosts = [];
 
-        const publicPosts = [
-            {
-                "id_viagem": 101,
-                "nome_viagem": "Museu Histórico de SP",
-                "descricao_viagem": "Uma tarde incrível explorando as exposições de arte e história da cidade.",
-                "data_inicio": "20/JAN",
-                "dia_semana": "SEG",
-                "horario": "15:00",
-                "local_resumo": "São Paulo, Brasil",
-                "isPublico": true,
-                "usuario": {
-                    "id_usuario": 1,
-                    "user_nome": "Carla Oliveira",
-                    "foto_perfil_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" 
-                },
-                "imagem_url": "https://images.unsplash.com/photo-1550586678-f7225f03c44b?w=500&h=300&fit=crop"
-            },
-            {
-                "id_viagem": 102,
-                "nome_viagem": "Trilha da Cachoeira Escondida",
-                "descricao_viagem": "Um dia de aventura na natureza, descobrindo uma cachoeira secreta.",
-                "data_inicio": "12/NOV",
-                "dia_semana": "DOM",
-                "horario": "10:30",
-                "local_resumo": "Chapada Diamantina, Bahia",
-                "isPublico": true,
-                "usuario": {
-                    "id_usuario": 2,
-                    "user_nome": "Lucas Ferreira",
-                    "foto_perfil_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop"
-                },
-                "imagem_url": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=500&h=300&fit=crop"
-            },
-            {
-                "id_viagem": 103,
-                "nome_viagem": "Férias em Paris",
-                "descricao_viagem": "Visitando a Torre Eiffel e comendo croissants.",
-                "data_inicio": "05/MAR",
-                "dia_semana": "QUA",
-                "horario": "14:00",
-                "local_resumo": "Paris, França",
-                "isPublico": true,
-                "usuario": {
-                    "id_usuario": 1,
-                    "user_nome": "Carla Oliveira",
-                    "foto_perfil_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" 
-                },
-                "imagem_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500&h=300&fit=crop"
+        async function carregarFeedPublico() {
+            try {
+                const response = await fetch('http://localhost:8080/v1/travel/viagem');
+                const data = await response.json();
+                
+                if (data.status_code !== 200 || !data.response.viagens) {
+                    console.error("Erro ao carregar feed");
+                    return [];
+                }
+                
+                const viagensPublicas = data.response.viagens.filter(v => v.isPublico === true || v.isPublico === 1);
+                
+                const postsFormatados = await Promise.all(
+                    viagensPublicas.map(async (viagem) => {
+                        try {
+                            const responseUsuario = await fetch(`http://localhost:8080/v1/travel/usuario/${viagem.id_usuario}`);
+                            const dataUsuario = await responseUsuario.json();
+                            
+                            const usuario = dataUsuario.status_code === 200 ? dataUsuario.response : {
+                                user_nome: "Usuário",
+                                nome: "Usuário"
+                            };
+                            
+                            const dataObj = new Date(viagem.data_inicio);
+                            const diaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'short' }).toUpperCase().replace('.', '');
+                            const dataFormatada = `${String(dataObj.getDate()).padStart(2, '0')}/${String(dataObj.getMonth() + 1).padStart(2, '0')}`;
+                            const horario = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                            
+                            return {
+                                id_viagem: viagem.id_viagem,
+                                nome_viagem: viagem.nome,
+                                descricao_viagem: viagem.descricao,
+                                data_inicio: dataFormatada,
+                                dia_semana: diaSemana,
+                                horario: horario,
+                                local_resumo: "Localização",
+                                isPublico: true,
+                                usuario: {
+                                    id_usuario: viagem.id_usuario,
+                                    user_nome: usuario.user_nome || usuario.nome
+                                }
+                            };
+                        } catch (error) {
+                            console.error("Erro ao processar viagem:", error);
+                            return null;
+                        }
+                    })
+                );
+                
+                return postsFormatados.filter(post => post !== null);
+                
+            } catch (error) {
+                console.error("Erro ao carregar feed:", error);
+                return [];
             }
-        ];
-
-        function entrarPerfil(idUsuario) {
-            localStorage.setItem('selectedUserId', idUsuario);
-            window.location.href = "./perfil-publico.html";
         }
 
         function createPostCard(post) {
@@ -118,18 +101,31 @@
 
             const profilePicFeed = document.createElement('div');
             profilePicFeed.className = 'profile-pic-feed';
-            profilePicFeed.onclick = () => entrarPerfil(post.usuario.id_usuario);
+            profilePicFeed.onclick = () => {
+                localStorage.setItem('selectedUserId', post.usuario.id_usuario);
+                window.location.href = "perfil-publico.html";
+            };
             profilePicFeed.style.cursor = 'pointer';
 
-            const profileImg = document.createElement('img');
-            profileImg.src = post.usuario.foto_perfil_url;
-            profileImg.alt = post.usuario.user_nome.charAt(0);
+            const profileImg = document.createElement('div');
+            profileImg.style.width = '100%';
+            profileImg.style.height = '100%';
+            profileImg.style.display = 'flex';
+            profileImg.style.alignItems = 'center';
+            profileImg.style.justifyContent = 'center';
+            profileImg.style.backgroundColor = 'var(--primary)';
+            profileImg.style.color = 'white';
+            profileImg.style.fontWeight = 'bold';
+            profileImg.textContent = post.usuario.user_nome ? post.usuario.user_nome.charAt(0).toUpperCase() : 'U';
 
             profilePicFeed.appendChild(profileImg);
 
             const usernameFeed = document.createElement('span');
             usernameFeed.className = 'username-feed';
-            usernameFeed.onclick = () => entrarPerfil(post.usuario.id_usuario);
+            usernameFeed.onclick = () => {
+                localStorage.setItem('selectedUserId', post.usuario.id_usuario);
+                window.location.href = "perfil-publico.html";
+            };
             usernameFeed.style.cursor = 'pointer';
             usernameFeed.textContent = post.usuario.user_nome;
 
@@ -160,11 +156,19 @@
             const tripMediaFeed = document.createElement('div');
             tripMediaFeed.className = 'trip-media-feed';
 
-            const mediaImg = document.createElement('img');
-            mediaImg.src = post.imagem_url;
-            mediaImg.alt = post.nome_viagem;
+            const mediaDiv = document.createElement('div');
+            mediaDiv.style.width = '100%';
+            mediaDiv.style.height = '100%';
+            mediaDiv.style.backgroundColor = 'var(--primary)';
+            mediaDiv.style.opacity = '0.8';
+            mediaDiv.style.display = 'flex';
+            mediaDiv.style.alignItems = 'center';
+            mediaDiv.style.justifyContent = 'center';
+            mediaDiv.style.color = 'white';
+            mediaDiv.style.fontSize = '2rem';
+            mediaDiv.innerHTML = '<i class="fas fa-globe-americas"></i>';
 
-            tripMediaFeed.appendChild(mediaImg);
+            tripMediaFeed.appendChild(mediaDiv);
 
             const title = document.createElement('h2');
             title.className = 'title';
@@ -172,7 +176,7 @@
 
             const description = document.createElement('p');
             description.className = 'description';
-            description.textContent = post.descricao_viagem;
+            description.textContent = post.descricao_viagem || 'Sem descrição';
 
             const postFooterFeed = document.createElement('div');
             postFooterFeed.className = 'post-footer-feed';
@@ -189,28 +193,11 @@
             locationDiv.appendChild(mapIcon);
             locationDiv.appendChild(locationSpan);
 
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'actions';
-
-            const heartIcon = document.createElement('i');
-            heartIcon.className = 'far fa-heart';
-            heartIcon.title = 'Curtir';
-
-            const starIcon = document.createElement('i');
-            starIcon.className = 'far fa-star';
-            starIcon.title = 'Favoritar';
-
-            actionsDiv.appendChild(heartIcon);
-            actionsDiv.appendChild(starIcon);
-
             postFooterFeed.appendChild(locationDiv);
-            postFooterFeed.appendChild(actionsDiv);
-
             postContentFeed.appendChild(tripMediaFeed);
             postContentFeed.appendChild(title);
             postContentFeed.appendChild(description);
             postContentFeed.appendChild(postFooterFeed);
-
             postBodyFeed.appendChild(postDateFeed);
             postBodyFeed.appendChild(postContentFeed);
             card.appendChild(postBodyFeed);
@@ -220,20 +207,17 @@
 
         function filtrarFeed() {
             const termoBusca = document.getElementById('search-input').value.toLowerCase();
-
-            const postsFiltrados = publicPosts.filter(post => {
+            const postsFiltrados = allPosts.filter(post => {
                 const nomeViagem = post.nome_viagem.toLowerCase();
                 const nomeUsuario = post.usuario.user_nome.toLowerCase();
-
                 return nomeViagem.includes(termoBusca) || nomeUsuario.includes(termoBusca);
             });
-
             renderFeed(postsFiltrados);
         }
 
-        function renderFeed(listaPosts = publicPosts) {
+        function renderFeed(listaPosts) {
             const feedContainer = document.getElementById('public-feed-container');
-            feedContainer.innerHTML = ''; 
+            feedContainer.innerHTML = '';
 
             if (listaPosts.length === 0) {
                 const div = document.createElement('div');
@@ -257,15 +241,17 @@
             }
 
             listaPosts.forEach(post => {
-                if (post.isPublico) { 
-                    const postCard = createPostCard(post);
-                    feedContainer.appendChild(postCard);
-                }
+                const postCard = createPostCard(post);
+                feedContainer.appendChild(postCard);
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderFeed(publicPosts);
+        document.addEventListener('DOMContentLoaded', async () => {
+            const feedContainer = document.getElementById('public-feed-container');
+            feedContainer.innerHTML = '<div style="text-align:center; padding: 40px;">Carregando feed público...</div>';
+            
+            allPosts = await carregarFeedPublico();
+            renderFeed(allPosts);
         });
     </script>
 </body>

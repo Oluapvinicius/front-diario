@@ -31,102 +31,132 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email" class="form-label">E-mail</label>
-                    <input type="email" id="email" class="form-input" placeholder="seu@email.com" required autocomplete="email">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="data_nascimento" class="form-label">Data de Nasc.</label>
-                        <input type="date" id="data_nascimento" class="form-input" required autocomplete="bday">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="genero" class="form-label">Gênero</label>
-                        <select id="genero" class="form-input" required>
-                            <option value="">Selecione</option>
-                            <option value="1">Feminino</option>
-                            <option value="2">Masculino</option>
-                            <option value="3">Outro</option>
-                            <option value="4">Prefiro não dizer</option>
-                        </select>
-                    </div>
+                    <label for="email_cadastro" class="form-label">E-mail</label>
+                    <input type="email" id="email_cadastro" class="form-input" placeholder="seu@email.com" required autocomplete="email">
                 </div>
 
                 <div class="form-group">
-                    <label for="senha_cadastro" class="form-label">Crie uma Senha</label>
-                    <div style="position: relative;">
-                        <input type="password" id="senha_cadastro" class="form-input" placeholder="Mínimo 8 caracteres" required minlength="8" autocomplete="new-password">
-                        <i class="fa-regular fa-eye password-toggle" onclick="toggleSenha('senha_cadastro', this)"></i>
-                    </div>
+                    <label for="data_nascimento" class="form-label">Data de Nascimento</label>
+                    <input type="date" id="data_nascimento" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="genero" class="form-label">Gênero</label>
+                    <select id="id_genero" class="form-input" required>
+                        <option value="">Selecione</option>
+                        <option value="1">Masculino</option>
+                        <option value="2">Feminino</option>
+                        <option value="3">Outro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="senha_cadastro" class="form-label">Senha</label>
+                    <input type="password" id="senha_cadastro" class="form-input" placeholder="********" required autocomplete="new-password">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmar_senha" class="form-label">Confirmar Senha</label>
+                    <input type="password" id="confirmar_senha" class="form-input" placeholder="********" required autocomplete="new-password">
                 </div>
                 
-                <div class="form-group">
-                    <label for="confirmar_senha" class="form-label">Confirme a Senha</label>
-                    <div style="position: relative;">
-                        <input type="password" id="confirmar_senha" class="form-input" required minlength="8" autocomplete="new-password">
-                        <i class="fa-regular fa-eye password-toggle" onclick="toggleSenha('confirmar_senha', this)"></i>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-primary">
-                    <i class="fa-solid fa-user-plus"></i> Finalizar Cadastro
-                </button>
+                <button type="submit" class="btn-primary">Cadastrar</button>
             </form>
 
-            <div class="auth-links" style="text-align: center;">
+            <div class="auth-links">
                 <p>Já tem uma conta? <a href="index.html">Faça login</a></p>
             </div>
         </div>
     </div>
 
     <script>
-        function toggleSenha(idCampo, icone) {
-            const campo = document.getElementById(idCampo);
-            if (campo.type === "password") {
-                campo.type = "text";
+        function exibirMensagem(texto, tipo = 'error') {
+            const form = document.getElementById('cadastroForm');
+            let errorMessage = form.querySelector('.auth-message');
             
-                icone.classList.remove('fa-eye-slash');
-                icone.classList.add('fa-eye');
-            } else {
-                campo.type = "password";
-              
-                icone.classList.remove('fa-eye');
-                icone.classList.add('fa-eye-slash');
+            if (!errorMessage) {
+                errorMessage = document.createElement('div');
+                errorMessage.className = 'auth-message';
+                form.prepend(errorMessage);
             }
+
+            if (tipo === 'success') {
+                errorMessage.style.cssText = "padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 15px; text-align: center;";
+            } else {
+                errorMessage.style.cssText = "padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin-bottom: 15px; text-align: center;";
+            }
+            
+            errorMessage.textContent = texto;
+            setTimeout(() => errorMessage.remove(), 5000);
         }
 
-        function realizarCadastro(event) {
+        function formatarDataAtual() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        async function realizarCadastro(event) {
             event.preventDefault();
-
+            
+            const nome = document.getElementById('nome').value;
+            const user_nome = document.getElementById('user_nome').value;
+            const email = document.getElementById('email_cadastro').value;
+            const data_nascimento = document.getElementById('data_nascimento').value;
+            const id_genero = parseInt(document.getElementById('id_genero').value);
             const senha = document.getElementById('senha_cadastro').value;
             const confirmar_senha = document.getElementById('confirmar_senha').value;
-            const email = document.getElementById('email').value;
-            const nomeUsuario = document.getElementById('user_nome').value;
 
             if (senha !== confirmar_senha) {
-                console.error("Erro: As senhas digitadas não coincidem.");
-              
-                const errorMessage = document.createElement('div');
-                errorMessage.textContent = "As senhas digitadas não coincidem. Por favor, verifique.";
-                errorMessage.style.cssText = "padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin-top: 10px; text-align: center;";
-                document.getElementById('cadastroForm').prepend(errorMessage);
-                setTimeout(() => errorMessage.remove(), 5000);
+                exibirMensagem("As senhas digitadas não coincidem. Por favor, verifique.");
                 document.getElementById('senha_cadastro').focus();
                 return;
             }
 
-            console.log("Tentativa de cadastro bem-sucedida:", { email, nomeUsuario });
+            const dataCadastro = formatarDataAtual();
             
-            
-            const successMessage = document.createElement('div');
-            successMessage.textContent = "Cadastro realizado com sucesso! Faça login para continuar.";
-            successMessage.style.cssText = "padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; margin-top: 10px; text-align: center;";
-            document.getElementById('cadastroForm').prepend(successMessage);
-            setTimeout(() => {
-                successMessage.remove();
-                window.location.href = "index.html";
-            }, 2000);
+            const dadosCadastro = {
+                user_nome: user_nome,
+                nome: nome,
+                descricao: null,
+                data_nascimento: data_nascimento,
+                email: email,
+                telefone: null,
+                senha: senha,
+                pais: "Brasil", 
+                estado: null,
+                cidade: null,
+                quantidade_seguidores: 0,
+                isActive: true,
+                data_criacao: dataCadastro, 
+                isPublico: true,
+                id_genero: id_genero
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/v1/travel/usuario', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dadosCadastro),
+                });
+
+                const data = await response.json();
+                
+                if (data.status_code === 201) { 
+                    exibirMensagem("Cadastro realizado com sucesso! Redirecionando para o login...", 'success');
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 2000);
+                } else {
+                    exibirMensagem(`Erro ao cadastrar: ${data.message || 'Erro desconhecido.'}`);
+                }
+            } catch (error) {
+                exibirMensagem("Erro de conexão. Verifique o servidor da API.");
+            }
         }
     </script>
 </body>
