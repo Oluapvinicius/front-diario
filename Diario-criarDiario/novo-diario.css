@@ -284,3 +284,25 @@ textarea.form-input:focus {
 .color-option.selected {
     border-color: #333;
 }
+/* Adicione ao final do arquivo novo-diario.css */
+
+#limitMessage {
+    font-weight: 500;
+    margin: 10px 0 20px 0;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgba(0, 142, 126, 0.1);
+}
+
+.diary-title-input:disabled {
+    background-color: var(--input-bg);
+    color: var(--secondary-text);
+    cursor: not-allowed;
+}
+
+.btn-salvar:disabled {
+    background-color: #e0e0e0;
+    color: #999;
+    cursor: not-allowed;
+    border-color: #ccc;
+}

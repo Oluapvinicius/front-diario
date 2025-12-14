@@ -12,7 +12,6 @@
 <body style="background-color: aliceblue;">
 
     <div class="page-container">
-
         <div class="header-section">
             <div class="action-bar">
                 <button class="btn-salvar" id="salvarBtn" onclick="salvarDiario(event)">
@@ -21,6 +20,7 @@
             </div>
 
             <h1 class="header-title" id="pageTitle">Adicionar diário</h1>
+            <p id="limitMessage" style="color: var(--primary); text-align: center; margin-bottom: 20px;"></p>
 
             <div class="privacy-toggle-container">
                 <div id="publico" class="toggle-option active" onclick="setPrivacy('publico')">
@@ -62,18 +62,78 @@
     </div>
 
     <script>
+        const MAX_DIARIES_PER_USER = 10;
         window.salvarDiario = salvarDiario;
         window.setPrivacy = setPrivacy;
         window.toggleColorPicker = toggleColorPicker;
         window.selectColor = selectColor;
 
         let idUsuarioLogado = localStorage.getItem('userId') ? parseInt(localStorage.getItem('userId')) : null;
-
         let selectedPrivacy = 'publico';
         let selectedColor = '#A0A0A0';
         let idCorSelecionada = 1;
         let isEditing = false;
         let editDiaryId = null;
+
+        async function checkDiaryLimit() {
+            if (!idUsuarioLogado) return false;
+            
+            try {
+                // Buscar todos os diários e filtrar pelos do usuário
+                const response = await fetch(`http://localhost:8080/v1/travel/diario`);
+                const json = await response.json();
+                
+                let todosOsDiarios = [];
+                if (json.response && json.response.diarios) {
+                    todosOsDiarios = json.response.diarios;
+                } else if (Array.isArray(json.response)) {
+                    todosOsDiarios = json.response;
+                } else if (Array.isArray(json)) {
+                    todosOsDiarios = json;
+                }
+                
+                // Filtrar diários do usuário
+                const meusDiarios = todosOsDiarios.filter(diario => 
+                    diario.id_usuario == idUsuarioLogado
+                );
+                
+                const userDiaryCount = meusDiarios.length;
+                updateLimitMessage(userDiaryCount);
+                
+                return userDiaryCount >= MAX_DIARIES_PER_USER;
+            } catch (error) {
+                console.error("Erro ao verificar limite:", error);
+                return false;
+            }
+        }
+
+        function updateLimitMessage(count) {
+            const limitMessage = document.getElementById('limitMessage');
+            if (limitMessage) {
+                limitMessage.textContent = `Você tem ${count} de ${MAX_DIARIES_PER_USER} diários.`;
+                
+                if (count >= MAX_DIARIES_PER_USER && !isEditing) {
+                    limitMessage.style.color = '#ff6b6b';
+                    limitMessage.textContent += `LIMITE ATINGIDO!`;
+                    
+                    // Desabilitar campos apenas se não for edição
+                    document.getElementById('diaryName').disabled = true;
+                    document.getElementById('diaryName').placeholder = "Limite máximo atingido";
+                    document.getElementById('salvarBtn').disabled = true;
+                    document.getElementById('salvarBtn').style.opacity = '0.5';
+                    document.getElementById('salvarBtn').style.cursor = 'not-allowed';
+                } else {
+                    limitMessage.style.color = 'var(--primary)';
+                    
+                    // Habilitar campos
+                    document.getElementById('diaryName').disabled = false;
+                    document.getElementById('diaryName').placeholder = "Dê um nome ao seu diário...";
+                    document.getElementById('salvarBtn').disabled = false;
+                    document.getElementById('salvarBtn').style.opacity = '1';
+                    document.getElementById('salvarBtn').style.cursor = 'pointer';
+                }
+            }
+        }
 
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -90,6 +150,9 @@
                 document.getElementById('pageTitle').textContent = "Editar diário";
                 document.getElementById('salvarBtn').textContent = "Atualizar";
 
+                // Não aplicar limite para edição
+                document.getElementById('limitMessage').style.display = 'none';
+                
                 const dadosMock = carregarDadosDiario(diarioId);
                 if (dadosMock) {
                     document.getElementById('diaryName').value = dadosMock.nome;
@@ -136,6 +199,17 @@
 
         async function salvarDiario(event) {
             event.preventDefault();
+
+            // Verificar limite apenas se não for edição
+            if (!isEditing) {
+                const isLimitReached = await checkDiaryLimit();
+                if (isLimitReached) {
+                    const statusMessage = document.getElementById('statusMessage');
+                    statusMessage.textContent = `Você atingiu o limite máximo de ${MAX_DIARIES_PER_USER} diários.`;
+                    statusMessage.style.color = 'red';
+                    return;
+                }
+            }
 
             const diaryName = document.getElementById('diaryName').value.trim();
             const statusMessage = document.getElementById('statusMessage');
@@ -216,7 +290,6 @@
             }
         }
 
-
         function carregarDadosDiario(id) {
             if (id == 1) {
                 return { nome: 'Diário Europa 2025', isPublico: true, cor: '#00A896', idCor: 4 };
@@ -224,13 +297,18 @@
             return null;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             if (!idUsuarioLogado) {
                 document.getElementById('statusMessage').textContent = "Você não está logado.";
             }
 
             selectColor(null, selectedColor, idCorSelecionada);
             loadDiaryForEditing();
+            
+            // Verificar limite ao carregar a página apenas se não for edição
+            if (!isEditing) {
+                await checkDiaryLimit();
+            }
         });
 
         document.addEventListener('click', (e) => {

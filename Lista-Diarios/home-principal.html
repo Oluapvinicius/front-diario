@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Diário de Viagens</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=menu_book" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=menu_book" />
     <link rel="stylesheet" href="./home-principal.css">
 </head>
+
 <body>
+   
     <div class="modal-overlay" id="createCategoryModal">
         <div class="modal-content small-modal">
             <div class="modal-header category-modal-header-new">
-                <div class="header-spacer"></div> 
+                <div class="header-spacer"></div>
                 <h2 class="settings-title modal-title">Criar Categoria</h2>
                 <button class="icon-btn close-category-modal-btn" id="closeCreateCategoryModalBtn">
-                     <i class="fas fa-times"></i>
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
 
             <div class="form-group categories-creation-form">
                 <label for="newCategoryName" class="form-label">Nome da Categoria:</label>
-                <input type="text" id="newCategoryName" class="form-input" placeholder="Ex: Praia, Aventura, Gastronomia">
+                <input type="text" id="newCategoryName" class="form-input"
+                    placeholder="Ex: Praia, Aventura, Gastronomia">
             </div>
 
             <div class="save-button-container">
@@ -33,30 +38,27 @@
         </div>
     </div>
 
-<div class="categories-modal-header">
-    <label class="form-label step3-label">Categorias: (Máximo 3)</label>
-    <button class="btn-small" id="addCategoryStep3Btn">Adicionar +</button>
-</div>
+ 
     <header class="diary-header">
         <div class="header-left">
             <button class="icon-btn" id="toggle-sidebar-btn">
                 <i class="fas fa-bars"></i>
             </button>
             <div class="header-logo" id="diaryTitleDisplay">
-                <i class="fas fa-book"></i> Meu Diário
+                <i class="fas fa-book"></i> <span id="currentDiaryTitle">Meu Diário</span>
             </div>
         </div>
         <div class="header-right">
-            <button class="icon-btn">
+            <button class="icon-btn" id="notificationBtn">
                 <i class="fas fa-bell"></i>
             </button>
             <button class="icon-btn profile-toggle" id="profile-toggle-btn">
                 <i class="fas fa-user-circle profile-icon"></i>
             </button>
-            
+
             <div class="profile-popup" id="profile-popup">
                 <div class="profile-info">
-                    <span>Usuário Teste</span>
+                    <span id="userNameDisplay">Usuário</span>
                     <i class="fas fa-user"></i>
                 </div>
                 <button class="popup-btn" id="goToSettingsBtn"><i class="fas fa-cog"></i> Configurações</button>
@@ -65,84 +67,96 @@
         </div>
     </header>
 
+   
     <aside class="main-sidebar" id="main-sidebar">
-        <div class="sidebar-icon" title="Diários" id="goToHomeBtn"><span class="material-symbols-outlined">
-            menu_book
-            </span></div>
+        <div class="sidebar-icon" title="Diários" id="goToHomeBtn">
+            <span class="material-symbols-outlined">menu_book</span>
+        </div>
         <div class="sidebar-icon" title="Mapas"><i class="fas fa-map-marked-alt"></i></div>
         <div class="sidebar-icon" title="Fotos" onclick="goToFeed()"><i class="fas fa-images"></i></div>
     </aside>
 
+  
     <main class="main-body">
         <div class="timeline-container">
-            
+
+          
             <div class="main-search-row">
-                <input type="text" class="form-input main-search-input" placeholder="Buscar por palavra-chave..." id="main-search-input">
+                <input type="text" class="form-input main-search-input" placeholder="Buscar por palavra-chave..."
+                    id="main-search-input">
                 <button class="btn-small search-align-center" id="search-btn">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
-            
+
+        
             <div class="controls-and-categories-wrapper">
-                
                 <div class="main-filter-row">
                     <button class="btn-small" id="categories-filter-toggle">
                         <i class="fas fa-tags"></i> Categorias
                     </button>
-                    <button class="btn-small">
+                    <button class="btn-small" id="sortBtn">
                         <i class="fas fa-sort-amount-down"></i> Ordenar
                     </button>
                 </div>
-                
+
                 <div class="categories-filter-popup" id="categoryFilterColumn">
                     <div class="categories-header">
                         <h4 class="categories-title"><i class="fas fa-tags"></i> Filtros</h4>
-                        <button class="btn-small create-category-btn"><i class="fas fa-plus"></i> Novo</button>
+                        <button class="btn-small create-category-btn" id="createCategoryFromFilterBtn">
+                            <i class="fas fa-plus"></i> Novo
+                        </button>
                     </div>
-                    <input type="text" class="form-input category-search-input" id="categorySearchInput" placeholder="Buscar categorias...">
-                    
+                    <input type="text" class="form-input category-search-input" id="categorySearchInput"
+                        placeholder="Buscar categorias...">
+
                     <ul class="categories-list" id="categories-list-filter">
-                        </ul>
+                    
+                    </ul>
                 </div>
             </div>
 
+       
             <div id="timeline-content">
-                <p>Carregando viagens...</p>
+                <div style="text-align: center; padding: 40px; color: var(--secondary-text);">
+                    <i class="fas fa-plane" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.3;"></i>
+                    <h3>Nenhuma viagem encontrada</h3>
+                    <p>Adicione sua primeira viagem ao diário!</p>
+                </div>
             </div>
 
         </div>
     </main>
 
+
     <button class="fab-add" id="fab-add-btn">
         <i class="fas fa-plus"></i> Adicionar Viagem
     </button>
 
-
+  
     <div class="modal-overlay" id="addTripModal">
         <div class="modal-content">
             <div id="step1" class="modal-step active">
                 <div class="modal-header">
                     <button class="btn-small" id="closeModalBtnHeader">Voltar</button>
-                    <h2 class="settings-title modal-title">Criar Viagens</h2>
+                    <h2 class="settings-title modal-title">Criar Viagem</h2>
                     <div class="header-spacer"></div>
                 </div>
-            
+
                 <div class="form-group">
                     <label class="form-label">Nome:</label>
-                    <input type="text" id="tripName" class="form-input">
+                    <input type="text" id="tripName" class="form-input" placeholder="Ex: Viagem para praia">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Descrição:</label>
-                    <input type="text" id="tripDesc" class="form-input">
+                    <input type="text" id="tripDesc" class="form-input" placeholder="Descreva sua viagem...">
                 </div>
-            
-                <p class="form-label">Adicionar Foto ou Video:</p>
+
+                <p class="form-label">Adicionar Foto:</p>
                 <div class="media-row">
-                  
                     <div class="media-upload-container">
                         <input type="file" id="tripImageUpload" accept="image/*" style="display: none;">
                         <div class="media-preview" id="imagePreview">
-                       
                             <div class="media-placeholder" id="mediaPlaceholder">+</div>
                             <img id="previewImage" class="preview-image" style="display: none;">
                         </div>
@@ -150,7 +164,7 @@
                             <i class="fas fa-upload"></i> Upload
                         </button>
                     </div>
-                    
+
                     <button id="btnNext1" class="btn-circle-action btn-hidden">
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -159,28 +173,28 @@
 
             <div class="modal-step" id="step2">
                 <div class="modal-header">
-                    <button class="icon-btn" onclick="passoAnterior(1)">
+                    <button class="icon-btn" onclick="proximoPasso(1)">
                         <i class="fas fa-arrow-left"></i>
                     </button>
                     <h2 class="modal-title location-title">Detalhes da Localização</h2>
                     <div class="header-spacer"></div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="trip-country" class="form-label">País</label>
-                    <input type="text" id="trip-country" class="form-input" oninput="validarPasso2()" required>
+                    <input type="text" id="trip-country" class="form-input" placeholder="Ex: Brasil" required>
                 </div>
                 <div class="form-group">
                     <label for="trip-state" class="form-label">Estado (Opcional)</label>
-                    <input type="text" id="trip-state" class="form-input" oninput="validarPasso2()">
+                    <input type="text" id="trip-state" class="form-input" placeholder="Ex: São Paulo">
                 </div>
                 <div class="form-group">
                     <label for="trip-city" class="form-label">Cidade</label>
-                    <input type="text" id="trip-city" class="form-input" oninput="validarPasso2()" required>
+                    <input type="text" id="trip-city" class="form-input" placeholder="Ex: Rio de Janeiro" required>
                 </div>
-                
+
                 <div class="media-row button-row-center">
-                    <div class="media-placeholder-spacer"></div> 
+                    <div class="media-placeholder-spacer"></div>
                     <button id="btnNext2" class="btn-circle-action btn-hidden">
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -189,8 +203,10 @@
 
             <div id="step3" class="modal-step">
                 <div class="modal-header">
-                    <button class="btn-small" id="prevStep2Btn">Voltar</button>
-                    <h2 class="settings-title modal-title">Criar Viagens</h2>
+                    <button class="btn-small" onclick="proximoPasso(2)">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                    <h2 class="settings-title modal-title">Criar Viagem</h2>
                     <div class="header-spacer"></div>
                 </div>
 
@@ -200,37 +216,249 @@
                 </div>
 
                 <div id="categoryList" class="category-list-modal">
-                    </div>
+                    
+                </div>
 
                 <div class="save-button-container">
-                    <button id="btnSave" class="btn-primary-save">
+                    <button id="btnSave" class="btn-primary-save btn-hidden">
                         Salvar
                     </button>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script>
+     
         let categorias = [];
         let viagens = [];
         let imagemSelecionada = null;
         let idDiario = null;
-        
+        let currentUserId = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log("Home Principal - DOM Carregado");
+
+       
+            currentUserId = localStorage.getItem('userId');
+            if (!currentUserId) {
+                alert("Usuário não logado. Redirecionando para login...");
+                window.location.href = "../index.html";
+                return;
+            }
+
+      
+            const userName = localStorage.getItem('userName') || "Usuário";
+            document.getElementById('userNameDisplay').textContent = userName;
+
+         
+            idDiario = getQueryParam('id_diario') || localStorage.getItem('currentDiaryId');
+
+            if (!idDiario) {
+                console.error("ID do Diário não encontrado.");
+                document.getElementById('timeline-content').innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #ff6b6b;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                <h3>Erro: Diário não selecionado</h3>
+                <p>Redirecionando para lista de diários...</p>
+            </div>
+        `;
+                setTimeout(() => window.location.href = 'home.html', 2000);
+                return;
+            }
+
+            idDiario = parseInt(idDiario);
+
+          
+            const diaryName = localStorage.getItem('currentDiaryName') || "Meu Diário";
+            document.getElementById('currentDiaryTitle').textContent = diaryName;
+
+       
+            setupEventListeners();
+
+
+            await verificarDiarioUsuario();
+
+            await Promise.all([
+                fetchCategories(),
+                fetchViagens(idDiario)
+            ]);
+
+            console.log("Dados carregados com sucesso");
+        });
+
+
+      
+        async function uploadFotoViagem(idViagem) {
+          
+            const inputFoto = document.getElementById('tripImageUpload');
+            const file = inputFoto.files[0];
+
+            if (!file) {
+                console.log("Nenhuma foto selecionada para upload. Continuando...");
+                return true; 
+            }
+
+            try {
+                console.log(`📷 Tentando upload da foto '${file.name}' para a viagem ID: ${idViagem}`);
+
+                const formData = new FormData();
+
+                formData.append('midia', file, file.name);
+
+               
+                formData.append('nome', file.name);
+                formData.append('tipo', file.type);
+                formData.append('tamanho_megabytes', (file.size / (1024 * 1024)).toFixed(2));
+                formData.append('id_viagem', idViagem);
+
+             
+                const response = await fetch('http://localhost:8080/v1/travel/arquivo', {
+                    method: 'POST',
+               
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.status_code === 201) {
+                    console.log(" Foto enviada e metadados salvos! URL:", data.response.url_armazenamento);
+                    return true;
+                } else {
+                   
+                    console.error(" Erro no upload da foto para a API:", data);
+                    return false;
+                }
+
+            } catch (error) {
+                console.error("Erro de conexão durante o upload da foto:", error);
+                return false;
+            }
+        }
+    
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
+
+        function setupEventListeners() {
+          
+            document.getElementById('toggle-sidebar-btn').addEventListener('click', alternarBarraLateral);
+            document.getElementById('profile-toggle-btn').addEventListener('click', alternarPopupPerfil);
+            document.getElementById('goToSettingsBtn').addEventListener('click', irParaConfiguracoes);
+            document.getElementById('logoutBtn').addEventListener('click', fazerLogout);
+            document.getElementById('goToHomeBtn').addEventListener('click', () => window.location.href = 'home.html');
+
+            document.getElementById('categories-filter-toggle').addEventListener('click', alternarFiltroCategorias);
+            document.getElementById('categorySearchInput').addEventListener('input', filtrarCategorias);
+            document.getElementById('search-btn').addEventListener('click', buscarViagens);
+            document.getElementById('sortBtn').addEventListener('click', ordenarViagens);
+
+            document.getElementById('createCategoryFromFilterBtn').addEventListener('click', abrirModalCriarCategoria);
+            document.getElementById('addCategoryStep3Btn').addEventListener('click', abrirModalCriarCategoria);
+            document.getElementById('closeCreateCategoryModalBtn').addEventListener('click', fecharModalCriarCategoria);
+            document.getElementById('newCategoryName').addEventListener('input', validarSalvarCategoria);
+            document.getElementById('btnSaveCategory').addEventListener('click', salvarNovaCategoria);
+
+            
+            document.getElementById('fab-add-btn').addEventListener('click', abrirModalAdicionar);
+            document.getElementById('closeModalBtnHeader').addEventListener('click', fecharModalAdicionar);
+
         
+            document.getElementById('uploadImageBtn').addEventListener('click', () => {
+                document.getElementById('tripImageUpload').click();
+            });
+
+            document.getElementById('tripImageUpload').addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const maxSize = 5 * 1024 * 1024;
+                    if (file.size > maxSize) {
+                        alert('A imagem é muito grande. O tamanho máximo é 5MB.');
+                        this.value = '';
+                        return;
+                    }
+
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Tipo de arquivo não permitido. Use JPG, PNG, GIF ou WebP.');
+                        this.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+
+                    reader.onload = function (event) {
+                        const previewImage = document.getElementById('previewImage');
+                        const mediaPlaceholder = document.getElementById('mediaPlaceholder');
+
+                        previewImage.src = event.target.result;
+                        previewImage.style.display = 'block';
+                        mediaPlaceholder.style.display = 'none';
+
+                        imagemSelecionada = {
+                            nome: file.name,
+                            tipo: file.type,
+                            tamanho_megabytes: (file.size / (1024 * 1024)).toFixed(2),
+                            data_url: event.target.result
+                        };
+                    };
+
+                    reader.onerror = function () {
+                        alert('Erro ao ler o arquivo. Tente novamente.');
+                        e.target.value = '';
+                    };
+
+                    reader.readAsDataURL(file);
+                } else if (file) {
+                    alert('Por favor, selecione um arquivo de imagem válido.');
+                    e.target.value = '';
+                }
+            });
+
+         
+            document.getElementById('tripName').addEventListener('input', validarPasso1);
+            document.getElementById('tripDesc').addEventListener('input', validarPasso1);
+            document.getElementById('btnNext1').addEventListener('click', () => proximoPasso(2));
+
+            document.getElementById('trip-country').addEventListener('input', validarPasso2);
+            document.getElementById('trip-city').addEventListener('input', validarPasso2);
+            document.getElementById('btnNext2').addEventListener('click', () => proximoPasso(3));
+
+       
+            document.getElementById('btnSave').addEventListener('click', salvarViagemSimplificada);
+        }
+
+     
         async function fetchCategories() {
             try {
+                console.log("Buscando categorias...");
                 const url = `http://localhost:8080/v1/travel/categoria`;
                 const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const data = await response.json();
-                
-                if (response.ok && Array.isArray(data.response)) {
-                    categorias = data.response;
+                console.log("Resposta categorias:", data);
+
+                if (response.ok) {
+                  
+                    if (data.response && Array.isArray(data.response.categories)) {
+                        categorias = data.response.categories;
+                    } else if (data.response && Array.isArray(data.response)) {
+                        categorias = data.response;
+                    } else if (Array.isArray(data)) {
+                        categorias = data;
+                    } else if (data.response && data.response.categorias && Array.isArray(data.response.categorias)) {
+                        categorias = data.response.categorias;
+                    } else {
+                        console.error("Formato de resposta inesperado:", data);
+                        categorias = [];
+                    }
+
+                    console.log("Categorias processadas:", categorias);
                     renderizarFiltroCategorias(categorias);
                     renderizarCategorias(categorias);
                 } else {
@@ -238,192 +466,379 @@
                 }
             } catch (error) {
                 console.error("Erro de conexão ao buscar categorias:", error);
+                categorias = [
+                    { id_categoria: 1, nome: "Praia" },
+                    { id_categoria: 2, nome: "Aventura" },
+                    { id_categoria: 3, nome: "Gastronomia" },
+                    { id_categoria: 4, nome: "Cultural" }
+                ];
+                renderizarFiltroCategorias(categorias);
+                renderizarCategorias(categorias);
             }
         }
 
         async function fetchViagens(diarioId) {
             const timelineContent = document.getElementById('timeline-content');
-            timelineContent.innerHTML = 'Carregando viagens...';
+            timelineContent.innerHTML = '<div style="text-align: center; padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Carregando viagens...</div>';
+
             try {
-                const url = `http://localhost:8080/v1/travel/viagem/diario/${diarioId}`;
+                console.log(`Buscando todas as viagens para filtrar por diário ${diarioId}...`);
+
+                const url = `http://localhost:8080/v1/travel/viagem`;
                 const response = await fetch(url);
-                const data = await response.json();
-                
-                let viagensData = [];
-                if (response.ok) {
-                    if (Array.isArray(data.response)) {
-                        viagensData = data.response;
-                    } else if (data.response) {
-                         viagensData = [data.response];
-                    }
-                    viagens = viagensData;
-                    renderizarViagens(viagens);
-                } else {
-                    viagens = []; 
-                    renderizarViagens([]); 
-                    timelineContent.innerHTML = '<p>Nenhuma viagem encontrada para este diário.</p>';
-                    console.error("Erro ao carregar viagens:", data.message || "Erro desconhecido.");
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+
+                const data = await response.json();
+
+                let todasViagens = [];
+
+                if (data.response && data.response.viagens && Array.isArray(data.response.viagens)) {
+                    todasViagens = data.response.viagens;
+                } else if (Array.isArray(data.response)) {
+                    todasViagens = data.response;
+                } else if (Array.isArray(data)) {
+                    todasViagens = data;
+                } else if (data.response && data.response.viagem && Array.isArray(data.response.viagem)) {
+                    todasViagens = data.response.viagem;
+                } else {
+                    todasViagens = [];
+                }
+
+                console.log(`Total de viagens encontradas: ${todasViagens.length}`);
+
+               
+                const viagensDoDiario = todasViagens.filter(viagem => {
+                    const viagemDiarioId = viagem.id_diario || viagem.ID_DIARIO || viagem.diario_id || viagem.ID_DIARIO;
+                    return viagemDiarioId == diarioId;
+                });
+
+                console.log(`Viagens do diário ${diarioId}:`, viagensDoDiario.length);
+
+                viagens = viagensDoDiario;
+
+                if (viagens.length === 0) {
+                    timelineContent.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: var(--secondary-text);">
+                    <i class="fas fa-plane" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.3;"></i>
+                    <h3>Nenhuma viagem encontrada neste diário</h3>
+                    <p>Adicione sua primeira viagem!</p>
+                </div>
+            `;
+                } else {
+                    renderizarViagens(viagens);
+                }
+
             } catch (error) {
-                console.error("Erro de conexão ao buscar viagens:", error);
-                renderizarViagens([]); 
-                timelineContent.innerHTML = '<p>Erro de conexão ao carregar viagens.</p>';
+                console.error("Erro ao buscar viagens:", error);
+                timelineContent.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #ff6b6b;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                <h3>Erro ao carregar viagens</h3>
+                <p>${error.message}</p>
+            </div>
+        `;
+                viagens = [];
             }
         }
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            const tituloSalvo = localStorage.getItem('h1 salva') || "Meu Diário";
-            const displayElement = document.getElementById('diaryTitleDisplay');
-            if (displayElement) {
-                const spanTitle = displayElement.querySelector('.current-diary-title');
-                if (spanTitle) {
-                     spanTitle.innerText = tituloSalvo;
-                } else {
-                     displayElement.innerHTML = `<i class="fas fa-book"></i> ${tituloSalvo}`;
-                }
+        
+        function renderizarFiltroCategorias(cats) {
+            const contentorLista = document.getElementById('categories-list-filter');
+            if (!contentorLista) return;
+            contentorLista.innerHTML = '';
+
+            cats.forEach(categoria => {
+                const categoriaId = categoria.id_categoria || categoria.id || categoria.ID_CATEGORIA || 0;
+                const categoriaNome = categoria.nome || categoria.NOME || "Sem nome";
+
+                if (!categoriaId) return;
+
+                const itemLista = document.createElement('li');
+                itemLista.classList.add('category-item-filter');
+                itemLista.setAttribute('data-id', categoriaId);
+                itemLista.setAttribute('data-name', categoriaNome);
+
+                itemLista.innerHTML = `
+            <span class="category-name">${categoriaNome}</span>
+            <button class="delete-category-btn" onclick="excluirCategoria(${categoriaId}, '${categoriaNome.replace(/'/g, "\\'")}')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        `;
+
+                itemLista.querySelector('.category-name').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    aplicarFiltroCategoria(categoriaId);
+                });
+
+                contentorLista.appendChild(itemLista);
+            });
+        }
+
+        function renderizarCategorias(cats) {
+            const contentorLista = document.getElementById('categoryList');
+            if (!contentorLista) return;
+            contentorLista.innerHTML = '';
+
+            cats.forEach(categoria => {
+                const categoriaId = categoria.id_categoria || categoria.id || categoria.ID_CATEGORIA || 0;
+                const categoriaNome = categoria.nome || categoria.NOME || "Sem nome";
+
+                if (!categoriaId) return;
+
+                const rotulo = document.createElement('label');
+                rotulo.classList.add('category-label-modal');
+                rotulo.setAttribute('for', `category-${categoriaId}`);
+
+                const caixaSelecao = document.createElement('input');
+                caixaSelecao.type = 'checkbox';
+                caixaSelecao.name = 'category';
+                caixaSelecao.value = categoriaId;
+                caixaSelecao.id = `category-${categoriaId}`;
+
+                caixaSelecao.addEventListener('change', function () {
+                    const caixasSelecionadas = document.querySelectorAll('#categoryList input[name="category"]:checked');
+                    const contagem = caixasSelecionadas.length;
+
+                    if (contagem > 3) {
+                        this.checked = false;
+                        alert('Você pode selecionar no máximo 3 categorias.');
+                    }
+                    validarPasso3();
+                });
+
+                rotulo.appendChild(caixaSelecao);
+                rotulo.innerHTML += ` ${categoriaNome}`;
+                contentorLista.appendChild(rotulo);
+            });
+
+            validarPasso3();
+        }
+
+        function renderizarViagens(viagensArray) {
+            const timelineContent = document.getElementById('timeline-content');
+            if (!timelineContent) return;
+
+            timelineContent.innerHTML = '';
+
+            if (!viagensArray || viagensArray.length === 0) {
+                timelineContent.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: var(--secondary-text);">
+                <i class="fas fa-plane" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.3;"></i>
+                <h3>Nenhuma viagem encontrada</h3>
+                <p>Adicione sua primeira viagem ao diário!</p>
+            </div>
+        `;
+                return;
             }
 
-            idDiario = getQueryParam('id_diario') || localStorage.getItem('currentDiaryId');
-            
-            if (!idDiario) {
-                console.error("ID do Diário não encontrado.");
-                document.getElementById('timeline-content').innerHTML = '<p>Erro: ID do Diário não encontrado. Redirecionando...</p>';
-                setTimeout(() => window.location.href = 'home.html', 1500);
-            } else {
-                idDiario = parseInt(idDiario);
-                await fetchCategories();
-                await fetchViagens(idDiario);
-            }
-    
-            const botoesIniciais = ['btnNext1', 'btnNext2', 'btnSave'];
-            botoesIniciais.forEach(id => {
-                const botao = document.getElementById(id);
-                if (botao) {
-                    botao.classList.add('btn-hidden'); 
+            // Ordenar viagens por data
+            viagensArray.sort((a, b) => {
+                const dateA = new Date(a.data_inicio || a.DATA_INICIO || Date.now());
+                const dateB = new Date(b.data_inicio || b.DATA_INICIO || Date.now());
+                return dateB - dateA;
+            });
+
+            viagensArray.forEach(viagem => {
+                try {
+                    const diaSemana = formatarDiaDaSemana(viagem.data_inicio || viagem.DATA_INICIO);
+                    const diaMes = formatarDiaDoMes(viagem.data_inicio || viagem.DATA_INICIO);
+                    const horaInicio = formatarHora(viagem.data_inicio || viagem.DATA_INICIO);
+
+                    let localizacao = "Local não especificado";
+                    if (viagem.localizacao_detalhada || viagem.LOCALIZACAO_DETALHADA) {
+                        localizacao = viagem.localizacao_detalhada || viagem.LOCALIZACAO_DETALHADA;
+                    } else if (viagem.cidade || viagem.CIDADE) {
+                        localizacao = `${viagem.cidade || viagem.CIDADE || ''}${(viagem.estado || viagem.ESTADO) ? ', ' + (viagem.estado || viagem.ESTADO) : ''}${(viagem.pais || viagem.PAIS) ? ', ' + (viagem.pais || viagem.PAIS) : ''}`;
+                    }
+
+                    const tripEntry = document.createElement('div');
+                    tripEntry.classList.add('trip-entry');
+                    tripEntry.setAttribute('data-id', viagem.id_viagem || viagem.ID_VIAGEM || 0);
+
+                    const tripDate = document.createElement('div');
+                    tripDate.classList.add('trip-date');
+
+                    const dow = document.createElement('span');
+                    dow.classList.add('dow');
+                    dow.textContent = diaSemana;
+
+                    const day = document.createElement('span');
+                    day.classList.add('day');
+                    day.textContent = diaMes;
+
+                    tripDate.appendChild(dow);
+                    tripDate.appendChild(day);
+
+                    const tripCard = document.createElement('div');
+                    tripCard.classList.add('trip-content-card');
+
+                    const tripHeader = document.createElement('div');
+                    tripHeader.classList.add('trip-header');
+                    const title = document.createElement('h3');
+                    title.textContent = viagem.nome || viagem.NOME || "Viagem sem nome";
+                    tripHeader.appendChild(title);
+
+                    const tripBody = document.createElement('div');
+                    tripBody.classList.add('trip-body');
+
+                    const tripThumb = document.createElement('div');
+                    tripThumb.classList.add('trip-thumb');
+
+                    // Verificar imagem
+                    let hasImage = false;
+                    if (viagem.arquivos && viagem.arquivos.length > 0 && viagem.arquivos[0].url_armazenamento) {
+                        const img = document.createElement('img');
+                        img.src = viagem.arquivos[0].url_armazenamento;
+                        img.alt = viagem.nome || "Viagem";
+                        img.classList.add('trip-image');
+                        img.onerror = function () {
+                            this.style.display = 'none';
+                            const icon = document.createElement('i');
+                            icon.classList.add('fas', 'fa-camera');
+                            tripThumb.appendChild(icon);
+                        };
+                        tripThumb.appendChild(img);
+                        hasImage = true;
+                    }
+
+                    if (!hasImage) {
+                        const icon = document.createElement('i');
+                        icon.classList.add('fas', 'fa-camera');
+                        tripThumb.appendChild(icon);
+                    }
+
+                    const tripDetails = document.createElement('div');
+                    tripDetails.classList.add('trip-details');
+
+                    const tripTime = document.createElement('p');
+                    tripTime.classList.add('trip-time');
+                    tripTime.textContent = horaInicio;
+
+                    const tripDesc = document.createElement('p');
+                    tripDesc.classList.add('trip-description');
+                    tripDesc.textContent = viagem.descricao || viagem.DESCRICAO || "Sem descrição";
+
+                    const tripLocation = document.createElement('div');
+                    tripLocation.classList.add('trip-location');
+                    const mapIcon = document.createElement('i');
+                    mapIcon.classList.add('fas', 'fa-map-marker-alt');
+                    tripLocation.appendChild(mapIcon);
+                    tripLocation.insertAdjacentText('beforeend', ` ${localizacao}`);
+
+                    tripDetails.appendChild(tripTime);
+                    tripDetails.appendChild(tripDesc);
+                    tripDetails.appendChild(tripLocation);
+                    tripBody.appendChild(tripThumb);
+                    tripBody.appendChild(tripDetails);
+                    tripCard.appendChild(tripHeader);
+                    tripCard.appendChild(tripBody);
+                    tripEntry.appendChild(tripDate);
+                    tripEntry.appendChild(tripCard);
+                    timelineContent.appendChild(tripEntry);
+
+                } catch (error) {
+                    console.error("Erro ao renderizar viagem:", error);
                 }
             });
-    
-            document.getElementById('toggle-sidebar-btn').addEventListener('click', alternarBarraLateral); 
-            document.getElementById('profile-toggle-btn').addEventListener('click', alternarPopupPerfil); 
-            document.getElementById('goToSettingsBtn').addEventListener('click', irParaConfiguracoes); 
-            document.getElementById('logoutBtn').addEventListener('click', () => {window.location.href= '../index.html'}); 
-            document.getElementById('goToHomeBtn').addEventListener('click', () => { window.location.href = 'home.html'; }); 
-            document.getElementById('categories-filter-toggle').addEventListener('click', alternarFiltroCategorias); 
-            document.getElementById('categorySearchInput').addEventListener('input', filtrarCategorias); 
-            document.getElementById('fab-add-btn').addEventListener('click', abrirModalAdicionar); 
-            document.getElementById('closeModalBtnHeader').addEventListener('click', fecharModalAdicionar); 
-    
-            document.getElementById('tripName').addEventListener('input', validarPasso1);
-            document.getElementById('tripDesc').addEventListener('input', validarPasso1);
-            document.getElementById('btnNext1').addEventListener('click', () => proximoPasso(2));
-    
-            document.getElementById('trip-country').addEventListener('input', validarPasso2); 
-            document.getElementById('trip-state').addEventListener('input', validarPasso2); 
-            document.getElementById('trip-city').addEventListener('input', validarPasso2); 
-            document.getElementById('btnNext2').addEventListener('click', () => proximoPasso(3));
-            document.getElementById('prevStep2Btn').addEventListener('click', () => passoAnterior(2)); 
-    
-            document.getElementById('prevStep2Btn').addEventListener('click', () => passoAnterior(2)); 
-            document.getElementById('btnSave').addEventListener('click', salvarViagem);
-            
-            const uploadBtn = document.getElementById('uploadImageBtn');
-            const fileInput = document.getElementById('tripImageUpload');
-            
-            if (uploadBtn) {
-                uploadBtn.addEventListener('click', () => {
-                    fileInput.click();
-                });
-            }
-            
-            if (fileInput) {
-                fileInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file && file.type.startsWith('image/')) {
-                        const reader = new FileReader();
-                        
-                        reader.onload = function(event) {
-                            const previewImage = document.getElementById('previewImage');
-                            const mediaPlaceholder = document.getElementById('mediaPlaceholder');
-                            previewImage.src = event.target.result;
-                            previewImage.style.display = 'block';
-                            mediaPlaceholder.style.display = 'none';
-                            
-                            imagemSelecionada = {
-                                nome: file.name,
-                                tipo: file.type,
-                                tamanho_megabytes: (file.size / (1024 * 1024)).toFixed(2),
-                                data_url: event.target.result
-                            };
-                        };
-                        reader.readAsDataURL(file);
-                    } else {
-                        alert('Por favor, selecione um arquivo de imagem válido.');
-                    }
-                });
-            }
+        }
 
-            const btnNovoFiltro = document.querySelector('.categories-header .create-category-btn');
-            if (btnNovoFiltro) {
-                btnNovoFiltro.addEventListener('click', abrirModalCriarCategoria);
+       
+        function formatarDiaDaSemana(dataISO) {
+            try {
+                const data = new Date(dataISO);
+                return data.toLocaleDateString('pt-BR', { weekday: 'short' }).toUpperCase().replace('.', '');
+            } catch (error) {
+                return "SEG";
             }
+        }
 
-            const btnAddStep3 = document.getElementById('addCategoryStep3Btn');
-            if (btnAddStep3) {
-                btnAddStep3.addEventListener('click', abrirModalCriarCategoria);
+        function formatarDiaDoMes(dataISO) {
+            try {
+                const data = new Date(dataISO);
+                return data.getDate();
+            } catch (error) {
+                return 1;
             }
+        }
 
-            document.getElementById('closeCreateCategoryModalBtn').addEventListener('click', fecharModalCriarCategoria);
-            document.getElementById('newCategoryName').addEventListener('input', validarSalvarCategoria);
-            document.getElementById('btnSaveCategory').addEventListener('click', salvarNovaCategoria); 
-        });
-        
+        function formatarHora(dataISO) {
+            try {
+                const data = new Date(dataISO);
+                const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                return horaFormatada.replace(':', 'h');
+            } catch (error) {
+                return "00h00";
+            }
+        }
+
+        // Funções de UI
         function alternarBarraLateral() {
             document.getElementById('main-sidebar').classList.toggle('open');
         }
-    
+
         function alternarPopupPerfil() {
             const popup = document.getElementById('profile-popup');
             popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
         }
-    
+
         function irParaConfiguracoes() {
             window.location.href = 'configuracoes.html';
         }
-        
+
+        function fazerLogout() {
+            localStorage.clear();
+            window.location.href = "../index.html";
+        }
+
         function alternarFiltroCategorias(evento) {
             if (evento) evento.stopPropagation();
-            const coluna = document.getElementById('categoryFilterColumn'); 
+            const coluna = document.getElementById('categoryFilterColumn');
             coluna.classList.toggle('visible');
-    
+
             if (coluna.classList.contains('visible')) {
                 document.addEventListener('click', fecharFiltroCategoriasAoClicarFora);
             } else {
                 document.getElementById('categorySearchInput').value = '';
-                filtrarCategorias(); 
-                document.removeEventListener('click', fecharFiltroCategoriasAoClicarFora); 
+                filtrarCategorias();
+                document.removeEventListener('click', fecharFiltroCategoriasAoClicarFora);
             }
         }
-    
+
         function fecharFiltroCategoriasAoClicarFora(evento) {
-            const coluna = document.getElementById('categoryFilterColumn'); 
-            const botao = document.getElementById('categories-filter-toggle'); 
-    
+            const coluna = document.getElementById('categoryFilterColumn');
+            const botao = document.getElementById('categories-filter-toggle');
+
             if (!coluna.contains(evento.target) && !botao.contains(evento.target)) {
                 coluna.classList.remove('visible');
                 document.removeEventListener('click', fecharFiltroCategoriasAoClicarFora);
             }
         }
-    
+
+        function aplicarFiltroCategoria(categoriaId) {
+            const viagensFiltradas = viagens.filter(viagem => {
+                if (viagem.categorias && Array.isArray(viagem.categorias)) {
+                    return viagem.categorias.some(cat =>
+                        cat.id_categoria == categoriaId || cat.ID_CATEGORIA == categoriaId
+                    );
+                }
+                return false;
+            });
+            renderizarViagens(viagensFiltradas);
+        }
+
         function filtrarCategorias() {
             const entrada = document.getElementById('categorySearchInput');
             const filtro = entrada.value.toUpperCase();
             const listaUl = document.getElementById('categories-list-filter');
             const itensLista = listaUl.getElementsByTagName('li');
-    
+
             for (let i = 0; i < itensLista.length; i++) {
                 const spanNome = itensLista[i].querySelector('.category-name');
                 const valorTexto = spanNome.textContent || spanNome.innerText;
-    
+
                 if (valorTexto.toUpperCase().indexOf(filtro) > -1) {
                     itensLista[i].style.display = 'flex';
                 } else {
@@ -431,116 +846,80 @@
                 }
             }
         }
-    
-        function excluirCategoria(id, nome) {
-            if (confirm(`Tem certeza que deseja excluir a categoria "${nome}"? (ID: ${id})`)) {
-                console.log(`Categoria ${id} excluída! (Simulação)`);
-                const itemParaRemover = document.querySelector(`.category-item-filter[data-id="${id}"]`);
-                if (itemParaRemover) {
-                    itemParaRemover.remove();
-                }
 
-                document.getElementById('categoryFilterColumn').classList.remove('visible'); 
-                document.removeEventListener('click', fecharFiltroCategoriasAoClicarFora);
+        function buscarViagens() {
+            const termo = document.getElementById('main-search-input').value.toLowerCase();
+            const viagensFiltradas = viagens.filter(viagem => {
+                const nome = viagem.nome || viagem.NOME || "";
+                const descricao = viagem.descricao || viagem.DESCRICAO || "";
+                const localizacao = viagem.localizacao_detalhada || viagem.LOCALIZACAO_DETALHADA || "";
+
+                return nome.toLowerCase().includes(termo) ||
+                    descricao.toLowerCase().includes(termo) ||
+                    localizacao.toLowerCase().includes(termo);
+            });
+            renderizarViagens(viagensFiltradas);
+        }
+
+        function ordenarViagens() {
+            const ordenacaoAtual = localStorage.getItem('ordenacaoViagens') || 'recente';
+            const novaOrdenacao = ordenacaoAtual === 'recente' ? 'antiga' : 'recente';
+
+            localStorage.setItem('ordenacaoViagens', novaOrdenacao);
+
+            if (novaOrdenacao === 'recente') {
+                viagens.sort((a, b) => {
+                    const dateA = new Date(a.data_inicio || a.DATA_INICIO || Date.now());
+                    const dateB = new Date(b.data_inicio || b.DATA_INICIO || Date.now());
+                    return dateB - dateA;
+                });
+            } else {
+                viagens.sort((a, b) => {
+                    const dateA = new Date(a.data_inicio || a.DATA_INICIO || Date.now());
+                    const dateB = new Date(b.data_inicio || b.DATA_INICIO || Date.now());
+                    return dateA - dateB;
+                });
             }
+
+            renderizarViagens(viagens);
         }
-        window.deleteCategory = excluirCategoria; 
-    
-        function renderizarFiltroCategorias(cats) {
-            const contentorLista = document.getElementById('categories-list-filter'); 
-            if (!contentorLista) return;
-            contentorLista.innerHTML = '';
-    
-            cats.forEach(categoria => {
-                const itemLista = document.createElement('li');
-                itemLista.classList.add('category-item-filter');
-                itemLista.setAttribute('data-id', categoria.id_categoria);
-    
-                itemLista.innerHTML = `
-                    <span class="category-name">${categoria.nome}</span>
-                    <button class="delete-category-btn" onclick="excluirCategoria(${categoria.id_categoria}, '${categoria.nome}')">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                `;
-    
-                itemLista.querySelector('.category-name').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    console.log(`Filtro aplicado na categoria: ${categoria.nome}`);
-                    document.getElementById('categoryFilterColumn').classList.remove('visible');
-                });
-    
-                contentorLista.appendChild(itemLista);
-            });
-        }
-    
-        function renderizarCategorias(cats) {
-            const contentorLista = document.getElementById('categoryList');
-            if (!contentorLista) return;
-            contentorLista.innerHTML = '';
-    
-            cats.forEach(categoria => {
-                const rotulo = document.createElement('label');
-                rotulo.classList.add('category-label-modal'); 
-    
-                const caixaSelecao = document.createElement('input');
-                caixaSelecao.type = 'checkbox';
-                caixaSelecao.name = 'category'; 
-                caixaSelecao.value = categoria.id_categoria;
-    
-                caixaSelecao.addEventListener('change', function() {
-                    const caixasSelecionadas = document.querySelectorAll('#categoryList input[name="category"]:checked');
-                    const contagem = caixasSelecionadas.length;
-    
-                    if (contagem > 3) {
-                        this.checked = false;
-                        alert('Você pode selecionar no máximo 3 categorias.');
-                    }
-                    validarPasso3();
-                });
-    
-                rotulo.appendChild(caixaSelecao);
-                rotulo.innerHTML += ` ${categoria.nome}`;
-                contentorLista.appendChild(rotulo);
-            });
-    
-            validarPasso3(); 
-        }
+
     
         function abrirModalAdicionar() {
             document.getElementById('addTripModal').style.display = 'flex';
-            limparFormularioViagem(); 
-            renderizarCategorias(categorias);
+            limparFormularioViagem();
             mostrarPasso(1);
         }
-    
+
         function fecharModalAdicionar() {
             document.getElementById('addTripModal').style.display = 'none';
         }
-    
+
         function mostrarPasso(numeroPasso) {
             document.querySelectorAll('.modal-step').forEach(elemento => elemento.classList.remove('active'));
             document.getElementById('step' + numeroPasso).classList.add('active');
 
             if (numeroPasso === 1) validarPasso1();
-            if (numeroPasso === 2) validarPasso2(); 
+            if (numeroPasso === 2) validarPasso2();
             if (numeroPasso === 3) validarPasso3();
         }
-    
-        function proximoPasso(passo) { mostrarPasso(passo); }
-        function passoAnterior(passo) { mostrarPasso(passo); }
-    
+
+        function proximoPasso(passo) {
+            mostrarPasso(passo);
+        }
+
         function validarPasso1() {
             const nome = document.getElementById('tripName').value.trim();
             const descricao = document.getElementById('tripDesc').value.trim();
             const botao = document.getElementById('btnNext1');
-    
+
             if (nome !== "" && descricao !== "") {
                 botao.classList.remove('btn-hidden');
             } else {
                 botao.classList.add('btn-hidden');
             }
         }
-    
+
         function validarPasso2() {
             const pais = document.getElementById('trip-country').value.trim();
             const cidade = document.getElementById('trip-city').value.trim();
@@ -552,16 +931,16 @@
                 botao.classList.add('btn-hidden');
             }
         }
-        
+
         function validarPasso3() {
             const caixasSelecionadas = document.querySelectorAll('#categoryList input[name="category"]:checked');
             const contagemSelecionada = caixasSelecionadas.length;
             const botao = document.getElementById('btnSave');
 
-            if (botao) { 
+            if (botao) {
                 if (contagemSelecionada >= 1 && contagemSelecionada <= 3) {
                     botao.classList.remove('btn-hidden');
-                    botao.disabled = false; 
+                    botao.disabled = false;
                 } else {
                     botao.classList.add('btn-hidden');
                     botao.disabled = true;
@@ -569,10 +948,382 @@
             }
         }
 
+        function limparFormularioViagem() {
+            document.getElementById('tripName').value = '';
+            document.getElementById('tripDesc').value = '';
+            document.getElementById('trip-country').value = '';
+            document.getElementById('trip-state').value = '';
+            document.getElementById('trip-city').value = '';
+
+            document.querySelectorAll('#categoryList input[name="category"]').forEach(cb => {
+                cb.checked = false;
+            });
+
+        
+            imagemSelecionada = null;
+            const previewImage = document.getElementById('previewImage');
+            const mediaPlaceholder = document.getElementById('mediaPlaceholder');
+            const fileInput = document.getElementById('tripImageUpload');
+
+            if (previewImage) {
+                previewImage.style.display = 'none';
+                previewImage.src = '';
+            }
+
+            if (mediaPlaceholder) {
+                mediaPlaceholder.style.display = 'flex';
+            }
+
+            if (fileInput) {
+                fileInput.value = '';
+            }
+
+ 
+            document.getElementById('btnNext1').classList.add('btn-hidden');
+            document.getElementById('btnNext2').classList.add('btn-hidden');
+            document.getElementById('btnSave').classList.add('btn-hidden');
+            document.getElementById('btnSave').disabled = true;
+        }
+
+
+async function criarLocalizacao(idViagem, local) {
+  
+    const pais = local.pais || 'Não Informado';
+    const estado = local.estado || 'NI';
+    const cidade = local.cidade || 'Não Informada';
+    const latitude = String(local.latitude || '0');
+    const longitude = String(local.longitude || '0');
+
+    const payload = {
+        id_viagem: idViagem,
+        pais: pais,
+        estado: estado,
+        cidade: cidade,
+        latitude: latitude,
+        longitude: longitude
+    };
+
+    const url = 'http://localhost:8080/v1/travel/local';
+    console.log('Criando localização:', payload);
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok || data.status_code === 201) {
+            console.log(' Localização criada com sucesso:', data);
+            return true;
+        } else {
+         
+            console.log(` Falha ao criar localização. Resposta:`, data);
+            return false;
+        }
+
+    } catch (error) {
+        console.error('Erro na requisição de criação de localização:', error);
+        return false;
+    }
+}
+     
+        async function salvarViagemSimplificada() {
+            const nome = document.getElementById('tripName').value.trim();
+            const descricao = document.getElementById('tripDesc').value.trim();
+            const pais = document.getElementById('trip-country').value.trim();
+            const estado = document.getElementById('trip-state').value.trim();
+            const cidade = document.getElementById('trip-city').value.trim();
+
+        
+            const categoriasSelecionadas = Array.from(
+                document.querySelectorAll('#categoryList input[name="category"]:checked')
+            ).map(cb => parseInt(cb.value));
+
+            // Validações
+            if (!nome) {
+                alert("Digite o nome da viagem.");
+                return;
+            }
+
+            if (!pais) {
+                alert("Digite o país.");
+                return;
+            }
+
+            if (!cidade) {
+                alert("Digite a cidade.");
+                return;
+            }
+
+            if (categoriasSelecionadas.length === 0) {
+                alert("Selecione pelo menos uma categoria.");
+                return;
+            }
+
+            if (!currentUserId || !idDiario) {
+                alert("Erro: Usuário ou Diário não identificados.");
+                return;
+            }
+
+            const btnSave = document.getElementById('btnSave');
+            btnSave.disabled = true;
+            btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+
+            try {
+                // Calcular datas
+                const dataAtual = new Date();
+                const dataFim = new Date(dataAtual);
+                dataFim.setDate(dataFim.getDate() + 7);
+                const dataFimFormatada = dataFim.toISOString().split('T')[0];
+                const dataInicio = dataAtual.toISOString().split('T')[0];
+
+       
+                const payload = {
+                    nome: nome,
+                    descricao: descricao,
+                    data_inicio: dataInicio,
+                    data_fim: dataFimFormatada,
+                    isPublico: true,
+                    quantidade_curtidas: 0,
+                    id_diario: idDiario,
+                    id_usuario: currentUserId
+                };
+
+                console.log("📤 Enviando viagem (payload principal):", JSON.stringify(payload, null, 2));
+
+                const response = await fetch('http://localhost:8080/v1/travel/viagem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const data = await response.json();
+                console.log("📥 Resposta da criação da viagem:", data);
+
+               
+                let idViagem;
+
+                if (response.ok || data.status_code === 200 || data.status_code === 201) {
+                   
+                    if (data.response && data.response.id_viagem) {
+                        idViagem = data.response.id_viagem;
+                    } else if (data.response && data.response.id) {
+                        idViagem = data.response.id;
+                    } else if (data.response && data.response.viagem && data.response.viagem.id_viagem) {
+                        idViagem = data.response.viagem.id_viagem;
+                    } else {
+                
+                        console.log("ID não retornado. Buscando última viagem criada...");
+                        idViagem = await buscarUltimaViagemCriada();
+                    }
+
+                    console.log(`✅ VIAGEM CRIADA! ID: ${idViagem}`);
+
+                    if (idViagem) {
+
+                        if (categoriasSelecionadas.length > 0) {
+                            console.log(`🔗 Vinculando ${categoriasSelecionadas.length} categorias...`);
+
+                            let categoriasVinculadas = 0;
+                            for (const categoriaId of categoriasSelecionadas) {
+                                const sucesso = await vincularCategoriaAViagem(idViagem, categoriaId);
+                                if (sucesso) categoriasVinculadas++;
+                            }
+
+                            console.log(`${categoriasVinculadas} categorias vinculadas com sucesso`);
+                        }
+
+                    
+                        if (pais && cidade) {
+                            console.log("📍 Criando localização...");
+                            const localCriado = await criarLocalizacao(idViagem, pais, estado, cidade);
+                            if (localCriado) {
+                                console.log("Localização criada com sucesso");
+                            }
+                        }
+
+                        const inputFoto = document.getElementById('tripImageUpload');
+
+                        if (inputFoto && inputFoto.files && inputFoto.files.length > 0) { 
+                            console.log("🖼️ Fazendo upload da imagem...");
+                         
+                            const uploadSuccess = await uploadImagemParaViagem(idViagem);
+                            if (!uploadSuccess) {
+                                alert("⚠️ A viagem foi criada, mas houve uma falha no upload da imagem.");
+                            }
+                        }
+                  
+                        console.log("🔄 Atualizando lista de viagens...");
+                        await fetchViagens(idDiario);
+
+                    } else {
+                        console.error("❌ Não foi possível obter o ID da viagem criada");
+                        alert("Viagem criada, mas não foi possível obter o ID para vincular categorias.");
+                    }
+
+                    
+                    fecharModalAdicionar();
+                    limparFormularioViagem();
+
+                } else {
+                    let mensagemErro = "Erro ao criar viagem.\n";
+                    if (data.invalid_field) {
+                        mensagemErro += `Campo inválido: ${data.invalid_field}\n`;
+                    }
+                    if (data.message) {
+                        mensagemErro += `Mensagem: ${data.message}\n`;
+                    }
+
+                    alert(mensagemErro);
+                    console.error("Erro detalhado:", data);
+                }
+
+            } catch (error) {
+                console.error("❌ Erro completo:", error);
+                alert(`Erro de conexão: ${error.message}`);
+
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerHTML = 'Salvar';
+            }
+        }
+
+     
+        async function buscarUltimaViagemCriada() {
+            try {
+           
+                const response = await fetch('http://localhost:8080/v1/travel/viagem');
+                const data = await response.json();
+
+                if (data.response && data.response.viagens && Array.isArray(data.response.viagens)) {
+           
+                    const viagensDoDiario = data.response.viagens.filter(v =>
+                        v.id_diario == idDiario || v.ID_DIARIO == idDiario
+                    );
+
+                    if (viagensDoDiario.length > 0) {
+                      
+                        viagensDoDiario.sort((a, b) => {
+                            const idA = a.id_viagem || a.ID_VIAGEM || a.id || 0;
+                            const idB = b.id_viagem || b.ID_VIAGEM || b.id || 0;
+                            return idB - idA;
+                        });
+
+                        const ultimaViagem = viagensDoDiario[0];
+                        console.log("Última viagem encontrada:", ultimaViagem);
+                        return ultimaViagem.id_viagem || ultimaViagem.ID_VIAGEM || ultimaViagem.id;
+                    }
+                }
+
+                return null;
+            } catch (error) {
+                console.error("Erro ao buscar última viagem:", error);
+                return null;
+            }
+        }
+
+
+
+async function buscarImagemById(idImagem) {
+    if (!idImagem) return null;
+    try {
+        console.log(`[GET] Buscando detalhes da imagem com ID: ${idImagem}`);
+     
+        const url = `http://localhost:8080/v1/travel/imagem/${idImagem}`; 
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log(`✅ Detalhes da Imagem ${idImagem} (GET):`, data);
+        
+       
+        return data.response.imagem || data.response;
+        
+    } catch (error) {
+        console.error("❌ Erro ao buscar imagem por ID:", error);
+        return null;
+    }
+}
+
+
+async function vincularCategoriaAViagem(idViagem, idCategoria) {
+    const url = 'http://localhost:8080/v1/travel/viagem_categoria';
+    const payload = {
+        id_viagem: idViagem,
+        id_categoria: idCategoria
+    };
+
+    console.log(`Vinculando categoria ${idCategoria} à viagem ${idViagem}`);
+    console.log(`Tentando payload:`, payload);
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+        
+            headers: {
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify(payload) 
+        });
+
+        const data = await response.json();
+
+        if (response.ok || data.status_code === 201) {
+            console.log(`✅ Categoria ${idCategoria} vinculada com sucesso.`);
+            return true;
+        } else {
+          
+            console.log(`❌ Falha ao vincular categoria ${idCategoria}. Resposta:`, data);
+            return false;
+        }
+
+    } catch (error) {
+        console.error(`Erro na requisição de vínculo de categoria:`, error);
+        return false;
+    }
+}
+
+async function uploadImagemParaViagem(idViagem, arquivo) {
+   
+    if (!arquivo) {
+        console.log('Upload de imagem pulado: Nenhuma imagem selecionada.');
+        return true; 
+    }
+
+    const url = 'http://localhost:8080/v1/travel/arquivo';
+    const formData = new FormData();
+    formData.append('midia', arquivo); 
+    formData.append('id_viagem', idViagem);
+    formData.append('nome', arquivo.name); 
+
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData,
+         
+        });
+
+
+    } catch (error) {
+        console.error(`Upload de imagem falhou (erro de conexão/parsing): ${error.message}`);
+        return false;
+    }
+}
         function abrirModalCriarCategoria() {
             document.getElementById('createCategoryModal').style.display = 'flex';
-            document.getElementById('newCategoryName').value = ''; 
-            validarSalvarCategoria(); 
+            document.getElementById('newCategoryName').value = '';
+            validarSalvarCategoria();
         }
 
         function fecharModalCriarCategoria() {
@@ -591,12 +1342,14 @@
                 botaoSalvar.classList.add('btn-disabled');
             }
         }
-        
+
         async function salvarNovaCategoria() {
             const nomeCategoria = document.getElementById('newCategoryName').value.trim();
             if (!nomeCategoria) return;
-            
-            document.getElementById('btnSaveCategory').disabled = true;
+
+            const btnSaveCategory = document.getElementById('btnSaveCategory');
+            btnSaveCategory.disabled = true;
+            btnSaveCategory.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
 
             try {
                 const url = `http://localhost:8080/v1/travel/categoria`;
@@ -605,245 +1358,190 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ nome: nomeCategoria }),
+                    body: JSON.stringify({
+                        nome: nomeCategoria,
+                        descricao: nomeCategoria
+                    }),
                 });
-                
+
                 const data = await response.json();
+                console.log("Resposta ao criar categoria:", data);
 
                 if (response.ok || data.status_code === 201) {
                     console.log("Nova Categoria Salva:", data.response);
-                    
-                    await fetchCategories(); 
 
-                    if (document.getElementById('addTripModal').style.display === 'flex' && document.getElementById('step3').classList.contains('active')) {
-                         renderizarCategorias(categorias);
-                    }
+                    await fetchCategories();
 
                     fecharModalCriarCategoria();
+                    alert("Categoria criada com sucesso!");
                 } else {
-                     alert(`Erro ao salvar categoria: ${data.message || data.invalid_field || 'Erro desconhecido.'}`);
+                    alert(`Erro ao salvar categoria: ${data.message || data.invalid_field || 'Erro desconhecido.'}`);
                 }
             } catch (error) {
                 console.error("Erro de conexão ao salvar categoria:", error);
                 alert('Erro de conexão com a API.');
             } finally {
-                document.getElementById('btnSaveCategory').disabled = false;
+                btnSaveCategory.disabled = false;
+                btnSaveCategory.innerHTML = 'Salvar';
             }
         }
-        
-        function formatarDiaDaSemana(dataISO) {
-            const data = new Date(dataISO);
-            return data.toLocaleDateString('pt-BR', { weekday: 'short' }).toUpperCase().replace('.', ''); 
-        }
 
-        function formatarDiaDoMes(dataISO) {
-            const data = new Date(dataISO);
-            return data.getDate();
-        }
-
-        function formatarHora(dataISO) {
-            const data = new Date(dataISO);
-            const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            return horaFormatada.replace(':', 'h'); 
-        }
-
-        function renderizarViagens(viagens) {
-            const timelineContent = document.getElementById('timeline-content');
-            if (!timelineContent) return;
-
-            timelineContent.innerHTML = '';
-            
-            if (viagens.length === 0) {
-                 timelineContent.innerHTML = '<p style="text-align: center; color: #555;">Você ainda não adicionou nenhuma viagem a este diário.</p>';
-                 return;
-            }
-
-            viagens.forEach(viagem => {
-                const diaSemana = formatarDiaDaSemana(viagem.data_inicio);
-                const diaMes = formatarDiaDoMes(viagem.data_inicio);
-                const horaInicio = formatarHora(viagem.data_inicio);
-
-                const tripEntry = document.createElement('div');
-                tripEntry.classList.add('trip-entry');
-                tripEntry.setAttribute('data-id', viagem.id_viagem);
-
-                const tripDate = document.createElement('div');
-                tripDate.classList.add('trip-date');
-                
-                const dow = document.createElement('span'); 
-                dow.classList.add('dow');
-                dow.textContent = diaSemana;
-                
-                const day = document.createElement('span');
-                day.classList.add('day');
-                day.textContent = diaMes;
-
-                tripDate.appendChild(dow);
-                tripDate.appendChild(day);
-                
-                const tripCard = document.createElement('div');
-                tripCard.classList.add('trip-content-card');
-
-                const tripHeader = document.createElement('div');
-                tripHeader.classList.add('trip-header');
-                const title = document.createElement('h3');
-                title.textContent = viagem.nome;
-                tripHeader.appendChild(title);
-
-                const tripBody = document.createElement('div');
-                tripBody.classList.add('trip-body');
-
-                const tripThumb = document.createElement('div');
-                tripThumb.classList.add('trip-thumb');
-                
-                if (viagem.arquivos && viagem.arquivos.length > 0 && viagem.arquivos[0].tipo === 'imagem' && viagem.arquivos[0].url_armazenamento) {
-                    const img = document.createElement('img');
-                    img.src = viagem.arquivos[0].url_armazenamento;
-                    img.alt = viagem.nome;
-                    img.classList.add('trip-image');
-                    tripThumb.appendChild(img);
-                } else {
-                    const icon = document.createElement('i');
-                    icon.classList.add('fas', 'fa-camera');
-                    tripThumb.appendChild(icon);
-                }
-
-                const tripDetails = document.createElement('div');
-                tripDetails.classList.add('trip-details');
-
-                const tripTime = document.createElement('p'); 
-                tripTime.classList.add('trip-time');
-                tripTime.textContent = horaInicio;
-
-                const tripDesc = document.createElement('p'); 
-                tripDesc.classList.add('trip-description');
-                tripDesc.textContent = viagem.descricao;
-
-                const tripLocation = document.createElement('div');
-                tripLocation.classList.add('trip-location');
-                const mapIcon = document.createElement('i');
-                mapIcon.classList.add('fas', 'fa-map-marker-alt');
-                tripLocation.appendChild(mapIcon);
-                tripLocation.insertAdjacentText('beforeend', ` ${viagem.localizacao_detalhada || 'Localização não informada'}`);
-                
-                tripDetails.appendChild(tripTime);
-                tripDetails.appendChild(tripDesc);
-                tripDetails.appendChild(tripLocation);
-                tripBody.appendChild(tripThumb);
-                tripBody.appendChild(tripDetails);
-                tripCard.appendChild(tripHeader);
-                tripCard.appendChild(tripBody);
-                tripEntry.appendChild(tripDate);
-                tripEntry.appendChild(tripCard);
-                timelineContent.appendChild(tripEntry);
-            });
-        }
-        
-        async function salvarViagem() {
-            const nome = document.getElementById('tripName').value.trim();
-            const descricao = document.getElementById('tripDesc').value.trim();
-            const pais = document.getElementById('trip-country').value.trim();
-            const estado = document.getElementById('trip-state').value.trim();
-            const cidade = document.getElementById('trip-city').value.trim();
-            
-            const categoriasSelecionadas = Array.from(
-                document.querySelectorAll('#categoryList input[name="category"]:checked')
-            ).map(cb => parseInt(cb.value));
-            
-            if (categoriasSelecionadas.length === 0) {
-                alert("Selecione pelo menos uma categoria.");
-                return;
-            }
-
-            const userId = localStorage.getItem('userId') ? parseInt(localStorage.getItem('userId')) : null;
-            if (!userId || !idDiario) {
-                alert("Erro: Usuário ou Diário não identificados.");
-                return;
-            }
-
-            document.getElementById('btnSave').disabled = true;
-
-            const novaViagemPayload = {
-                id_diario: parseInt(idDiario), 
-                id_usuario: userId,
-                nome: nome,
-                descricao: descricao,
-              
-                data_inicio: new Date().toISOString().slice(0, 19).replace('T', ' '), 
-                pais: pais,
-                estado: estado,
-                cidade: cidade,
-                localizacao_detalhada: `${cidade}${estado ? ', ' + estado : ''}, ${pais}`,
-                isPublico: true, 
-          
-                id_categorias: categoriasSelecionadas, 
-            };
-
-            if (imagemSelecionada) {
-                 novaViagemPayload.arquivos = [{
-                     nome: imagemSelecionada.nome,
-                     tipo: 'imagem',
-                    
-                     conteudo_base64: imagemSelecionada.data_url.split(',')[1], 
-                 }];
-            }
+     
+        async function verificarDiarioUsuario() {
+            console.log("=== VERIFICANDO DIÁRIO E USUÁRIO ===");
 
             try {
-                const url = `http://localhost:8080/v1/travel/viagem`;
-                const response = await fetch(url, {
+         
+                const diariosResponse = await fetch('http://localhost:8080/v1/travel/diario');
+                const diariosData = await diariosResponse.json();
+
+                console.log("Diários disponíveis:", diariosData);
+
+                if (diariosData.response && diariosData.response.diarios) {
+                    const diarioExiste = diariosData.response.diarios.find(d =>
+                        d.id_diario == idDiario || d.ID_DIARIO == idDiario
+                    );
+
+                    if (diarioExiste) {
+                        console.log("✅ Diário encontrado:", diarioExiste);
+                    } else {
+                        console.error("❌ Diário NÃO encontrado! ID:", idDiario);
+                        alert("Erro: Diário não encontrado na API!");
+                        return false;
+                    }
+                }
+
+          
+                const usuariosResponse = await fetch(`http://localhost:8080/v1/travel/usuario/${currentUserId}`);
+                const usuarioData = await usuariosResponse.json();
+
+                if (usuarioData.response) {
+                    console.log("✅ Usuário encontrado:", usuarioData.response);
+                } else {
+                    console.error("❌ Usuário NÃO encontrado! ID:", currentUserId);
+                    alert("Erro: Usuário não encontrado na API!");
+                    return false;
+                }
+
+                return true;
+
+            } catch (error) {
+                console.error("Erro ao verificar:", error);
+                return false;
+            }
+        }
+
+        async function excluirCategoria(id, nome) {
+            if (!id || !nome) {
+                console.error("ID ou nome da categoria não fornecido");
+                return;
+            }
+
+            if (confirm(`Tem certeza que deseja excluir a categoria "${nome}"?`)) {
+                try {
+                    const response = await fetch(`http://localhost:8080/v1/travel/categoria/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok || data.status_code === 200) {
+                        console.log(`Categoria ${id} excluída com sucesso!`);
+
+            
+                        const itemParaRemover = document.querySelector(`.category-item-filter[data-id="${id}"]`);
+                        if (itemParaRemover) {
+                            itemParaRemover.remove();
+                        }
+
+                        await fetchCategories();
+
+                        alert("Categoria excluída com sucesso!");
+                    } else {
+                        alert(`Erro ao excluir categoria: ${data.message || 'Erro desconhecido'}`);
+                    }
+                } catch (error) {
+                    console.error("Erro ao excluir categoria:", error);
+                    alert("Erro de conexão ao excluir categoria.");
+                }
+
+                document.getElementById('categoryFilterColumn').classList.remove('visible');
+                document.removeEventListener('click', fecharFiltroCategoriasAoClicarFora);
+            }
+        }
+
+        function goToFeed() {
+            window.location.href = './feed-publico.html';
+        }
+
+   
+        window.excluirCategoria = excluirCategoria;
+        window.proximoPasso = proximoPasso;
+        window.goToFeed = goToFeed;
+
+       
+        async function testeCriacaoRapida() {
+            const payloadTeste = {
+                NOME: "TESTE CONSOLE",
+                DESCRICAO: "Teste via console",
+                DATA_INICIO: "2025-12-13",
+                PAIS: "Brasil",
+                CIDADE: "São Paulo",
+                ID_USUARIO: Number(currentUserId),
+                ID_DIARIO: Number(idDiario)
+            };
+
+            console.log("Enviando payload de teste:", payloadTeste);
+
+            try {
+                const response = await fetch('http://localhost:8080/v1/travel/viagem', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(novaViagemPayload),
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payloadTeste)
                 });
 
                 const data = await response.json();
+                console.log("Resposta:", data);
 
                 if (response.ok || data.status_code === 201) {
-                    console.log("Viagem salva com sucesso:", data.response);
-                    
-                    await fetchViagens(idDiario); 
-                    
-                    fecharModalAdicionar();
-                    limparFormularioViagem();
-                } else {
-                    alert(`Erro ao salvar viagem: ${data.message || data.invalid_field || 'Erro desconhecido.'}`);
+                    console.log("✅ SUCESSO! ID da viagem:", data.response?.id_viagem || data.response?.id);
+                } else if (data.invalid_field) {
+                    console.log("❌ Campo inválido:", data.invalid_field);
                 }
 
             } catch (error) {
-                console.error("Erro de conexão ao salvar viagem:", error);
-                alert('Erro de conexão com a API.');
-            } finally {
-                document.getElementById('btnSave').disabled = false;
+                console.error("Erro:", error);
             }
         }
 
-        function limparFormularioViagem() {
-            document.getElementById('tripName').value = '';
-            document.getElementById('tripDesc').value = '';
-            document.getElementById('trip-country').value = '';
-            document.getElementById('trip-state').value = '';
-            document.getElementById('trip-city').value = '';
-            
-            document.querySelectorAll('#categoryList input[name="category"]').forEach(cb => {
-                cb.checked = false;
-            });
-            
-            imagemSelecionada = null;
-            document.getElementById('previewImage').style.display = 'none';
-            document.getElementById('mediaPlaceholder').style.display = 'flex';
-            document.getElementById('tripImageUpload').value = '';
-            
-            document.getElementById('btnNext1').classList.add('btn-hidden');
-            document.getElementById('btnNext2').classList.add('btn-hidden');
-            document.getElementById('btnSave').classList.add('btn-hidden');
-            document.getElementById('btnSave').disabled = true;
+        window.testeCriacaoRapida = testeCriacaoRapida;
+
+      
+        async function verificarViagemCriada() {
+            console.log("🔍 Verificando viagens do diário 24...");
+
+            try {
+                const response = await fetch('http://localhost:8080/v1/travel/viagem');
+                const data = await response.json();
+
+                console.log("Todas as viagens:", data);
+
+                if (data.response && data.response.viagens) {
+                    const viagensDoDiario24 = data.response.viagens.filter(v =>
+                        v.id_diario == 24 || v.ID_DIARIO == 24
+                    );
+
+                    console.log(`Viagens do diário 24: ${viagensDoDiario24.length}`);
+                    console.log(viagensDoDiario24);
+                }
+            } catch (error) {
+                console.error("Erro ao verificar:", error);
+            }
         }
-        
-        function goToFeed() {
-            window.location.href = './feed-publico.html'; 
-        }
+
+        window.verificarViagemCriada = verificarViagemCriada;
+        window.salvarViagemSimplificada = salvarViagemSimplificada;
     </script>
 </body>
+
 </html>

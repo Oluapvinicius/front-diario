@@ -121,14 +121,37 @@
                 return;
             }
 
-            const dataCadastro = formatarDataAtual();
+            if (!id_genero) {
+                exibirMensagem("Por favor, selecione um gênero.");
+                return;
+            }
 
-            const dadosCadastro = {
+            const dataFormatada = new Date(data_nascimento).toISOString().split('T')[0];
+
+            const dadosCadastroVersao1 = {
+                USER_NOME: user_nome,
+                NOME: nome,
+                DESCRICAO: "Novo usuário. Acrescente uma descrição aqui",
+                DATA_NASCIMENTO: dataFormatada,
+                TELEFONE: "",
+                EMAIL: email,
+                SENHA: senha,
+                PAIS: "",
+                ESTADO: "",
+                CIDADE: "",
+                QUANTIDADE_SEGUIDORES: 0,
+                QUANTIDADE_SEGUINDO: 0,
+                ISACTIVE: true,
+                ISPUBLICO: true,
+                ID_GENERO: id_genero
+            };
+
+            const dadosCadastroVersao2 = {
                 user_nome: user_nome,
                 nome: nome,
-                descricao: "Novo usuário. Acrescente um decrição aqui",
-                data_nascimento: data_nascimento,
-                telefone: "(11) 9823-1232",
+                descricao: "Novo usuário. Acrescente uma descrição aqui",
+                data_nascimento: dataFormatada,
+                telefone: "",
                 email: email,
                 senha: senha,
                 pais: "",
@@ -141,26 +164,53 @@
                 id_genero: id_genero
             };
 
+            const dadosCadastroVersao3 = {
+                user_nome: user_nome,
+                nome: nome,
+                descricao: "Novo usuário. Acrescente uma descrição aqui",
+                data_nascimento: dataFormatada,
+                telefone: "",
+                email: email,
+                senha: senha,
+                pais: "",
+                estado: "",
+                cidade: "",
+                quantidade_seguidores: 0,
+                quantidade_seguindo: 0,
+                isActive: true,
+                isPublico: true,
+                id_genero: id_genero 
+            };
+
+            console.log("Enviando dados para cadastro:", dadosCadastroVersao3);
+
             try {
                 const response = await fetch('http://localhost:8080/v1/travel/usuario', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(dadosCadastro),
+                    body: JSON.stringify(dadosCadastroVersao3),
                 });
 
                 const data = await response.json();
-                console.log(data)
-                if (data.status_code === 201) {
+                console.log("Resposta da API:", data);
+                
+                if (data.status_code === 201 || response.ok) {
                     exibirMensagem("Cadastro realizado com sucesso! Redirecionando para o login...", 'success');
                     setTimeout(() => {
                         window.location.href = "index.html";
                     }, 2000);
                 } else {
-                    exibirMensagem(`Erro ao cadastrar: ${data.message || 'Erro desconhecido.'}`);
+                    // Verifique o campo específico do erro
+                    if (data.invalid_field && data.invalid_field.includes('ID_GENERO')) {
+                        exibirMensagem(`Erro: O campo de gênero não está no formato correto. Detalhes: ${data.message}`);
+                    } else {
+                        exibirMensagem(`Erro ao cadastrar: ${data.message || 'Erro desconhecido.'}`);
+                    }
                 }
             } catch (error) {
+                console.error("Erro na requisição:", error);
                 exibirMensagem("Erro de conexão. Verifique o servidor da API.");
             }
         }

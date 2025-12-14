@@ -14,9 +14,10 @@
             <header class="home-header">
                 <h1>Meus Diários de Viagens</h1>
                 <p style="color: var(--secondary-text);">Aqui estão todos os seus diários. Clique para ver os detalhes e viagens.</p>
+                <p id="diaryCountMessage" style="color: var(--primary); font-weight: bold; margin-top: 10px;"></p>
             </header>
             <div class="home-actions">
-                <a href="../Diario-criarDiario/novo-diario.html" class="btn-primary" style="width: auto;"> 
+                <a href="../Diario-criarDiario/novo-diario.html" class="btn-primary" style="width: auto;" id="newDiaryBtn"> 
                     <i class="fa-solid fa-plus"></i> Novo Diário
                 </a>
             </div>
@@ -25,6 +26,8 @@
     </div>
 
     <script>
+        const MAX_DIARIES_PER_USER = 10;
+        
         function getUserId() {
             const userId = localStorage.getItem('userId');
             if (!userId) {
@@ -39,35 +42,90 @@
             if (!idUsuario) return;
 
             try {
-                const urlDiarios = `http://localhost:8080/v1/travel/diario/meusDiarios/${idUsuario}`;
                 const urlCores = 'http://localhost:8080/v1/travel/cor';
-
                 const responseCores = await fetch(urlCores);
                 const jsonCores = await responseCores.json();
                 const cores = jsonCores.response?.colors || [];
 
-                const responseDiarios = await fetch(urlDiarios);
+             
+                const responseDiarios = await fetch(`http://localhost:8080/v1/travel/diario`);
                 const jsonDiarios = await responseDiarios.json();
 
-                let diarios = [];
-                if (jsonDiarios.response && Array.isArray(jsonDiarios.response)) {
-                    diarios = jsonDiarios.response;
-                } else if (jsonDiarios.response && !Array.isArray(jsonDiarios.response)) {
-                    diarios = [jsonDiarios.response];
+                let todosOsDiarios = [];
+                if (jsonDiarios.response && jsonDiarios.response.diarios) {
+                    todosOsDiarios = jsonDiarios.response.diarios;
+                } else if (Array.isArray(jsonDiarios.response)) {
+                    todosOsDiarios = jsonDiarios.response;
                 } else if (Array.isArray(jsonDiarios)) {
-                    diarios = jsonDiarios;
+                    todosOsDiarios = jsonDiarios;
                 }
 
-                exibirDiarios(diarios, cores);
+           
+                const meusDiarios = todosOsDiarios.filter(diario => 
+                    diario.id_usuario == idUsuario
+                );
+
+                console.log("Todos os diários:", todosOsDiarios);
+                console.log("Meus diários:", meusDiarios);
+
+           
+                updateDiaryCount(meusDiarios.length);
+                
+                exibirDiarios(meusDiarios, cores);
             } catch (error) {
                 console.error("Erro ao carregar dados:", error);
                 alert("Erro ao carregar diários. Verifique o servidor.");
             }
         }
 
+        function updateDiaryCount(count) {
+            const messageElement = document.getElementById('diaryCountMessage');
+            const newDiaryBtn = document.getElementById('newDiaryBtn');
+            
+            messageElement.textContent = `Você tem ${count} de ${MAX_DIARIES_PER_USER} diários disponíveis.`;
+            
+            if (count >= MAX_DIARIES_PER_USER) {
+                messageElement.style.color = '#ff6b6b';
+                
+               
+                if (newDiaryBtn) {
+                    newDiaryBtn.style.opacity = '0.5';
+                    newDiaryBtn.style.cursor = 'not-allowed';
+                    newDiaryBtn.onclick = function(e) {
+                        e.preventDefault();
+                        alert(`Você já atingiu o limite máximo de ${MAX_DIARIES_PER_USER} diários.`);
+                        return false;
+                    };
+                }
+            } else {
+                messageElement.style.color = 'var(--primary)';
+                
+              
+                if (newDiaryBtn) {
+                    newDiaryBtn.style.opacity = '1';
+                    newDiaryBtn.style.cursor = 'pointer';
+                    newDiaryBtn.onclick = null;
+                }
+            }
+        }
+
         function exibirDiarios(diarios, cores) {
             const container = document.querySelector('.diary-grid');
             container.innerHTML = '';
+
+            if (diarios.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--secondary-text);">
+                        <i class="fa-solid fa-book-open" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.3;"></i>
+                        <h3>Nenhum diário encontrado</h3>
+                        <p>Crie seu primeiro diário de viagens!</p>
+                    </div>
+                `;
+                return;
+            }
+
+           
+            diarios.sort((a, b) => b.id_diario - a.id_diario);
 
             diarios.forEach(diario => {
                 const corEncontrada = cores.find(c => c.id_cor === diario.id_cor);
@@ -90,7 +148,7 @@
                 title.onclick = function() { 
                     localStorage.setItem('currentDiaryId', diario.id_diario);
                     localStorage.setItem('currentDiaryName', diario.nome);
-                    window.location.href = "./home-principal.html";
+                    window.location.href = `./home-principal.html?id_diario=${diario.id_diario}`;
                 };
 
                 const meta = document.createElement('div');
