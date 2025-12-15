@@ -60,7 +60,6 @@
                     todosOsDiarios = jsonDiarios;
                 }
 
-           
                 const meusDiarios = todosOsDiarios.filter(diario => 
                     diario.id_usuario == idUsuario
                 );
@@ -68,7 +67,7 @@
                 console.log("Todos os diários:", todosOsDiarios);
                 console.log("Meus diários:", meusDiarios);
 
-           
+                
                 updateDiaryCount(meusDiarios.length);
                 
                 exibirDiarios(meusDiarios, cores);
@@ -87,7 +86,6 @@
             if (count >= MAX_DIARIES_PER_USER) {
                 messageElement.style.color = '#ff6b6b';
                 
-               
                 if (newDiaryBtn) {
                     newDiaryBtn.style.opacity = '0.5';
                     newDiaryBtn.style.cursor = 'not-allowed';
