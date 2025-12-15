@@ -230,11 +230,15 @@
 
     <script>
      
-        let categorias = [];
+        const categorias = [];
         let viagens = [];
         let imagemSelecionada = null;
         let idDiario = null;
         let currentUserId = null;
+
+
+
+        
 
         document.addEventListener('DOMContentLoaded', async () => {
             console.log("Home Principal - DOM Carregado");
@@ -430,53 +434,75 @@
         }
 
      
-        async function fetchCategories() {
-            try {
-                console.log("Buscando categorias...");
-                const url = `http://localhost:8080/v1/travel/categoria`;
-                const response = await fetch(url);
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+
+
+
+    async function fetchCategories() {
+    
+    let containerPrincipal = document.getElementById('categories-list-filter'); 
+    let containerFiltro = document.getElementById('categoryList'); 
+
+  
+    if (!containerPrincipal) {
+        console.error("ERRO FATAL: Container principal de categorias (categories-list-filter) não foi encontrado no DOM.");
+        return; 
+    }
+    
+    containerPrincipal.innerHTML = '<li style="text-align: center; color: var(--secondary-text);">Carregando categorias...</li>'; 
+
+    try {
+        const url = 'http://localhost:8080/v1/travel/categoria'; 
+        const response = await fetch(url);
+        const data = await response.json();
+        const categorias = data.response; 
+
+        if (data.status_code === 200) {
+            
+     
+            containerPrincipal.innerHTML = '';
+            if (containerFiltro) containerFiltro.innerHTML = '';
+
+            
+            categorias.categories.forEach(categoria => {
+                console.log(categoria)
+    
+                const itemPrincipal = document.createElement('li'); 
+                itemPrincipal.className = 'category-item';
+                itemPrincipal.setAttribute('data-id', categoria.id_categoria); 
+                itemPrincipal.innerHTML = `
+                    <p class="category-name">${categoria.nome}</p>
+                `;
+                containerPrincipal.appendChild(itemPrincipal);
+                
+               
+                if (containerFiltro) {
+                    const idUnico = `cat-modal-${categoria.id_categoria}`; 
+                    const itemFiltro = document.createElement('div');
+                    itemFiltro.className = 'category-item-filter';
+                    itemFiltro.setAttribute('data-id', categoria.id_categoria); 
+                    
+                    itemFiltro.innerHTML = `
+                        <input type="checkbox" id="${idUnico}" name="categorias" value="${categoria.id_categoria}">
+                        <label for="${idUnico}">${categoria.nome}</label>
+                    `;
+                    containerFiltro.appendChild(itemFiltro);
                 }
+            });
 
-                const data = await response.json();
-                console.log("Resposta categorias:", data);
+            
 
-                if (response.ok) {
-                  
-                    if (data.response && Array.isArray(data.response.categories)) {
-                        categorias = data.response.categories;
-                    } else if (data.response && Array.isArray(data.response)) {
-                        categorias = data.response;
-                    } else if (Array.isArray(data)) {
-                        categorias = data;
-                    } else if (data.response && data.response.categorias && Array.isArray(data.response.categorias)) {
-                        categorias = data.response.categorias;
-                    } else {
-                        console.error("Formato de resposta inesperado:", data);
-                        categorias = [];
-                    }
-
-                    console.log("Categorias processadas:", categorias);
-                    renderizarFiltroCategorias(categorias);
-                    renderizarCategorias(categorias);
-                } else {
-                    console.error("Erro ao carregar categorias:", data.message || "Erro desconhecido.");
-                }
-            } catch (error) {
-                console.error("Erro de conexão ao buscar categorias:", error);
-                categorias = [
-                    { id_categoria: 1, nome: "Praia" },
-                    { id_categoria: 2, nome: "Aventura" },
-                    { id_categoria: 3, nome: "Gastronomia" },
-                    { id_categoria: 4, nome: "Cultural" }
-                ];
-                renderizarFiltroCategorias(categorias);
-                renderizarCategorias(categorias);
-            }
+        } else {
+            
+            containerPrincipal.innerHTML = '<li class="no-data-msg">Nenhuma categoria encontrada.</li>';
+            if (containerFiltro) containerFiltro.innerHTML = '<p class="no-data-msg">Nenhuma categoria para selecionar.</p>';
         }
 
+    } catch (error) {
+        console.error("Erro de conexão ao buscar categorias:", error);
+        containerPrincipal.innerHTML = '<li class="error-msg">Erro de conexão com o servidor.</li>';
+    }
+}
         async function fetchViagens(diarioId) {
             const timelineContent = document.getElementById('timeline-content');
             timelineContent.innerHTML = '<div style="text-align: center; padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Carregando viagens...</div>';
@@ -583,7 +609,7 @@
             contentorLista.innerHTML = '';
 
             cats.forEach(categoria => {
-                const categoriaId = categoria.id_categoria || categoria.id || categoria.ID_CATEGORIA || 0;
+                const categoriaId = categoria.id_categoria
                 const categoriaNome = categoria.nome || categoria.NOME || "Sem nome";
 
                 if (!categoriaId) return;
@@ -988,9 +1014,9 @@
 
 async function criarLocalizacao(idViagem, local) {
   
-    const pais = local.pais || 'Não Informado';
-    const estado = local.estado || 'NI';
-    const cidade = local.cidade || 'Não Informada';
+    const pais = local.pais ;
+    const estado = local.estado ;
+    const cidade = local.cidade ;
     const latitude = String(local.latitude || '0');
     const longitude = String(local.longitude || '0');
 
@@ -1002,6 +1028,8 @@ async function criarLocalizacao(idViagem, local) {
         latitude: latitude,
         longitude: longitude
     };
+
+
 
     const url = 'http://localhost:8080/v1/travel/local';
     console.log('Criando localização:', payload);
@@ -1044,7 +1072,7 @@ async function criarLocalizacao(idViagem, local) {
                 document.querySelectorAll('#categoryList input[name="category"]:checked')
             ).map(cb => parseInt(cb.value));
 
-            // Validações
+  
             if (!nome) {
                 alert("Digite o nome da viagem.");
                 return;
@@ -1075,7 +1103,7 @@ async function criarLocalizacao(idViagem, local) {
             btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
 
             try {
-                // Calcular datas
+                
                 const dataAtual = new Date();
                 const dataFim = new Date(dataAtual);
                 dataFim.setDate(dataFim.getDate() + 7);
@@ -1088,13 +1116,13 @@ async function criarLocalizacao(idViagem, local) {
                     descricao: descricao,
                     data_inicio: dataInicio,
                     data_fim: dataFimFormatada,
-                    isPublico: true,
+                    isPublico: 1,
                     quantidade_curtidas: 0,
                     id_diario: idDiario,
                     id_usuario: currentUserId
                 };
 
-                console.log("📤 Enviando viagem (payload principal):", JSON.stringify(payload, null, 2));
+                console.log(" Enviando viagem (payload principal):", JSON.stringify(payload, null, 2));
 
                 const response = await fetch('http://localhost:8080/v1/travel/viagem', {
                     method: 'POST',
@@ -1105,7 +1133,7 @@ async function criarLocalizacao(idViagem, local) {
                 });
 
                 const data = await response.json();
-                console.log("📥 Resposta da criação da viagem:", data);
+                console.log(" Resposta da criação da viagem:", data);
 
                
                 let idViagem;
@@ -1124,12 +1152,12 @@ async function criarLocalizacao(idViagem, local) {
                         idViagem = await buscarUltimaViagemCriada();
                     }
 
-                    console.log(`✅ VIAGEM CRIADA! ID: ${idViagem}`);
+                    console.log(`VIAGEM CRIADA! ID: ${idViagem}`);
 
                     if (idViagem) {
 
                         if (categoriasSelecionadas.length > 0) {
-                            console.log(`🔗 Vinculando ${categoriasSelecionadas.length} categorias...`);
+                            console.log(` Vinculando ${categoriasSelecionadas.length} categorias...`);
 
                             let categoriasVinculadas = 0;
                             for (const categoriaId of categoriasSelecionadas) {
@@ -1142,7 +1170,7 @@ async function criarLocalizacao(idViagem, local) {
 
                     
                         if (pais && cidade) {
-                            console.log("📍 Criando localização...");
+                            console.log(" Criando localização...");
                             const localCriado = await criarLocalizacao(idViagem, pais, estado, cidade);
                             if (localCriado) {
                                 console.log("Localização criada com sucesso");
@@ -1152,19 +1180,19 @@ async function criarLocalizacao(idViagem, local) {
                         const inputFoto = document.getElementById('tripImageUpload');
 
                         if (inputFoto && inputFoto.files && inputFoto.files.length > 0) { 
-                            console.log("🖼️ Fazendo upload da imagem...");
+                            console.log(" Fazendo upload da imagem...");
                          
                             const uploadSuccess = await uploadImagemParaViagem(idViagem);
                             if (!uploadSuccess) {
-                                alert("⚠️ A viagem foi criada, mas houve uma falha no upload da imagem.");
+                                alert(" A viagem foi criada, mas houve uma falha no upload da imagem.");
                             }
                         }
                   
-                        console.log("🔄 Atualizando lista de viagens...");
+                        console.log(" Atualizando lista de viagens...");
                         await fetchViagens(idDiario);
 
                     } else {
-                        console.error("❌ Não foi possível obter o ID da viagem criada");
+                        console.error(" Não foi possível obter o ID da viagem criada");
                         alert("Viagem criada, mas não foi possível obter o ID para vincular categorias.");
                     }
 
@@ -1186,7 +1214,7 @@ async function criarLocalizacao(idViagem, local) {
                 }
 
             } catch (error) {
-                console.error("❌ Erro completo:", error);
+                console.error(" Erro completo:", error);
                 alert(`Erro de conexão: ${error.message}`);
 
             } finally {
@@ -1240,17 +1268,17 @@ async function buscarImagemById(idImagem) {
         const response = await fetch(url);
         
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);''
         }
         
         const data = await response.json();
-        console.log(`✅ Detalhes da Imagem ${idImagem} (GET):`, data);
+        console.log(` Detalhes da Imagem ${idImagem} (GET):`, data);
         
        
         return data.response.imagem || data.response;
         
     } catch (error) {
-        console.error("❌ Erro ao buscar imagem por ID:", error);
+        console.error(" Erro ao buscar imagem por ID:", error);
         return null;
     }
 }
@@ -1279,11 +1307,11 @@ async function vincularCategoriaAViagem(idViagem, idCategoria) {
         const data = await response.json();
 
         if (response.ok || data.status_code === 201) {
-            console.log(`✅ Categoria ${idCategoria} vinculada com sucesso.`);
+            console.log(` Categoria ${idCategoria} vinculada com sucesso.`);
             return true;
         } else {
           
-            console.log(`❌ Falha ao vincular categoria ${idCategoria}. Resposta:`, data);
+            console.log(` Falha ao vincular categoria ${idCategoria}. Resposta:`, data);
             return false;
         }
 
@@ -1403,9 +1431,9 @@ async function uploadImagemParaViagem(idViagem, arquivo) {
                     );
 
                     if (diarioExiste) {
-                        console.log("✅ Diário encontrado:", diarioExiste);
+                        console.log(" Diário encontrado:", diarioExiste);
                     } else {
-                        console.error("❌ Diário NÃO encontrado! ID:", idDiario);
+                        console.error(" Diário NÃO encontrado! ID:", idDiario);
                         alert("Erro: Diário não encontrado na API!");
                         return false;
                     }
@@ -1416,9 +1444,9 @@ async function uploadImagemParaViagem(idViagem, arquivo) {
                 const usuarioData = await usuariosResponse.json();
 
                 if (usuarioData.response) {
-                    console.log("✅ Usuário encontrado:", usuarioData.response);
+                    console.log(" Usuário encontrado:", usuarioData.response);
                 } else {
-                    console.error("❌ Usuário NÃO encontrado! ID:", currentUserId);
+                    console.error(" Usuário NÃO encontrado! ID:", currentUserId);
                     alert("Erro: Usuário não encontrado na API!");
                     return false;
                 }
@@ -1480,67 +1508,11 @@ async function uploadImagemParaViagem(idViagem, arquivo) {
         window.goToFeed = goToFeed;
 
        
-        async function testeCriacaoRapida() {
-            const payloadTeste = {
-                NOME: "TESTE CONSOLE",
-                DESCRICAO: "Teste via console",
-                DATA_INICIO: "2025-12-13",
-                PAIS: "Brasil",
-                CIDADE: "São Paulo",
-                ID_USUARIO: Number(currentUserId),
-                ID_DIARIO: Number(idDiario)
-            };
-
-            console.log("Enviando payload de teste:", payloadTeste);
-
-            try {
-                const response = await fetch('http://localhost:8080/v1/travel/viagem', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payloadTeste)
-                });
-
-                const data = await response.json();
-                console.log("Resposta:", data);
-
-                if (response.ok || data.status_code === 201) {
-                    console.log("✅ SUCESSO! ID da viagem:", data.response?.id_viagem || data.response?.id);
-                } else if (data.invalid_field) {
-                    console.log("❌ Campo inválido:", data.invalid_field);
-                }
-
-            } catch (error) {
-                console.error("Erro:", error);
-            }
-        }
-
-        window.testeCriacaoRapida = testeCriacaoRapida;
-
-      
-        async function verificarViagemCriada() {
-            console.log("🔍 Verificando viagens do diário 24...");
-
-            try {
-                const response = await fetch('http://localhost:8080/v1/travel/viagem');
-                const data = await response.json();
-
-                console.log("Todas as viagens:", data);
-
-                if (data.response && data.response.viagens) {
-                    const viagensDoDiario24 = data.response.viagens.filter(v =>
-                        v.id_diario == 24 || v.ID_DIARIO == 24
-                    );
-
-                    console.log(`Viagens do diário 24: ${viagensDoDiario24.length}`);
-                    console.log(viagensDoDiario24);
-                }
-            } catch (error) {
-                console.error("Erro ao verificar:", error);
-            }
-        }
-
-        window.verificarViagemCriada = verificarViagemCriada;
+    
         window.salvarViagemSimplificada = salvarViagemSimplificada;
+
+
+        
     </script>
 </body>
 
